@@ -1,0 +1,31 @@
+@import "~bootstrap/scss/bootstrap";
+
+.menu-row {
+    
+    @extend .row;
+    
+    .menu-item {
+        @extend .col-md-4;
+        
+        display: block; 
+        text-align: center;
+        margin-top:40px;
+        
+    }
+    
+    .menu-item--heading {
+        color: $wec-c-grey;
+        display: block;
+        font-size: 1.6rem;
+        padding-top: 0.2rem;
+        width: 100%;
+        
+        a:hover {
+            text-decoration: underline;
+        }
+    }
+    .menu-item--img {
+        max-height:80px;
+        margin:auto;
+    }
+}

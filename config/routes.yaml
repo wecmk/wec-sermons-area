@@ -1,3 +1,16 @@
 #index:
 #    path: /
 #    controller: App\Controller\DefaultController::index
+
+wec_teams:
+    path: /teams
+    controller:   Symfony\Bundle\FrameworkBundle\Controller\TemplateController
+    defaults:
+        template:     'teams/menu.html.twig'
+
+wecmk_public_home:
+    path: /
+    host: "www.wecmk.org"
+    schemes: "https"
+    defaults: 
+        _controller: FrameworkBundle:Redirect:urlRedirect

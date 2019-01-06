@@ -1,0 +1,19 @@
+{% extends 'base.html.twig' %}
+
+{% set breadcrumbs = { "Home": "members_area_home" } %}
+
+{% block title %}Members Area{% endblock %}
+
+{% block content %} 
+    <div class="container">
+        <div class="menu-row">
+            {{ include('components/menu-item.html.twig', {'path': path('members_area_home'), 'asset': asset('build/images/search.svg') , 'heading': 'Sermons'}) }}
+            {{ include('components/menu-item.html.twig', {'path': path('wec_teams'), 'asset': asset('build/images/rota.svg') , 'heading': 'Team Lists'}) }}
+            {{ include('components/menu-item.html.twig', {'path': path('members_area_home'), 'asset': asset('build/images/question.svg') , 'heading': 'Question and Answers'}) }}
+        </div>
+        <div class="menu-row">
+            {{ include('components/menu-item.html.twig', {'path': path('members_area_home'), 'asset': asset('build/images/logout.svg') , 'heading': 'Logout'}) }}
+            {{ include('components/menu-item.html.twig', {'path': path('wecmk_public_home'), 'asset': asset('build/images/leftarrow.svg') , 'heading': 'Public Website'}) }}
+        </div>
+    </div>
+{% endblock %}
