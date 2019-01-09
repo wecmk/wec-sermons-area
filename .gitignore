@@ -24,8 +24,8 @@ yarn-error.log
 ###< symfony/webpack-encore-bundle ###
 
 
-# Created by https://www.gitignore.io/api/node,linux,macos,windows,symfony,netbeans,composer,phpstorm+all
-# Edit at https://www.gitignore.io/?templates=node,linux,macos,windows,symfony,netbeans,composer,phpstorm+all
+# Created by https://www.gitignore.io/api/node,linux,macos,windows,symfony,vagrant,netbeans,composer,phpstorm+all
+# Edit at https://www.gitignore.io/?templates=node,linux,macos,windows,symfony,vagrant,netbeans,composer,phpstorm+all
 
 ### Composer ###
 composer.phar
@@ -308,6 +308,16 @@ modules.xml
 /web/css/
 /web/js/
 
+### Vagrant ###
+# General
+.vagrant/
+
+# Log files (if you are creating logs in debug mode, uncomment this)
+# *.logs
+
+### Vagrant Patch ###
+*.box
+
 ### Windows ###
 # Windows thumbnail cache files
 Thumbs.db
@@ -333,4 +343,4 @@ $RECYCLE.BIN/
 # Windows shortcuts
 *.lnk
 
-# End of https://www.gitignore.io/api/node,linux,macos,windows,symfony,netbeans,composer,phpstorm+all
+# End of https://www.gitignore.io/api/node,linux,macos,windows,symfony,vagrant,netbeans,composer,phpstorm+all
