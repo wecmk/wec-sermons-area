@@ -1,0 +1,18 @@
+{% extends 'base.html.twig' %}
+
+{% set breadcrumbs = { "Home": "members_area_home", "Children's talk questions and answers": "questions_home"} %}
+
+{% block title %}Children's talk question and answers{% endblock %}
+
+{% block content %} 
+    <div class="container">
+        <div class="col-md-12">
+            <h1>Children's talk questions and answers</h1>
+        </div>
+        <div class="menu-row">
+            {% for entity in entities %}
+                {{ include('components/menu-item.html.twig', {'path': path('questions_list_by_id', { 'id': entity.id }), 'asset': asset('build/images/question.svg') , 'heading': entity.id ~ ". " ~ entity.name }) }}
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}

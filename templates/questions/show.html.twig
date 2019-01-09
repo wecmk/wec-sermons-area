@@ -1,0 +1,90 @@
+{% extends 'base.html.twig' %}
+
+{% set asdf = "asdf" %}
+{% set breadcrumbs = { "Home": "members_area_home", 
+    "Children's talk questions and answers": "questions_home", 
+    "Question Series": ""
+} %}
+
+{% block title %}Children's talk question and answers{% endblock %}
+
+{% block content %}
+    <div class="container">
+        <h1>{{ questionSeries.name }}</h1>
+        
+        <div class="row">
+            {% if is_granted('ROLE_CHILDREN_ADMIN') %}
+                {% if questionSeries.current %}
+                    <h4 class="hidden-print">current series</h4>
+                {% else %}
+                    {{ form_start(questionSeriesSetCurrentForm, {'attr': {'class': 'form' }}) }}
+                    <input type="submit" value="Set as Current Series" class="btn btn-default">
+                    {{ form_rest(questionSeriesSetCurrentForm) }}
+                    {{ form_end(questionSeriesSetCurrentForm) }}
+                {% endif %}
+            {% endif %}
+
+
+            {% if questions is empty %}
+                <p>
+                    Questions and answers will be displayed after the childrens talks on Sunday
+                </p>
+            {% endif %}
+            {% for question in questions %}
+                {% if (question.publishDate < date()) or is_granted('ROLE_CHILDREN_ADMIN') %}
+                    <div class="col-md-4 col-sm-6 col-sm-6 col-xs-6">
+                        <div class="question">
+                            <h3>{{ question.number }}. {{ question.question }}</h3>
+                            <p>{{ question.answer }}</p>
+                        </div>
+                        {% if is_granted('ROLE_CHILDREN_ADMIN') %}
+                            <div class="hidden-print">
+                                <table class="table table-responsive">
+                                    <tr>
+                                        <td>Publish date:</td>
+                                        <td>{% if question.publishDate %}{{ question.publishDate|date('Y-m-d H:i:s') }}{% endif %}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Published:</td>
+                                        <td>{% if question.publishDate < date() %}
+                                                Yes
+                                            {% else %}
+                                                No
+                                            {% endif %}
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                                <form name="wec_questionsbundle_question_23" method="post" action="/questions/publish/{{ question.id }}">
+                                                    <input type="checkbox" id="wec_questionsbundle_question_scheduleSubsequentQuestions_{{ question.id }}" name="wec_questionsbundle_question[scheduleSubsequentQuestions]" class="hidden" value="1">
+
+                                                    <input type="hidden" id="wec_questionsbundle_question_series_{{ question.id }}" name="wec_questionsbundle_question[series]" value="3">
+                                                    <input type="hidden" id="wec_questionsbundle_question_Number_{{ question.id }}" name="wec_questionsbundle_question[Number]" value="1">
+
+                                                {% if question.publishDate > date() %}
+                                                    <input type="hidden" name="publishdate" value="{{ "now"|date('c') }}">
+                                                    <input type="submit" value="Publish Now" class="btn btn-default">
+                                                {% else %}
+                                                    <input type="hidden" name="publishdate" value="{{ "+10 Years"|date('c') }}">
+                                                    <input type="submit" value="Unpublish" class="btn btn-default">
+                                                {% endif %}
+
+                                                </form>
+                                        </td>
+                                        <td>
+                                            <a href="{{ path('question_edit', { id: question.id }) }}">Schedule</a> </td>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+                        {% endif %}
+
+                    </div><!--/span-->
+                {% endif %}
+
+            {% endfor %}
+
+
+        </div>
+    </div>
+{% endblock %}
