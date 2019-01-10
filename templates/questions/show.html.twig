@@ -10,7 +10,7 @@
 
 {% block content %}
     <div class="container">
-        <h1>{{ questionSeries.name }}</h1>
+        <h1>Set {{ questionSeries.id }}. {{ questionSeries.name }}</h1>
         
         <div class="row">
             {% if is_granted('ROLE_CHILDREN_ADMIN') %}
