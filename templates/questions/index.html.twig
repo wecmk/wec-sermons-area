@@ -11,7 +11,7 @@
         </div>
         <div class="menu-row">
             {% for entity in entities %}
-                {{ include('components/menu-item.html.twig', {'path': path('questions_list_by_id', { 'id': entity.id }), 'asset': asset('build/images/question.svg') , 'heading': entity.id ~ ". " ~ entity.name }) }}
+                {{ include('components/menu-item.html.twig', {'path': path('questions_list_by_id', { 'id': entity.id }), 'asset': asset('build/images/bible.svg') , 'heading': entity.id ~ ". " ~ entity.name }) }}
             {% endfor %}
         </div>
     </div>
