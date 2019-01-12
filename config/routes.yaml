@@ -13,4 +13,4 @@ wecmk_public_home:
     host: "www.wecmk.org"
     schemes: "https"
     defaults: 
-        _controller: FrameworkBundle:Redirect:urlRedirect
+        _controller: Symfony\Bundle\FrameworkBundle\Controller\RedirectController::redirectAction
