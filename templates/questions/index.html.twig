@@ -11,7 +11,34 @@
         </div>
         <div class="menu-row">
             {% for entity in entities %}
-                {{ include('components/menu-item.html.twig', {'path': path('questions_list_by_id', { 'id': entity.id }), 'asset': asset('build/images/bible.svg') , 'heading': entity.id ~ ". " ~ entity.name }) }}
+
+                {% if entity.current %}
+                    {% set inner = '
+                            <div style="
+                                position: absolute;
+                                top: -25px;
+                                font-style: italic;
+                                left: 25px;
+                                color: black;">
+                                Current Series
+                            </div>
+                    ' %}
+                {% else %}
+                    {% set inner = "" %}
+                {% endif %}
+
+
+
+                {{ include('components/menu-item.html.twig', 
+                    {
+                        'path': path('questions_list_by_id', 
+                            { 'id': entity.id }
+                        ), 
+                        'asset': asset('build/images/bible.svg') , 
+                        'heading': entity.id ~ ". " ~ entity.name,
+                        'inner': inner
+                    }) 
+                }}                
             {% endfor %}
         </div>
     </div>

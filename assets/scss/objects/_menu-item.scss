@@ -6,11 +6,11 @@
     
     .menu-item {
         @extend .col-md-4;
-        
+                
         display: block; 
         text-align: center;
         margin-top:40px;
-        
+        position: relative;        
     }
     
     .menu-item--heading {
