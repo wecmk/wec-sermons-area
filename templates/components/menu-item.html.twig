@@ -3,5 +3,7 @@
         <img class="menu-item--img" alt="" src="{{ asset }}">
         <span class="menu-item--heading">{{ heading }}</span>
     </a>
-    {{ inner | raw }}
+    {% if inner is defined %}
+        {{ inner | raw }}
+    {% endif %}
 </div>
