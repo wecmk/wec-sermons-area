@@ -2,6 +2,8 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -30,6 +32,16 @@ class Speaker
      * @ORM\Column(type="string", length=255)
      */
     private $Website;
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Sermon", mappedBy="speaker")
+     */
+    private $Sermon;
+
+    public function __construct()
+    {
+        $this->Sermon = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -68,6 +80,37 @@ class Speaker
     public function setWebsite(string $Website): self
     {
         $this->Website = $Website;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Sermon[]
+     */
+    public function getSermon(): Collection
+    {
+        return $this->Sermon;
+    }
+
+    public function addSermon(Sermon $sermon): self
+    {
+        if (!$this->Sermon->contains($sermon)) {
+            $this->Sermon[] = $sermon;
+            $sermon->setSpeaker($this);
+        }
+
+        return $this;
+    }
+
+    public function removeSermon(Sermon $sermon): self
+    {
+        if ($this->Sermon->contains($sermon)) {
+            $this->Sermon->removeElement($sermon);
+            // set the owning side to null (unless already changed)
+            if ($sermon->getSpeaker() === $this) {
+                $sermon->setSpeaker(null);
+            }
+        }
 
         return $this;
     }

@@ -73,6 +73,11 @@ class Sermon
      */
     private $PrivateComments;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\Speaker", inversedBy="Sermon")
+     */
+    private $speaker;
+
     public function __construct()
     {
         $this->Series = new ArrayCollection();
@@ -226,6 +231,18 @@ class Sermon
     public function setPrivateComments(string $PrivateComments): self
     {
         $this->PrivateComments = $PrivateComments;
+
+        return $this;
+    }
+
+    public function getSpeaker(): ?Speaker
+    {
+        return $this->speaker;
+    }
+
+    public function setSpeaker(?Speaker $speaker): self
+    {
+        $this->speaker = $speaker;
 
         return $this;
     }
