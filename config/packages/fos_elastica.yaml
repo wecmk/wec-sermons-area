@@ -1,0 +1,26 @@
+# Read the documentation: https://github.com/FriendsOfSymfony/FOSElasticaBundle/blob/master/Resources/doc/setup.md
+fos_elastica:
+    clients:
+        default:
+            connections:
+                - url: http://localhost:9200/
+    indexes:
+        app: 
+            index_name: app2_%kernel.environment%
+            types:
+                Sermons:
+                    serializer:
+                        groups: [elastica]
+                    properties: ~ 
+                    persistence:
+                        # the driver can be orm, mongodb or phpcr
+                        driver: orm
+                        model: App\Entity\User
+                        provider: ~
+                        finder: ~
+                        elastica_to_model_transformer:
+                            ignore_missing: true
+                        provider:
+                            batch_size: 100
+    serializer: ~
+

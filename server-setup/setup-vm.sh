@@ -22,7 +22,8 @@ add-apt-repository -y ppa:certbot/certbot
 curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | sudo apt-key add -
 echo "deb https://dl.yarnpkg.com/debian/ stable main" | sudo tee /etc/apt/sources.list.d/yarn.list
 curl -sL https://deb.nodesource.com/setup_11.x | sudo -E bash -
-
+apt-get install apt-transport-https
+echo "deb https://artifacts.elastic.co/packages/6.x/apt stable main" | sudo tee -a /etc/apt/sources.list.d/elastic-6.x.list
 
 apt update -y
 
@@ -53,6 +54,9 @@ apt upgrade -y
 
 if [ !$IS_DEV ]; then
     apt-get install -y python-certbot-apache 
+    apt-get install -y elasticsearch
+    systemctl enable elasticsearch.service
+    systemctl start elasticsearch.service
 fi
 
 # Symlink the Symfony web root to www (for standardisation of VirtulHost)
@@ -72,6 +76,10 @@ a2enmod headers
 a2enmod ssl
 a2enmod rewrite
 systemctl reload apache2
+
+
+
+
 
 
 cat <<text
