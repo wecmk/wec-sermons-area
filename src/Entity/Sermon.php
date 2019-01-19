@@ -49,11 +49,6 @@ class Sermon
     private $Title;
 
     /**
-     * @ORM\ManyToMany(targetEntity="App\Entity\Speaker")
-     */
-    private $Speaker;
-
-    /**
      * @ORM\Column(type="boolean")
      */
     private $corrupt;
@@ -171,32 +166,6 @@ class Sermon
     public function setTitle(string $Title): self
     {
         $this->Title = $Title;
-
-        return $this;
-    }
-
-    /**
-     * @return Collection|Speaker[]
-     */
-    public function getSpeaker(): Collection
-    {
-        return $this->Speaker;
-    }
-
-    public function addSpeaker(Speaker $speaker): self
-    {
-        if (!$this->Speaker->contains($speaker)) {
-            $this->Speaker[] = $speaker;
-        }
-
-        return $this;
-    }
-
-    public function removeSpeaker(Speaker $speaker): self
-    {
-        if ($this->Speaker->contains($speaker)) {
-            $this->Speaker->removeElement($speaker);
-        }
 
         return $this;
     }
