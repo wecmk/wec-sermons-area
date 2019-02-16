@@ -63,10 +63,10 @@
 
                                             {% if question.publishDate > date() %}
                                                 <input type="hidden" name="publishdate" value="{{ "now"|date('c') }}">
-                                                <input type="submit" value="Publish Now" class="btn btn-default">
+                                                <input type="submit" value="Publish Now" class="btn btn-secondary">
                                             {% else %}
                                                 <input type="hidden" name="publishdate" value="{{ "+10 Years"|date('c') }}">
-                                                <input type="submit" value="Unpublish" class="btn btn-default">
+                                                <input type="submit" value="Unpublish" class="btn btn-secondary">
                                             {% endif %}
 
                                         </form>
