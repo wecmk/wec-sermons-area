@@ -1,6 +1,7 @@
 
 ###> symfony/framework-bundle ###
 /.env.local
+/.env.local.php
 /.env.*.local
 /public/bundles/
 /var/
@@ -144,10 +145,6 @@ typings/
 
 # Yarn Integrity file
 .yarn-integrity
-
-# dotenv environment variables file
-.env
-.env.test
 
 # parcel-bundler cache (https://parceljs.org/)
 .cache
