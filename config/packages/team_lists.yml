@@ -1,0 +1,6 @@
+twig:
+    globals:
+        creche: '%env(CRECHE)%'
+        church_cleaning: '%env(CHURCHCLEANING)%'
+        morning_setup: '%env(MORNINGSETUP)%'
+        sunday_school: '%env(SUNDAYSCHOOL)%'

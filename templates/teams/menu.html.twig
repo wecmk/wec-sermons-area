@@ -7,12 +7,12 @@
 {% block content %} 
     <div class="container">
         <div class="menu-row">
-            {{ include('components/menu-item.html.twig', {'path': "CRECHE", 'asset': asset('build/images/creche.svg') , 'heading': 'Crèche' }) }}
-            {{ include('components/menu-item.html.twig', {'path': "CHURCHCLEANING", 'asset': asset('build/images/cleaning.svg') , 'heading': 'Church Cleaning'}) }}
-            {{ include('components/menu-item.html.twig', {'path': "SETUP", 'asset': asset('build/images/setup.svg') , 'heading': 'Sunday Morning Setup/Take-down'}) }}
+            {{ include('components/menu-item.html.twig', {'path': creche, 'asset': asset('build/images/creche.svg') , 'heading': 'Crèche' }) }}
+            {{ include('components/menu-item.html.twig', {'path': church_cleaning, 'asset': asset('build/images/cleaning.svg') , 'heading': 'Church Cleaning'}) }}
+            {{ include('components/menu-item.html.twig', {'path': morning_setup, 'asset': asset('build/images/setup.svg') , 'heading': 'Sunday Morning Setup/Take-down'}) }}
         </div>
         <div class="menu-row">
-            {{ include('components/menu-item.html.twig', {'path': "SUNDAYSCHOOL", 'asset': asset('build/images/sundayschool.svg') , 'heading': 'Sunday School'}) }}
+            {{ include('components/menu-item.html.twig', {'path': sunday_school, 'asset': asset('build/images/sundayschool.svg') , 'heading': 'Sunday School'}) }}
         </div>
     </div>                     
 {% endblock %}
