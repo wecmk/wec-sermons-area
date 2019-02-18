@@ -135,8 +135,10 @@ class QuestionsController extends AbstractController {
      * @Route("/schedule/{id}", name="schedule", methods={"GET", "POST", "PUT"})
      */
     public function scheduleQuestionAction(Request $request, $id) {
+               
         $em = $this->getDoctrine()->getManager();
 
+        /** @var QuestionQA $entity */
         $entity = $em->getRepository(QuestionQA::class)->find($id);
 
         if (!$entity) {
@@ -152,7 +154,7 @@ class QuestionsController extends AbstractController {
 
                 $startDate = $entity->getPublishDate();
                 foreach ($em->getRepository(QuestionQA::class)->findBy(
-                        array('series' => $entity->getNumber()), 
+                        array('questionSeries' => $entity->getQuestionSeries()), 
                         array('id' => 'ASC')) 
                         as $question) {
                     if ($question->getNumber() >= $entity->getNumber()) {
