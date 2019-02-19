@@ -33,6 +33,11 @@ class QuestionSeries
      */
     private $QuestionQA;
 
+    /**
+     * @ORM\Column(type="integer")
+     */
+    private $number;
+
     public function __construct()
     {
         $this->QuestionQA = new ArrayCollection();
@@ -106,5 +111,17 @@ class QuestionSeries
     public function getFullName()
     {
         return $this->getId() .  ". " . $this->name;
+    }
+
+    public function getNumber(): ?int
+    {
+        return $this->number;
+    }
+
+    public function setNumber(int $number): self
+    {
+        $this->number = $number;
+
+        return $this;
     }
 }
