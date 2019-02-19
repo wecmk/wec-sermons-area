@@ -12,12 +12,14 @@ use App\Form\PublishQuestionType;
 /**
  * @Route("/questions", name="questions_")
  */
-class QuestionsController extends AbstractController {
+class QuestionsController extends AbstractController
+{
 
     /**
      * @Route("/", name="home")
      */
-    public function indexAction() {
+    public function indexAction()
+    {
         $em = $this->getDoctrine()->getManager();
 
         $entities = $em->getRepository(QuestionSeries::class)->findAll();
@@ -32,7 +34,8 @@ class QuestionsController extends AbstractController {
      *
      * @Route("/{id}", name="list_by_id")
      */
-    public function showAction($id) {
+    public function showAction($id)
+    {
         $em = $this->getDoctrine()->getManager();
         $questionSeries = $em->getRepository(QuestionSeries::class)->find($id);
 
@@ -59,7 +62,8 @@ class QuestionsController extends AbstractController {
      *
      * @Route("/{id}/current", name="set_current", methods={"POST"})
      */
-    public function setSeriesCurrent(Request $request, $id) {
+    public function setSeriesCurrent(Request $request, $id)
+    {
         $em = $this->getDoctrine()->getManager();
 
         /* @var $entity QuestionSeries */
@@ -86,7 +90,8 @@ class QuestionsController extends AbstractController {
      *
      * @Route("/publish/{id}", name="publish_now", methods={"POST"})
      */
-    public function setQuestionPublishDateAction(Request $request, $id) {
+    public function setQuestionPublishDateAction(Request $request, $id)
+    {
         $em = $this->getDoctrine()->getManager();
 
         /* @var $entity QuestionQA */
@@ -110,9 +115,10 @@ class QuestionsController extends AbstractController {
     /**
      * Displays a form to edit the publish Date of a Question entity.
      *
-     * @Route("/edit/{id}", name="edit", methods={"GET"})     
+     * @Route("/edit/{id}", name="edit", methods={"GET"})
      */
-    public function editAction(Request $request, $id) {
+    public function editAction(Request $request, $id)
+    {
         $em = $this->getDoctrine()->getManager();
 
         $entity = $em->getRepository(QuestionQA::class)->find($id);
@@ -134,8 +140,8 @@ class QuestionsController extends AbstractController {
      *
      * @Route("/schedule/{id}", name="schedule", methods={"GET", "POST", "PUT"})
      */
-    public function scheduleQuestionAction(Request $request, $id) {
-               
+    public function scheduleQuestionAction(Request $request, $id)
+    {
         $em = $this->getDoctrine()->getManager();
 
         /** @var QuestionQA $entity */
@@ -154,8 +160,9 @@ class QuestionsController extends AbstractController {
 
                 $startDate = $entity->getPublishDate();
                 foreach ($em->getRepository(QuestionQA::class)->findBy(
-                        array('questionSeries' => $entity->getQuestionSeries()), 
-                        array('id' => 'ASC')) 
+                        array('questionSeries' => $entity->getQuestionSeries()),
+                        array('id' => 'ASC')
+                )
                         as $question) {
                     if ($question->getNumber() >= $entity->getNumber()) {
                         // Hack: Doctrine detects changes by reference.
@@ -189,7 +196,8 @@ class QuestionsController extends AbstractController {
      *
      * @return \Symfony\Component\Form\Form The form
      */
-    private function createPublishQuestionForm(QuestionQA $entity) {
+    private function createPublishQuestionForm(QuestionQA $entity)
+    {
         $em = $this->getDoctrine()->getManager();
 
         $form = $this->createForm(PublishQuestionType::class, $entity, array(
@@ -198,5 +206,4 @@ class QuestionsController extends AbstractController {
         ));
         return $form;
     }
-
 }

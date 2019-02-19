@@ -341,3 +341,4 @@ $RECYCLE.BIN/
 *.lnk
 
 # End of https://www.gitignore.io/api/node,linux,macos,windows,symfony,vagrant,netbeans,composer,phpstorm+all
+.php_cs.cache

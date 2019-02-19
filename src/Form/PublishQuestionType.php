@@ -48,5 +48,4 @@ class PublishQuestionType extends AbstractType
     {
         return 'wec_questionsbundle_question';
     }
-
 }
