@@ -10,6 +10,7 @@
         display: block; 
         text-align: center;
         margin-top:40px;
+        margin-bottom: 40px;
         position: relative;        
     }
     
@@ -17,7 +18,7 @@
         color: $wec-c-grey;
         display: block;
         font-size: 1.6rem;
-        padding-top: 0.2rem;
+        padding-top: 0.5rem;
         width: 100%;
         
         a:hover {
