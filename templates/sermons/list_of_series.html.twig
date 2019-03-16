@@ -1,33 +1,87 @@
-<div class="col-md-6">
-    <b>Search by series (Bible books):</b><br>
+{% extends 'base.html.twig' %}
 
-    {% for book in books %}
-        <a href="{{ path('list_type', {'field': 'series', 'value': book }) }}">{{ book }}</a>
-        <br />
-    {% endfor %}
-    <br>
-</div>
+{% set breadcrumbs = { "Home": "members_area_home", 
+    "Sermons": "sermons_home", 
+    "List of Series": "list_series"
+} %}
 
-<div class="col-md-6">
-    <b>Search by series (other):</b><br>
-    {% for key,series in seriesList %}
-        {% if series is not empty %}
-            <a href="{{ path('list_type', {'field': 'series', 'value': series }) }}">{{ series }}</a>
-            <br />
-        {% endif %} 
-    {% endfor %}
-    <br>             
-</div>
-<div class="col-md-6">
-    <b>Search by Time:</b><br>
-    <a href="{{ path('list_type', {'field': 'apm', 'value': 'AM'}) }}">AM only</a><br>
-    <a href="{{ path('list_type', {'field': 'apm', 'value': 'PM'}) }}">PM only</a><br>
-</div>
-<div class="col-md-6">
-    <b>Search by Speaker:</b><br>
-    <a href="{{ path('list_type', {'field': 'speaker', 'value': 'Allan Huxtable'}) }}">Allan Huxtable</a><br>
-    <a href="{{ path('list_type', {'field': 'speaker', 'value': 'Roger March'}) }}">Roger March</a><br>
-    <a href="{{ path('list_type', {'field': 'speaker', 'value': 'Roy Moffatt'}) }}">Roy Moffatt</a><br>
-    <a href="{{ path('list_type', {'field': 'speaker', 'value': 'Derek Sparrow'}) }}">Derek Sparrow</a><br>
-    <a href="{{ path('list_type', {'field': 'series', 'value': 'Visiting Speaker'}) }}">Visiting Speakers</a><br>                       
-</div>
+{% block title %}Sermons{% endblock %}
+
+{% block header_right %}
+    <form name="search" class="header-search__form" method="get" action="{{ path('sermons_home') }}">
+        <div class="input-group mb-3 header-search" class="">
+            <input type="text" class="form-control" name="searchQuery" placeholder="Search all sermons" aria-label="search sermons" value="{{ searchQuery }}">
+            <div class="input-group-append">
+                <button class="btn btn-primary" type="submit">Search</button>
+            </div>
+        </div>
+    </form>
+{% endblock %}
+
+{% block content %} 
+    <div class="sermons-navigation-container">
+        <div class="d-block d-md-none">
+            <div class="flash-message alert alert-info container" role="alert">
+                To download or stream, please scroll to the right <span
+                    class="glyphicon glyphicon-circle-arrow-right"></span>
+            </div>
+        </div>
+        <div class="btn-group-lg" role="group" aria-label="...">
+            {% if 'searchQuery' in app.request.query.all|keys %}
+                <div class="btn-group" role="group">
+                    <!-- Button trigger modal -->
+                    <a class="btn btn-secondary" href="{% if mainPage is defined %}{{ path('search_all') }}{% else %}{{ path('sermons_home') }}{% endif %}">
+                        Start again
+                    </a>
+                </div>
+            {% endif %}
+            <div class="btn-group" role="group">
+                <a type="btn btn-secondary" class="btn btn-secondary" href="{{ path("sermons_list_series") }}">
+                    List all Series
+                </a>
+            </div>
+            <div class="btn-group" role="group">
+                <button type="button" class="btn btn-secondary" data-toggle="modal" data-target=".help-modal-dialog">
+                    Help
+                </button>
+            </div>
+        </div>
+    </div>
+    <div class="container">
+        <div class="row">
+            <div class="col-6">
+                <h3>Search by series (Bible books):</h3>
+
+                {% for book in books %}
+                    <a href="{{ path('sermons_list_by_series', {'value': book }) }}">{{ book }}</a>
+                    <br />
+                {% endfor %}
+                <br>
+            </div>
+
+            <div class="col-6">
+                <h3>Search by series (other):</h3>
+                {% for key,series in seriesList %}
+                    {% if series is not empty %}
+                        <a href="{{ path('sermons_list_by_series', {'value': series }) }}">{{ series }}</a>
+                        <br />
+                    {% endif %} 
+                {% endfor %}
+                <br>             
+            </div>
+        </div>
+        <div class="row">
+
+            <div class="col-6">
+                <h3>Search by Speaker:</h3>
+                <a href="{{ path('sermons_list_by_speaker', {'value': 'Allan Huxtable'}) }}">Allan Huxtable</a><br>
+                <a href="{{ path('sermons_list_by_speaker', {'value': 'Roger March'}) }}">Roger March</a><br>
+                <a href="{{ path('sermons_list_by_speaker', {'value': 'Roy Moffatt'}) }}">Roy Moffatt</a><br>
+                <a href="{{ path('sermons_list_by_speaker', {'value': 'Derek Sparrow'}) }}">Derek Sparrow</a><br>
+                <a href="{{ path('sermons_list_by_series', {'value': 'Visiting Speaker'}) }}">Visiting Speakers</a><br>                       
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+

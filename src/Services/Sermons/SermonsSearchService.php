@@ -58,4 +58,20 @@ class SermonsSearchService {
         );
     }
 
+    public function searchBySpeaker($name) {
+        $query_part = new \Elastica\Query\BoolQuery();
+        $nested = new \Elastica\Query\Nested();
+        $nested->setPath("Speaker");
+
+        $nested_bool = new \Elastica\Query\BoolQuery();
+        $nested_bool->addMust(
+                new \Elastica\Query\Match("Speaker.Name", $name)
+        );
+        $nested->setQuery($nested_bool);
+        $query_part->addMust($nested);
+
+        return array(
+            'results' => $this->index->find($query_part),
+        );
+    }
 }
