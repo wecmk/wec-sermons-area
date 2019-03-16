@@ -83,9 +83,17 @@
 {% block body %}
     <div class="header">
         <div class="header-inner-container">
-            <a class="header-link" href="/">
-                <img class="header-logo" src="{{ asset('build/images/wec-logo-full.svg') }}" alt=""/>
-            </a>
+            <div class="row">
+                <div class="col-3">
+                    <a class="header-link" href="/">
+                        <img class="header-logo" src="{{ asset('build/images/wec-logo-full.svg') }}" alt=""/>
+                    </a>
+                </div>
+                <div class="col-9 jumbotron-right">
+                    {% block header_right %}
+                    {% endblock %}
+                </div>
+            </div>
         </div>
     </div>
 
@@ -96,15 +104,15 @@
                     {% for key,value in breadcrumbs %}
                         {% if loop.last %}
                             <li class="breadcrumb-item active" aria-current="page">{{ key }}</li>
-                        {% else %}
+                            {% else %}
                             <li class="breadcrumb-item"><a href="{{ path(value) }}">{{ key }}</a></li>
-                        {% endif %}
-                    {% endfor %}
+                            {% endif %}
+                        {% endfor %}
                 </ol>                
             </nav>
         </div>
     {% endif %}
-    
+
     {% for flashMessage in app.session.flashbag.get('notice') %}
         <div class="flash-message alert alert-info container" role="alert">
             <em>Notice</em>: {{ flashMessage }}
@@ -115,10 +123,5 @@
     {% endblock %}
 
     <div class="footer">
-        {#        <div class="container hidden-print">
-                    {% block content_footer %}
-                        <a href="{{ path('wec_acknowledgements') }}">acknowledgements</a>
-                    {% endblock %}
-                </div>#}
     </div>
 {% endblock %}

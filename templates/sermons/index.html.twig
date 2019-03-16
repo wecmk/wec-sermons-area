@@ -7,17 +7,14 @@
 {% block title %}Sermons{% endblock %}
 
 {% block header_right %}
-    <div id="header-search" class="">
-        <form name="search" class="header-search__form" method="get" action="{{ path('sermons_search') }}">
-            <input type="text" id="searchinputbox" type="submit" class="header-search__form-input" name="find"
-                   placeholder="search all sermons" value="{{ app.request.query.get("find") }}" required>
-            <span class="input-group-btn">
-                <button class="header-search__form-submit" type="submit">
-                    <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
-                </button>
-            </span>
-        </form>
-    </div>
+    <form name="search" class="header-search__form" method="get" action="{{ path('sermons_home') }}">
+        <div class="input-group mb-3 header-search" class="">
+            <input type="text" class="form-control" name="searchQuery" placeholder="Search all sermons" aria-label="search sermons" value="{{ searchQuery }}">
+            <div class="input-group-append">
+                <button class="btn btn-primary" type="submit">Search</button>
+            </div>
+        </div>
+    </form>
 {% endblock %}
 
 {% block content %} 
@@ -108,7 +105,7 @@
                                 </a>
                             {%  endif %}
                         </td>
-{#                        {% set GAString = entity.Date|date('d-m-Y') ~ " - " ~ entity.Apm ~ " - " ~ entity.Title ~ " - " ~ entity.Speaker.Name ~ " - " ~ entity.Download %}#}
+                        {#                        {% set GAString = entity.Date|date('d-m-Y') ~ " - " ~ entity.Apm ~ " - " ~ entity.Title ~ " - " ~ entity.Speaker.Name ~ " - " ~ entity.Download %}#}
                         {% set GAString = entity.Date|date('d-m-Y') ~ " - " ~ entity.Apm %}
 
                         <td>
