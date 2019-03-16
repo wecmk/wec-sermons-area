@@ -3,24 +3,54 @@ fos_elastica:
     clients:
         default:
             connections:
-                - url: http://localhost:9200/
+                - url: '%env(resolve:INDEX)%'
     indexes:
-        app: 
+        app:
             index_name: app2_%kernel.environment%
+            settings:
+                index:
+                    analysis:
+                        filter:
+                            autocomplete_filter:
+                                type: "edge_ngram"
+                                min_gram: 2
+                                max_gram: 20
+                        analyzer:
+                            autocomplete:
+                                type: custom
+                                tokenizer: standard
+                                filter: [ "lowercase", "autocomplete_filter"]
+                                language: English
+                            snowball_analyzer:
+                                type: snowball
+                                language: English 
             types:
-                Sermons:
-                    serializer:
-                        groups: [elastica]
-                    properties: ~ 
+                sermons:
+                    properties:
+                        id: ~
+                        Date: { type: date }
+                        Apm: { type: text, fielddata: true }
+                        Series: 
+                            type: "nested"
+                            properties:
+                                Name: { type: text }
+                                Complete: { type: boolean }
+                        Reading: { analyzer: snowball_analyzer }
+                        SecondReading: ~
+                        Title: { analyzer: snowball_analyzer }
+                        Speaker: 
+                            type: "nested"
+                            properties:
+                                Name: { type: text }
+                                Organisation: { type: text }
+                                Website: ~                                
                     persistence:
                         # the driver can be orm, mongodb or phpcr
                         driver: orm
-                        model: App\Entity\User
+                        model: App\Entity\Sermon
                         provider: ~
                         finder: ~
                         elastica_to_model_transformer:
                             ignore_missing: true
                         provider:
                             batch_size: 100
-    serializer: ~
-

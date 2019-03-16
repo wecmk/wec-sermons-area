@@ -4,6 +4,8 @@
 @import 'settings/globals';
 @import "~bootstrap/scss/bootstrap";
 
+// Legacy Search
+@import 'objects/search';
 
 // objects
 @import 'objects/menu-item';

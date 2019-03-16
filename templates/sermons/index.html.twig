@@ -1,0 +1,229 @@
+{% extends 'base.html.twig' %}
+
+{% set breadcrumbs = { "Home": "members_area_home", 
+    "Sermons": "sermons_home", 
+} %}
+
+{% block title %}Sermons{% endblock %}
+
+{% block header_right %}
+    <div id="header-search" class="">
+        <form name="search" class="header-search__form" method="get" action="{{ path('sermons_search') }}">
+            <input type="text" id="searchinputbox" type="submit" class="header-search__form-input" name="find"
+                   placeholder="search all sermons" value="{{ app.request.query.get("find") }}" required>
+            <span class="input-group-btn">
+                <button class="header-search__form-submit" type="submit">
+                    <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
+                </button>
+            </span>
+        </form>
+    </div>
+{% endblock %}
+
+{% block content %} 
+    <div class="container">
+        <div class="d-block d-md-none">
+            <div class="flash-message alert alert-info container" role="alert">
+                To download or stream, please scroll to the right <span
+                    class="glyphicon glyphicon-circle-arrow-right"></span>
+            </div>
+        </div>
+        <div class="btn-group-lg" role="group" aria-label="...">
+            {% if 'find' in app.request.query.all|keys %}
+                <div class="btn-group" role="group">
+                    <!-- Button trigger modal -->
+                    <a class="btn btn-secondary" href="{% if mainPage is defined %}{{ path('search_all') }}{% else %}{{ path('sermons_home') }}{% endif %}">
+                        Start again
+                    </a>
+                </div>
+            {% endif %}
+            <div class="btn-group" role="group">
+                <button type="button" class="btn btn-secondary" data-toggle="modal" data-target=".series-modal-dialog">
+                    Find by series
+                </button>
+            </div>
+            <div class="btn-group" role="group">
+                <button type="button" class="btn btn-secondary" data-toggle="modal" data-target=".help-modal-dialog">
+                    Help
+                </button>
+            </div>
+        </div>
+    </div>
+    <div class="sermons-list col-md-12">
+        <table id="myTable" class="table table-striped table-bordered table-hover table-condensed sortable">
+            <thead>
+                <TR>
+                    <TH class="Date">Date</TH>
+                    <TH class="apm">AM/PM</TH>
+                    <TH class="series">Series</TH>
+                    <TH class="reading">Reading</th>
+                    <TH class="title">Title</TH>
+                    <TH class="speaker">Speaker</TH>
+                    <TH class="download">Download</TH>
+                        {% if is_granted('ROLE_MANAGER') %}
+                        <TH class="sermon-stats">Stats</TH>
+                        {% endif %}
+                </TR>
+            </thead>
+            <tfoot>
+                <TR>
+                    <TH class="date">Date</TH>
+                    <TH class="apm">AM/PM</TH>
+                    <TH class="series">Series</TH>
+                    <TH class="reading">Reading</TH>
+                    <TH class="title">Title</TH>
+                    <TH class="speaker">Speaker</TH>
+                    <TH class="Download">Download</TH>
+                        {% if is_granted('ROLE_MANAGER') %}
+                        <TH class="sermon-stats">Stats</TH>
+                        {% endif %}
+                </TR>
+            </tfoot>
+
+            <tbody>
+                {% for entity in results.results %}
+                    <tr>
+                        <td>{% if entity.Date %}{{ entity.Date|date('d-m-Y') }}{% endif %}</td>
+                        <td>{{ entity.Apm }}</td>
+                        <td>
+                            {% for series in entity.Series %}
+                                <a href="{{ path("sermons_list_type", { 'value': series.Name }) }}">
+                                    {{ series.Name }}
+                                </a>
+                            {% endfor %}
+                        </td>
+                        <td>{{ entity.Reading }}
+                            {% if entity.SecondReading == 'none' %}
+                                <br>{{ entity.SecondReading }}
+                            {% endif %}
+                        </td>
+                        <td>{{ entity.Title }}</td>
+                        <td>            
+                            {{ entity.Speaker.Name }}
+                            {% if entity.Speaker.Organisation is not null %}
+                                {{ entity.Speaker.Organisation }}
+                            {% elseif entity.Speaker.Website is not null %}
+                                <a href="{{ entity.Speaker.Website }}">
+                                    {{ entity.Speaker.Organisation }}
+                                </a>
+                            {%  endif %}
+                        </td>
+{#                        {% set GAString = entity.Date|date('d-m-Y') ~ " - " ~ entity.Apm ~ " - " ~ entity.Title ~ " - " ~ entity.Speaker.Name ~ " - " ~ entity.Download %}#}
+                        {% set GAString = entity.Date|date('d-m-Y') ~ " - " ~ entity.Apm %}
+
+                        <td>
+                            {#{% if entity.webAudioFile %}
+
+                                <a class="btn btn-default sermon-button-margin"
+                                   href="{{ path('download_mp3', {'id': entity.download}) }}" onClick="
+                                           ga('send', {
+                                               'hitType': 'event', // Required.
+                                               'eventCategory': 'Media', // Required.
+                                               'eventAction': 'Download', // Required.
+                                               'eventLabel': '{{ GAString }}'
+                                           });
+                                   ">Download</a>&nbsp;
+
+                                <a class="btn btn-default sermon-button-margin"
+                                   href="{{ path('stream_mp3', {'id': entity.download}) }}" onClick="
+                                           ga('send', {
+                                               'hitType': 'event', // Required.
+                                               'eventCategory': 'Media', // Required.
+                                               'eventAction': 'Stream', // Required.
+                                               'eventLabel': '{{ GAString }}'
+                                           });
+                                   ">Stream</a>
+
+                            {% elseif not entity.webAudioFile and entity.corrupt == "0" %}
+                                <a class="btn btn-default sermon-button-margin"
+                                   href="{{ path('request_sermon', {'id': entity.download}) }}" onClick="
+                                           ga('send', {
+                                               'hitType': 'event', // Required.
+                                               'eventCategory': 'Media', // Required.
+                                               'eventAction': 'Request Sermon', // Required.
+                                               'eventLabel': '{{ GAString }}'
+                                           });
+                                   ">Request Sermon</a>&nbsp;
+                            {% elseif not entity.webAudioFile and entity.corrupt == "2" %}
+                                Pending Audio File
+                            {% else %}
+                                Download Unavailable
+                            {% endif %}
+
+                            {% if entity.hasServiceSheet %}
+                                <a class="btn btn-default sermon-button-margin"
+                                   href="{{ path('service_sheet_get', {'filename': entity.download}) }}" onClick="
+                                           ga('send', {
+                                               'hitType': 'event', // Required.
+                                               'eventCategory': 'Media', // Required.
+                                               'eventAction': 'Service Sheet', // Required.
+                                               'eventLabel': '{{ GAString }}'
+                                           });
+                                   ">Service Sheet</a>
+                            {% endif %}#}
+
+
+                        </td>
+                        {#{% if is_granted('ROLE_MANAGER') %}
+                            <td>
+                                Notes: {{ entity.sermonNotes }}<br/>
+                                Audio File: {{ entity.webAudioFile }}<br/>
+                                Sermon Sheet: {{ entity.hasServiceSheet }}<br/>
+                                Download ID: {{ entity.download }} <br/>
+                            </td>
+                        {% endif %}#}
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {# display navigation #}
+        <div class="navigation">
+            {#{{ knp_pagination_render(pagination) }}#}
+        </div>
+    </div>
+
+
+    <div class="modal fade help-modal-dialog" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                            aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="myModalLabel">Need help?</h4>
+                </div>
+                <div class="modal-body">
+                    Email <a href="mailto:***REMOVED***">***REMOVED***</a> or fill out <a
+                        href="{{ path('contact_form') }}">this form</a>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade series-modal-dialog" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                            aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="myModalLabel">
+                        List by series
+                    </h4>
+                </div>
+                <div class="modal-body">
+                    {#{{ render(controller(
+                    'WecMediaBundle:SermonsList:ListOfSeries'
+                    )) }}#}
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

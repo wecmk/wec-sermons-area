@@ -1,0 +1,33 @@
+<div class="col-md-6">
+    <b>Search by series (Bible books):</b><br>
+
+    {% for book in books %}
+        <a href="{{ path('list_type', {'field': 'series', 'value': book }) }}">{{ book }}</a>
+        <br />
+    {% endfor %}
+    <br>
+</div>
+
+<div class="col-md-6">
+    <b>Search by series (other):</b><br>
+    {% for key,series in seriesList %}
+        {% if series is not empty %}
+            <a href="{{ path('list_type', {'field': 'series', 'value': series }) }}">{{ series }}</a>
+            <br />
+        {% endif %} 
+    {% endfor %}
+    <br>             
+</div>
+<div class="col-md-6">
+    <b>Search by Time:</b><br>
+    <a href="{{ path('list_type', {'field': 'apm', 'value': 'AM'}) }}">AM only</a><br>
+    <a href="{{ path('list_type', {'field': 'apm', 'value': 'PM'}) }}">PM only</a><br>
+</div>
+<div class="col-md-6">
+    <b>Search by Speaker:</b><br>
+    <a href="{{ path('list_type', {'field': 'speaker', 'value': 'Allan Huxtable'}) }}">Allan Huxtable</a><br>
+    <a href="{{ path('list_type', {'field': 'speaker', 'value': 'Roger March'}) }}">Roger March</a><br>
+    <a href="{{ path('list_type', {'field': 'speaker', 'value': 'Roy Moffatt'}) }}">Roy Moffatt</a><br>
+    <a href="{{ path('list_type', {'field': 'speaker', 'value': 'Derek Sparrow'}) }}">Derek Sparrow</a><br>
+    <a href="{{ path('list_type', {'field': 'series', 'value': 'Visiting Speaker'}) }}">Visiting Speakers</a><br>                       
+</div>

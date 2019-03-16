@@ -5,12 +5,24 @@ namespace App\Entity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Gedmo\Mapping\Annotation as Gedmo;
+
+use Gedmo\SoftDeleteable\Traits\SoftDeleteableEntity;
+use Gedmo\Timestampable\Traits\TimestampableEntity;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\SermonRepository")
+ * @Gedmo\Loggable
  */
 class Sermon
 {
+    /**
+     * Hook SoftDeleteable behavior
+     * updates deletedAt field
+     */
+    use SoftDeleteableEntity;
+    use TimestampableEntity;
+    
     /**
      * @ORM\Id()
      * @ORM\GeneratedValue()
@@ -24,7 +36,7 @@ class Sermon
     private $Date;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\Apm", inversedBy="sermons")
+     * @ORM\Column(type="string", length=3)
      */
     private $Apm;
 
@@ -76,12 +88,14 @@ class Sermon
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Speaker", inversedBy="Sermon")
      */
-    private $speaker;
+    private $Speaker;
 
     public function __construct()
     {
         $this->Series = new ArrayCollection();
         $this->Speaker = new ArrayCollection();
+        $this->setCreatedAt(new \DateTime());
+        $this->setUpdatedAt(new \DateTime());
     }
 
     public function getId(): ?int
@@ -101,12 +115,12 @@ class Sermon
         return $this;
     }
 
-    public function getApm(): ?Apm
+    public function getApm(): ?string
     {
         return $this->Apm;
     }
 
-    public function setApm(?Apm $Apm): self
+    public function setApm($Apm): self
     {
         $this->Apm = $Apm;
 
@@ -237,12 +251,12 @@ class Sermon
 
     public function getSpeaker(): ?Speaker
     {
-        return $this->speaker;
+        return $this->Speaker;
     }
 
     public function setSpeaker(?Speaker $speaker): self
     {
-        $this->speaker = $speaker;
+        $this->Speaker = $speaker;
 
         return $this;
     }

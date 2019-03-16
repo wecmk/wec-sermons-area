@@ -7,7 +7,7 @@
 {% block content %} 
     <div class="container">
         <div class="menu-row">
-            {{ include('components/menu-item.html.twig', {'path': path('members_area_home'), 'asset': asset('build/images/search.svg') , 'heading': 'Sermons'}) }}
+            {{ include('components/menu-item.html.twig', {'path': path('sermons_home'), 'asset': asset('build/images/search.svg') , 'heading': 'Sermons'}) }}
             {{ include('components/menu-item.html.twig', {'path': path('wec_teams'), 'asset': asset('build/images/rota.svg') , 'heading': 'Team Lists'}) }}
             {{ include('components/menu-item.html.twig', {'path': path('questions_home'), 'asset': asset('build/images/question.svg') , 'heading': 'Question and Answers'}) }}
         </div>
