@@ -9,6 +9,7 @@ use Symfony\Component\HttpFoundation\Request;
 use FOS\ElasticaBundle\Elastica\Client;
 use Elastica\Query\QueryString;
 use Elastica\Query;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 
 /**
  * @Route("/sermons", name="sermons_")
@@ -18,24 +19,23 @@ class SermonsController extends AbstractController
     private $itemsPerPage = 16;
 
     /**
-     * @Route("/", name="home")
+     * @Route("/", name="home")     
      */
     public function indexAction(Request $request, \App\Services\Sermons\SermonsSearchService $search)
     {
+        $searchQuery = $request->query->get("searchQuery", "*");
+        // Fix search query so that empty matches everything
+        $searchQuery = ($searchQuery == "") ? "*" : $searchQuery;
+        
+        $results = $search->search($searchQuery);
+        
+        // Fix search display so that a match all (*) is written as an empty string
+        $searchQueryDisplay = ($searchQuery == "*") ? "" : $searchQuery;
+        
         return $this->render('sermons/index.html.twig', [
-                    'results' => $search->search("*"),
+                    'results' => $results,
+                    'searchQuery' => $searchQueryDisplay,
         ]);
-    }
-
-    /**
-     * @Route("/search", name="search")
-     */
-    public function searchAction(Request $request, \App\Services\Sermons\SermonsSearchService $search)
-    {
-        return array(
-            'results' => $searchResults,
-//            'articleSearchForm' => $articleSearchForm->createView(),
-        );
     }
 
     /**
