@@ -4,10 +4,14 @@ html * {
    font-family: Lato;
 }
 
-.container {
-    width: 1170px;
-}
-
 h1, h2, h3, h4, h5, h6 {
     color: $wec-c-red;
+}
+
+a {
+    color: $wec-c-red;
+}
+
+.container {
+    width: 1170px;
 }
