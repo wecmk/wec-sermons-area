@@ -36,15 +36,6 @@ class SermonsSearchService {
         
         $results = $this->index->find($boolQuery);
 
-                
-        /* @var $resultSet \Elastica\ResultSet */
-        foreach ($results as $scrollId => $resultSet) {
-            foreach ($resultSet as $result) {
-                /* @var $result \Elastica\Result */
-                $data = $result->getData();
-                $results[] = $data;
-            }
-        }
         return array(
             'results' => $results,
         );
