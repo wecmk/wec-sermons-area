@@ -69,7 +69,9 @@ cd /data/web/members.wecmk.org/certificates
 openssl req -x509 -nodes -days 3650 -newkey rsa:2048 -keyout members.wecmk.org.key -out members.wecmk.org.crt -subj '/CN=members.wecmk.org/O=Dev./C=GB'
 cd $CURRENTDIR
 
-sed -i 's/www-data/vagrant/g' /etc/apache2/envvars
+if [ $IS_DEV ]; then
+    sed -i 's/www-data/vagrant/g' /etc/apache2/envvars
+fi
 
 a2ensite members.wecmk.org
 a2enmod headers
