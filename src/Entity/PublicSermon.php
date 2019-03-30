@@ -4,11 +4,23 @@ namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
+use Gedmo\Mapping\Annotation as Gedmo;
+
+use Gedmo\SoftDeleteable\Traits\SoftDeleteableEntity;
+use Gedmo\Timestampable\Traits\TimestampableEntity;
+
 /**
  * @ORM\Entity(repositoryClass="App\Repository\PublicSermonRepository")
  */
 class PublicSermon
 {
+    /**
+     * Hook SoftDeleteable behavior
+     * updates deletedAt field
+     */
+    use SoftDeleteableEntity;
+    use TimestampableEntity;
+    
     /**
      * @ORM\Id()
      * @ORM\GeneratedValue()
@@ -26,6 +38,12 @@ class PublicSermon
      */
     private $Speaker;
 
+    public function __construct()
+    {
+        $this->setCreatedAt(new \DateTime());
+        $this->setUpdatedAt(new \DateTime());
+    }
+    
     public function getId(): ?int
     {
         return $this->id;
