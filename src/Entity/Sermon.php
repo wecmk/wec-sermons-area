@@ -10,6 +10,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
 use Gedmo\SoftDeleteable\Traits\SoftDeleteableEntity;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
 
+
 /**
  * @ORM\Entity(repositoryClass="App\Repository\SermonRepository")
  * @Gedmo\Loggable
@@ -24,11 +25,14 @@ class Sermon
     use TimestampableEntity;
     
     /**
-     * @ORM\Id()
-     * @ORM\GeneratedValue()
-     * @ORM\Column(type="integer")
+     * @var \Ramsey\Uuid\UuidInterface
+     *
+     * @ORM\Id
+     * @ORM\Column(type="uuid", unique=true)
+     * @ORM\GeneratedValue(strategy="CUSTOM")
+     * @ORM\CustomIdGenerator(class="Ramsey\Uuid\Doctrine\UuidGenerator")
      */
-    private $id;
+    protected $id;
 
     /**
      * @ORM\Column(type="date")
@@ -98,7 +102,7 @@ class Sermon
         $this->setUpdatedAt(new \DateTime());
     }
 
-    public function getId(): ?int
+    public function getId(): ?\Ramsey\Uuid\Uuid
     {
         return $this->id;
     }

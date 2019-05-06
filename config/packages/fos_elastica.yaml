@@ -33,6 +33,7 @@ fos_elastica:
                         Series: 
                             type: "nested"
                             properties:
+                                id: { type: text }
                                 Name: { type: text }
                                 Complete: { type: boolean }
                         Reading: { analyzer: snowball_analyzer }
@@ -41,6 +42,7 @@ fos_elastica:
                         Speaker: 
                             type: "nested"
                             properties:
+                                id: { type: text }
                                 Name: { type: text }
                                 Organisation: { type: text }
                                 Website: ~                                

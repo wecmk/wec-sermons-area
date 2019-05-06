@@ -23,11 +23,14 @@ class Speaker
     use TimestampableEntity;
     
     /**
-     * @ORM\Id()
-     * @ORM\GeneratedValue()
-     * @ORM\Column(type="integer")
+     * @var \Ramsey\Uuid\UuidInterface
+     *
+     * @ORM\Id
+     * @ORM\Column(type="uuid", unique=true)
+     * @ORM\GeneratedValue(strategy="CUSTOM")
+     * @ORM\CustomIdGenerator(class="Ramsey\Uuid\Doctrine\UuidGenerator")
      */
-    private $id;
+    protected $id;
 
     /**
      * @ORM\Column(type="string", length=255)
@@ -56,7 +59,7 @@ class Speaker
         $this->setUpdatedAt(new \DateTime());
     }
 
-    public function getId(): ?int
+    public function getId(): ?\Ramsey\Uuid\Uuid
     {
         return $this->id;
     }
