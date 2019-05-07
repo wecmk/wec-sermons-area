@@ -177,7 +177,7 @@
         "version": "2.0.0"
     },
     "jms/serializer": {
-        "version": "3.0.1"
+        "version": "2.3.0"
     },
     "jms/serializer-bundle": {
         "version": "3.0",
@@ -193,6 +193,12 @@
             "config/packages/prod/jms_serializer.yaml"
         ]
     },
+    "mhujer/jms-serializer-uuid": {
+        "version": "3.0.0"
+    },
+    "mhujer/jms-serializer-uuid-bundle": {
+        "version": "4.0.0"
+    },
     "monolog/monolog": {
         "version": "1.24.0"
     },
@@ -204,15 +210,6 @@
     },
     "pagerfanta/pagerfanta": {
         "version": "v1.1.0"
-    },
-    "phpdocumentor/reflection-common": {
-        "version": "1.0.1"
-    },
-    "phpdocumentor/reflection-docblock": {
-        "version": "4.3.0"
-    },
-    "phpdocumentor/type-resolver": {
-        "version": "0.4.0"
     },
     "psr/cache": {
         "version": "1.0.1"
@@ -424,9 +421,6 @@
     "symfony/property-access": {
         "version": "v4.1.7"
     },
-    "symfony/property-info": {
-        "version": "v4.1.7"
-    },
     "symfony/routing": {
         "version": "4.0",
         "recipe": {
@@ -456,12 +450,6 @@
     },
     "symfony/security-http": {
         "version": "v4.2.1"
-    },
-    "symfony/serializer": {
-        "version": "v4.1.7"
-    },
-    "symfony/serializer-pack": {
-        "version": "v1.0.1"
     },
     "symfony/stopwatch": {
         "version": "v4.1.7"
@@ -552,9 +540,6 @@
     },
     "twig/twig": {
         "version": "v2.5.0"
-    },
-    "webmozart/assert": {
-        "version": "1.3.0"
     },
     "willdurand/jsonp-callback-validator": {
         "version": "v1.1.0"

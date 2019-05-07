@@ -5,6 +5,8 @@ namespace App\Entity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use JMS\Serializer\Annotation as JMS;
+use JMS\Serializer\Annotation\SerializedName;
 use Gedmo\Mapping\Annotation as Gedmo;
 
 use Gedmo\SoftDeleteable\Traits\SoftDeleteableEntity;
@@ -26,6 +28,7 @@ class Sermon
     
     /**
      * @var \Ramsey\Uuid\UuidInterface
+     * @JMS\Type("uuid")
      *
      * @ORM\Id
      * @ORM\Column(type="uuid", unique=true)
