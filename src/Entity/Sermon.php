@@ -12,7 +12,6 @@ use Gedmo\Mapping\Annotation as Gedmo;
 use Gedmo\SoftDeleteable\Traits\SoftDeleteableEntity;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
 
-
 /**
  * @ORM\Entity(repositoryClass="App\Repository\SermonRepository")
  * @Gedmo\Loggable
@@ -127,6 +126,11 @@ class Sermon
         return $this->Apm;
     }
 
+    public function setId(\Ramsey\Uuid\UuidInterface $id)
+    {
+        $this->id = $id;
+    }
+        
     public function setApm($Apm): self
     {
         $this->Apm = $Apm;

@@ -160,8 +160,8 @@ class QuestionsController extends AbstractController
 
                 $startDate = $entity->getPublishDate();
                 foreach ($em->getRepository(QuestionQA::class)->findBy(
-                        array('questionSeries' => $entity->getQuestionSeries()),
-                        array('id' => 'ASC')
+                    array('questionSeries' => $entity->getQuestionSeries()),
+                    array('id' => 'ASC')
                 )
                         as $question) {
                     if ($question->getNumber() >= $entity->getNumber()) {

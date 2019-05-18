@@ -29,7 +29,7 @@ class Series
     /**
      * @var \Ramsey\Uuid\UuidInterface
      * @JMS\Type("uuid")
-     * 
+     *
      * @ORM\Id
      * @ORM\Column(type="uuid", unique=true)
      * @ORM\GeneratedValue(strategy="CUSTOM")

@@ -5,9 +5,10 @@ namespace App\DataFixtures;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\Persistence\ObjectManager;
 
-class BibleBooksFixtures extends Fixture implements \Doctrine\Bundle\FixturesBundle\FixtureGroupInterface {
-
-    public function load(ObjectManager $manager) {
+class BibleBooksFixtures extends Fixture implements \Doctrine\Bundle\FixturesBundle\FixtureGroupInterface
+{
+    public function load(ObjectManager $manager)
+    {
         $books = array(
             1 => array('Genesis', 'Gen', 'Ge', 'Gn'),
             2 => array('Exodus', 'Exo', 'Ex', 'Exod'),
@@ -86,8 +87,8 @@ class BibleBooksFixtures extends Fixture implements \Doctrine\Bundle\FixturesBun
         $manager->flush();
     }
 
-    public static function getGroups(): array {
+    public static function getGroups(): array
+    {
         return ['prod', 'dev', 'test'];
     }
-
 }

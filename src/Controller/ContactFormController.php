@@ -9,12 +9,14 @@ use Symfony\Component\HttpFoundation\Request;
 /**
  * @Route("/contact", name="contact_")
  */
-class ContactFormController extends AbstractController {
+class ContactFormController extends AbstractController
+{
 
     /**
      * @Route("/", name="form")
      */
-    public function index(Request $request, \Swift_Mailer $mailer) {
+    public function index(Request $request, \Swift_Mailer $mailer)
+    {
         $form = $this->createForm(\App\Form\ContactUsType::class);
         $form->handleRequest($request);
 
@@ -47,9 +49,9 @@ class ContactFormController extends AbstractController {
     /**
      * @Route("/complete", name="form_complete")
      */
-    function contactUsComplete() {
+    public function contactUsComplete()
+    {
         return $this->render('contact_form/complete.html.twig', [
         ]);
     }
-
 }

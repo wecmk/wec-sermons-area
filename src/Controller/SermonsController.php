@@ -14,14 +14,15 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 /**
  * @Route("/sermons", name="sermons_")
  */
-class SermonsController extends AbstractController {
-
+class SermonsController extends AbstractController
+{
     private $itemsPerPage = 16;
 
     /**
-     * @Route("/", name="home")     
+     * @Route("/", name="home")
      */
-    public function indexAction(Request $request, \App\Services\Sermons\SermonsSearchService $search) {
+    public function indexAction(Request $request, \App\Services\Sermons\SermonsSearchService $search)
+    {
         $searchQuery = $request->query->get("searchQuery", "*");
         // Fix search query so that empty matches everything
         $searchQuery = ($searchQuery == "") ? "*" : $searchQuery;
@@ -40,7 +41,8 @@ class SermonsController extends AbstractController {
     /**
      * @Route("/series/{value}", name="list_by_series")
      */
-    public function searchFieldAction(Request $request, \App\Services\Sermons\SermonsSearchService $search, $value) {
+    public function searchFieldAction(Request $request, \App\Services\Sermons\SermonsSearchService $search, $value)
+    {
         return $this->render('sermons/index.html.twig', [
                     'results' => $search->searchBySeries($value),
                     'searchQuery' => "",
@@ -50,7 +52,8 @@ class SermonsController extends AbstractController {
     /**
      * @Route("/speaker/{value}", name="list_by_speaker")
      */
-    public function searchSpeakerAction(Request $request, \App\Services\Sermons\SermonsSearchService $search, $value) {
+    public function searchSpeakerAction(Request $request, \App\Services\Sermons\SermonsSearchService $search, $value)
+    {
         return $this->render('sermons/index.html.twig', [
                     'results' => $search->searchBySpeaker($value),
                     'searchQuery' => "",
@@ -60,7 +63,8 @@ class SermonsController extends AbstractController {
     /**
      * @Route("/listofseries", name="list_series")
      */
-    public function ListOfSeriesAction(Request $request) {
+    public function ListOfSeriesAction(Request $request)
+    {
         // make a database call or other logic
         // to get the "$max" most recent articles
         $em = $this->getDoctrine()->getManager();
@@ -90,7 +94,8 @@ class SermonsController extends AbstractController {
         ]);
     }
 
-    public function convert_smart_quotes($string) {
+    public function convert_smart_quotes($string)
+    {
         $search = array(chr(145),
             chr(146),
             chr(147),
@@ -105,5 +110,4 @@ class SermonsController extends AbstractController {
 
         return str_replace($search, $replace, $string);
     }
-
 }
