@@ -6,6 +6,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use JMS\Serializer\Annotation as JMS;
+use JMS\Serializer\Annotation\Exclude;
 
 use Gedmo\Mapping\Annotation as Gedmo;
 
@@ -51,6 +52,7 @@ class Series
 
     /**
      * @ORM\ManyToMany(targetEntity="App\Entity\Sermon", mappedBy="Series")
+     * @Exclude
      */
     private $sermons;
 

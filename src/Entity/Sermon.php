@@ -5,12 +5,16 @@ namespace App\Entity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+
 use JMS\Serializer\Annotation as JMS;
 use JMS\Serializer\Annotation\SerializedName;
 use Gedmo\Mapping\Annotation as Gedmo;
+use JMS\Serializer\Annotation\Exclude;
 
 use Gedmo\SoftDeleteable\Traits\SoftDeleteableEntity;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
+
+
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\SermonRepository")
@@ -48,6 +52,7 @@ class Sermon
 
     /**
      * @ORM\ManyToMany(targetEntity="App\Entity\Series", inversedBy="sermons")
+     * @var Collection
      */
     private $Series;
 
@@ -99,7 +104,6 @@ class Sermon
     public function __construct()
     {
         $this->Series = new ArrayCollection();
-        $this->Speaker = new ArrayCollection();
         $this->setCreatedAt(new \DateTime());
         $this->setUpdatedAt(new \DateTime());
     }
@@ -108,7 +112,7 @@ class Sermon
     {
         return $this->id;
     }
-
+ 
     public function getDate(): ?\DateTimeInterface
     {
         return $this->Date;
@@ -139,7 +143,7 @@ class Sermon
     }
 
     /**
-     * @return Collection|Series[]
+     * @return Collection
      */
     public function getSeries(): Collection
     {

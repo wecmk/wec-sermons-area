@@ -27,7 +27,7 @@ fos_elastica:
             types:
                 sermons:
                     properties:
-                        id: ~
+                        id: { type: keyword }
                         Date: { type: date }
                         Apm: { type: text, fielddata: true }
                         Series: 
