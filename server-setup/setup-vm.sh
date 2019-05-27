@@ -40,7 +40,7 @@ apt-get install -y nodejs
 apt install -y vim htop lsof nload apache2 cronolog zip unzip
 apt install -y software-properties-common
 apt install -y yarn
-apt install -y php$PHPVERSION php$PHPVERSION-intl php$PHPVERSION-xml php$PHPVERSION-curl php$PHPVERSION-mbstring php$PHPVERSION-zip php$PHPVERSION-mysql
+apt install -y php$PHPVERSION php$PHPVERSION-intl php$PHPVERSION-xml php$PHPVERSION-curl php$PHPVERSION-mbstring php$PHPVERSION-zip php$PHPVERSION-mysql php$PHPVERSION-gd
 
 
 apt install -y libapache2-mod-php$PHPVERSION libapache2-mod-xsendfile
