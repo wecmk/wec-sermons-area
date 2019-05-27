@@ -4,6 +4,8 @@ IS_DEV=false
 
 CURRENTDIR=`pwd`
 
+PHPVERSION=7.2
+
 if [ -d "/vagrant/" ]; then
     IS_DEV=true
 fi
@@ -38,10 +40,10 @@ apt-get install -y nodejs
 apt install -y vim htop lsof nload apache2 cronolog zip unzip
 apt install -y software-properties-common
 apt install -y yarn
-apt install -y php7.3 php7.3-intl php7.3-xml php7.3-curl php7.3-mbstring php7.3-zip php7.3-mysql
+apt install -y php$PHPVERSION php$PHPVERSION-intl php$PHPVERSION-xml php$PHPVERSION-curl php$PHPVERSION-mbstring php$PHPVERSION-zip php$PHPVERSION-mysql
 
 
-apt install -y libapache2-mod-php7.3 libapache2-mod-xsendfile
+apt install -y libapache2-mod-php$PHPVERSION libapache2-mod-xsendfile
 
 php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
 php -r "if (hash_file('sha384', 'composer-setup.php') === '93b54496392c062774670ac18b134c3b3a95e5a5e5c8f1a9f115f203b75bf9a129d5daa8ba6a13e2cc8a1da0806388a8') { echo 'Installer verified'; } else { echo 'Installer corrupt'; unlink('composer-setup.php'); } echo PHP_EOL;"
