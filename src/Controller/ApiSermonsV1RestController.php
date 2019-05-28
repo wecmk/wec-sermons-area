@@ -10,6 +10,7 @@ use FOS\RestBundle\View\View;
 use FOS\RestBundle\Request\ParamFetcher;
 use FOS\RestBundle\Controller\AbstractFOSRestController;
 use JMS\Serializer\SerializerInterface;
+use Wec\MediaBundle\Entity\Series;
 
 /**
  * Download controller.
@@ -24,10 +25,25 @@ class ApiSermonsV1RestController extends AbstractFOSRestController
      *
      * @Route("", name="get_all_sermons", methods={"GET"})
      */
-    public function getAllSermonsAction(SerializerInterface $serialiser)
+    public function getAllSermonsAction()
     {
         $sermonsRepository = $this->getDoctrine()->getRepository(\App\Entity\Sermon::class);
         $entities = $sermonsRepository->findAll();
+        if (!$entities) {
+            throw $this->createNotFoundException('Data not found.');
+        }
+        return $this->view($entities, 200);        
+    }
+    
+    /**
+     * Return sermon by id
+     *
+     * @Route("/{id}", name="get_sermon", methods={"GET"})
+     */
+    public function getSermonsAction($id)
+    {
+        $sermonsRepository = $this->getDoctrine()->getRepository(\App\Entity\Sermon::class);
+        $entities = $sermonsRepository->find($id);
         if (!$entities) {
             throw $this->createNotFoundException('Data not found.');
         }
@@ -40,8 +56,6 @@ class ApiSermonsV1RestController extends AbstractFOSRestController
      * @param Request $request
      *
      * @return Response|View
-     * Return an user identified by username/email.
-     *
      * @param string $downloadId DownloadId
      * @Route("", name="post_new_sermon", methods={"POST"})
      */
@@ -87,93 +101,20 @@ class ApiSermonsV1RestController extends AbstractFOSRestController
         $sermon->setSpeaker($speaker[0]);
         
         $sermonsService->add($sermon);
-        
+
         return $this->view($sermon, 201);
     }
 
     /**
-     * Create a Sermon from the submitted data.<br/>
+     * Delete a sermon by id
      *
-     *
-     * @param ParamFetcher $paramFetcher Paramfetcher
-
-     * @Route("/download/{id}", name="update_sermon")
-     * @Method({"PUT"})
+     * @Route("/{id}", name="delete_sermon_by_id", methods={"DELETE"})
+     * 
+     * @param string $id the ID of the sermon
      * @return View
      */
-    public function putSermonAction(ParamFetcher $paramFetcher, $id)
+    public function deleteSermon($id)
     {
-        $sermon = $this->getDoctrine()->getRepository('WecMediaBundle:Sermons')->findOneBy(
-            array('download' => $paramFetcher->get('download'))
-        );
-
-        if ($paramFetcher->get('date')) {
-            $sermon->setDate(new \DateTime($paramFetcher->get('date')));
-        }
-        if ($paramFetcher->get('apm')) {
-            $sermon->setApm($paramFetcher->get('apm'));
-        }
-        if ($paramFetcher->get('series')) {
-            $series = $this->container->get('doctrine')->getRepository('WecMediaBundle:Series')->findOneBy(array('name' => $paramFetcher->get('series')));
-            if ($series === null) {
-                $series = new \Wec\MediaBundle\Entity\Series();
-                $series->setName($paramFetcher->get('series'));
-            }
-            $sermon->setSeries($series);
-        }
-        if ($paramFetcher->get('reading')) {
-            $sermon->setReading($paramFetcher->get('reading'));
-        }
-        if ($paramFetcher->get('second_reading')) {
-            $sermon->setSecondReading($paramFetcher->get('second_reading'));
-        }
-        if ($paramFetcher->get('title')) {
-            $sermon->setTitle($paramFetcher->get('title'));
-        }
-        if ($paramFetcher->get('speaker')) {
-            $sermon->setSpeaker($paramFetcher->get('speaker'));
-        }
-        if ($paramFetcher->get('download')) {
-            $sermon->setDownload($paramFetcher->get('download'));
-        }
-        if ($paramFetcher->get('corrupt')) {
-            $sermon->setCorrupt($paramFetcher->get('corrupt'));
-        }
-        if ($paramFetcher->get('tags')) {
-            $sermon->setTags($paramFetcher->get('tags'));
-        }
-        $view = View::create();
-        $errors = $this->get('validator')->validate($sermon, array('Update'));
-        if (count($errors) == 0) {
-            $em = $this->container->get('doctrine')->getManager();
-            $em->persist($sermon);
-            $em->flush();
-            $view->setStatusCode(204);
-            return $view;
-        } else {
-            $view = $this->getErrorsView($errors);
-            return $view;
-        }
-    }
-
-    /**
-     * Delete an user identified by username/email.
-     *
-
-     * @param string $slug username or email
-     *
-     * @return View
-     */
-    public function deleteUserAction($slug)
-    {
-        $userManager = $this->container->get('fos_user.user_manager');
-        $entity = $userManager->findUserByUsernameOrEmail($slug);
-        if (!$entity) {
-            throw $this->createNotFoundException('Data not found.');
-        }
-        $userManager->deleteUser($entity);
-        $view = View::create();
-        $view->setData("User deteled.")->setStatusCode(204);
-        return $view;
+        throw new \Exception("Action not implemented yet!");
     }
 }
