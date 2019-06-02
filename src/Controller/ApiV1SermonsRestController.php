@@ -14,9 +14,9 @@ use JMS\Serializer\SerializerInterface;
 /**
  * Download controller.
  *
- * @Route("/api/v1/sermons", name="api_sermons_")
+ * @Route("/api/v1/sermons", name="api_v1_sermons_")
  */
-class ApiSermonsV1RestController extends AbstractFOSRestController
+class ApiV1SermonsRestController extends AbstractFOSRestController
 {
     
     /**
@@ -31,7 +31,7 @@ class ApiSermonsV1RestController extends AbstractFOSRestController
         if (!$entities) {
             throw $this->createNotFoundException('Data not found.');
         }
-        return $this->view($entities, 200);        
+        return $this->view($entities, 200);
     }
 
     /**
@@ -45,11 +45,12 @@ class ApiSermonsV1RestController extends AbstractFOSRestController
      * @param string $downloadId DownloadId
      * @Route("", name="post_new_sermon", methods={"POST"})
      */
-    public function newAction(Request $request, 
-            \App\Services\Sermons\SermonsService $sermonsService,
-            \App\Services\Series\SeriesService $seriesService, 
-            \App\Services\Speaker\SpeakerService $speakerService)
-    {
+    public function newAction(
+        Request $request,
+        \App\Services\Sermons\SermonsService $sermonsService,
+        \App\Services\Series\SeriesService $seriesService,
+        \App\Services\Speaker\SpeakerService $speakerService
+    ) {
         $em = $this->getDoctrine()->getManager();
 
         /* @var $sermonNew App\Entity\Sermon */
@@ -66,7 +67,7 @@ class ApiSermonsV1RestController extends AbstractFOSRestController
             $series = $seriesService->findBy($value);
             if (empty($series)) {
                 $series = array($seriesService->create($value));
-            } 
+            }
             $sermon->addSeries($series[0]);
         }
         

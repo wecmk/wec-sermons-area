@@ -32,7 +32,8 @@ class SermonsService
      * @param string $name
      * @return array
      */
-    public function findBy($name) {
+    public function findBy($name)
+    {
         if ($name == "") {
             $name = "Uncategorised";
         }
@@ -44,9 +45,10 @@ class SermonsService
      * @param Sermon $sermon
      * @return Sermon The managed persisted object
      */
-    public function add(Sermon $sermon) {
+    public function add(Sermon $sermon)
+    {
         $this->em->persist($sermon);
         $this->em->flush();
         return $sermon;
-    }   
+    }
 }

@@ -33,7 +33,8 @@ class SeriesService
      * @param string $name
      * @return array
      */
-    public function findBy($name) {
+    public function findBy($name)
+    {
         if ($name == "") {
             $name = "Uncategorised";
         }
@@ -45,7 +46,8 @@ class SeriesService
      * @param Series $series
      * @return Series The managed persisted object
      */
-    public function add(Series $series) {
+    public function add(Series $series)
+    {
         $this->em->persist($series);
         $this->em->flush();
         return $series;
@@ -56,7 +58,8 @@ class SeriesService
      * @param Series $series
      * @return Series The managed persisted object
      */
-    public function create($seriesName, $complete = false) {
+    public function create($seriesName, $complete = false)
+    {
         $series = new Series();
         $series->setName($seriesName);
         $series->setComplete($complete);

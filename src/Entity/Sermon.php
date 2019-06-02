@@ -14,8 +14,6 @@ use JMS\Serializer\Annotation\Exclude;
 use Gedmo\SoftDeleteable\Traits\SoftDeleteableEntity;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
 
-
-
 /**
  * @ORM\Entity(repositoryClass="App\Repository\SermonRepository")
  * @Gedmo\Loggable
