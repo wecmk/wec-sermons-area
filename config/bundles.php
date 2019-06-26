@@ -21,10 +21,4 @@ return [
     Stof\DoctrineExtensionsBundle\StofDoctrineExtensionsBundle::class => ['all' => true],
     JMS\SerializerBundle\JMSSerializerBundle::class => ['all' => true],
     Mhujer\JmsSerializer\Uuid\SymfonyBundle\MhujerJmsSerializerUuidBundle::class => ['all' => true],
-    Sonata\EasyExtendsBundle\SonataEasyExtendsBundle::class => ['all' => true],
-    Sonata\DatagridBundle\SonataDatagridBundle::class => ['all' => true],
-    Sonata\CoreBundle\SonataCoreBundle::class => ['all' => true],
-    Sonata\MediaBundle\SonataMediaBundle::class => ['all' => true],
-    Sonata\Doctrine\Bridge\Symfony\Bundle\SonataDoctrineBundle::class => ['all' => true],
-    App\Application\Sonata\MediaBundle\ApplicationSonataMediaBundle::class => ['all' => true],
 ];
