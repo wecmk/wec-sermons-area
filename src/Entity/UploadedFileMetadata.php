@@ -3,6 +3,12 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Vich\UploaderBundle\Mapping\Annotation as Vich;
+use Symfony\Component\HttpFoundation\File\File;
+use Gedmo\SoftDeleteable\Traits\SoftDeleteableEntity;
+use Gedmo\Timestampable\Traits\TimestampableEntity;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
+use JMS\Serializer\Annotation as JMS;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\UploadedFileMetadataRepository")
@@ -10,6 +16,13 @@ use Doctrine\ORM\Mapping as ORM;
 class UploadedFileMetadata
 {
 
+    /**
+     * Hook SoftDeleteable behavior
+     * updates deletedAt field
+     */
+    use SoftDeleteableEntity;
+    use TimestampableEntity;
+    
     /**
      * @var \Ramsey\Uuid\UuidInterface
      * @JMS\Type("uuid")
@@ -32,10 +45,10 @@ class UploadedFileMetadata
     private $contentLength;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string", length=50, nullable=true))
      */
-    private $contentType;
-
+    private $fileLocation;
+        
     public function getId(): ?\Ramsey\Uuid\Uuid
     {
         return $this->id;
@@ -65,15 +78,27 @@ class UploadedFileMetadata
         return $this;
     }
 
-    public function getContentType(): ?string
+    public function getFileLocation(): ?string
     {
-        return $this->contentType;
+        if (null == $this->fileLocation) {
+            return "/data/media/tmp/uploaded_file/" . $this->id->toString();
+        }
+        return $this->fileLocation;
     }
 
-    public function setContentType(string $contentType): self
+    public function setFileLocation(string $fileLocation): self
     {
-        $this->contentType = $contentType;
+        $this->fileLocation = $fileLocation;
 
         return $this;
+    }
+    
+    /**
+     * Generate a hash value using the contents of a given file
+     * @param string $algo Name of selected hashing algorithm (i.e. "md5", "sha256", "haval160,4", etc..)
+     * @return string Returns a string containing the calculated message digest as lowercase hexits unless raw_output is set to true in which case the raw binary representation of the message digest is returned.
+     */
+    public function getHash($algo = "sha512") {
+        return hash_file($algo, $this->getFileLocation());
     }
 }

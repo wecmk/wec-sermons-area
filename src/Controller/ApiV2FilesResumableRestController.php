@@ -5,7 +5,7 @@ namespace App\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
-
+use Symfony\Component\HttpFoundation\Response;
 /**
  *
  * @Route("/api/v2/files", name="api_v2_files_")
@@ -29,33 +29,39 @@ class ApiV2FilesResumableRestController extends AbstractController
      *
      * @Route("/upload/resumable", name="upload_resumable_post", methods={"POST"})
      */
-    public function resumableUpload(Request $request)
+    public function resumableUpload(Request $request, \App\Services\File\UploadService $uploadService)
     {
         // Based on https://developers.google.com/drive/api/v3/manage-uploads
-        $metadata = [];
-        $uploadedMimeType = $request->headers->get('X-Upload-Content-Type', 'application/octet-stream');
-        $uploadedContentLength = $request->headers->get('X-Upload-Content-Length', "*");
-        $uploadedContentType = $request->headers->get('X-Upload-Content-Length', "*");
+        $metadata = new \App\Entity\UploadedFileMetadata();
+        $metadata->setMimeType($request->headers->get('X-Upload-Content-Type', 'application/octet-stream'));
+        if ($request->headers->has('X-Upload-Content-Length')) {
+            $metadata->setContentLength($request->headers->get('X-Upload-Content-Length'));
+        } else {
+            $response = new Response();
+            $response->setStatusCode(411, "X-Upload-Content-Length Required");
+            return $response;            
+        }
+        $contentType = $request->headers->get('Content-Type', "*");
+
+        // Content of the body (not the overall file length)
         $contentLength = $request->headers->get('Content-Length', "*");
         
-        // Create a session token
-        $id = \Ramsey\Uuid\Uuid::uuid4();
-                
-        $temp_file = "/tmp/" . $id;
-        $handle = fopen($temp_file, "c+b");
-        fclose($handle);
-    
+        $uploadedFile = $uploadService->create($metadata->getMimeType(), $metadata->getContentLength());
+
         // return a Location Header
         $response = new \Symfony\Component\HttpFoundation\Response('', 201);
-        $response->headers->set("Location", $this->generateUrl('api_v2_files_upload_resumable_put', ['id' => $id]), true);
+        $response->headers->set("Location", $this->generateUrl('api_v2_files_upload_resumable_put', ['id' => $uploadedFile->getId()->toString()]), true);
         return $response;
     }
     
     /**
      * @Route("/upload/resumable/{id}", name="upload_resumable_put", methods={"PUT"})
      */
-    public function resumableUploadContinue(Request $request, $id)
+    public function resumableUploadContinue(Request $request, 
+            \App\Services\File\UploadService $uploadService,
+            $id)
     {
+        $uuid = \Ramsey\Uuid\Uuid::fromString($id);        
         // Based on https://developers.google.com/drive/api/v3/manage-uploads
         // input request
         /*
@@ -67,27 +73,29 @@ class ApiV2FilesResumableRestController extends AbstractController
             [BYTES 0-524287]
         */
         // Based on https://developers.google.com/drive/api/v3/manage-uploads
-        $uploadedMimeType = $request->headers->get('X-Upload-Content-Type', 'application/octet-stream');
-        $uploadedContentLength = $request->headers->get('X-Upload-Content-Length', "*");
-        $uploadedContentType = $request->headers->get('X-Upload-Content-Length', "*");
-        $contentLength = $request->headers->get('Content-Length', "*");
-        
-        $uploadedContentRange = new \App\Entity\UploadedContentRange($request->headers->get('Content-Range'));
-        
-        // Create a session token
-        $temp_file = "/tmp/" . $id;
-        $outputStream = fopen($temp_file, "c+b");
-        fseek($outputStream, $uploadedContentRange->startsAt());
-        
-        fwrite($outputStream, $request->getContent(), $uploadedContentRange->length());
-        $pointer = ftell($outputStream);
-        fclose($outputStream);
+                
+        $uploadedContent = new \App\Entity\UploadedContent(
+                $request->headers->get('Content-Range'),
+                $request->getContent()
+                );
+        $file = $uploadService->getFile($uuid);
+        $pointer = $uploadService->update(\Ramsey\Uuid\Uuid::fromString($uuid), $uploadedContent);
         
         // once the upload is complete, return 200/201, along with any metadata associated with the resource
         $response = new \Symfony\Component\HttpFoundation\Response();
-        $response->setStatusCode(308, "Resume Incomplete");
-        $rangeValue = "0-" . strval($pointer-1);
-        $response->headers->set("Content-Range", $rangeValue);
+        if ($pointer == intval($file->getContentLength())) {
+            $response->setStatusCode(201);
+            $hashAlgo = "sha512";
+            $body = [
+                "algo" => $hashAlgo,
+                "hash" => $file->getHash($hashAlgo),
+            ];
+            $response->setContent(json_encode($body));
+        } else {
+            $response->setStatusCode(308, "Resume Incomplete");
+            $rangeValue = "0-" . strval($pointer-1);
+            $response->headers->set("Content-Range", $rangeValue);
+        }
         return $response;
     }
 }
