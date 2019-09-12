@@ -16,6 +16,7 @@ else
     DIRPATH=`pwd`
 fi
 
+sudo apt-get install software-properties-common
 add-apt-repository ppa:ondrej/php
 add-apt-repository ppa:ondrej/apache2
 add-apt-repository ppa:webupd8team/y-ppa-manager
