@@ -85,7 +85,7 @@ class ApiV2FilesResumableRestController extends AbstractController
         $uploadedContent = new \App\Entity\UploadedContent(
             $request->headers->get('Content-Range'),
             $request->getContent()
-                );
+        );
         $file = $uploadService->getFile($uuid);
         $pointer = $uploadService->update(\Ramsey\Uuid\Uuid::fromString($uuid), $uploadedContent);
         

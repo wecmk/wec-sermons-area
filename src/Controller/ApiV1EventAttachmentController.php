@@ -36,7 +36,7 @@ class ApiV1EventAttachmentController extends AbstractFOSRestController
         \App\Services\Event\EventService $eventService,
         \App\Services\File\UploadService $uploadService,
         \Doctrine\ORM\EntityManagerInterface $em
-            ) {
+    ) {
         $event = $eventService->getById($eventId);
         if (isEmpty($event)) {
             $this->createNotFoundException("$eventId is not found");
