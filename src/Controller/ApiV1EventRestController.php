@@ -16,7 +16,7 @@ use JMS\Serializer\SerializerInterface;
  *
  * @Route("/api/v1/sermons", name="api_v1_sermons_")
  */
-class ApiV1SermonsRestController extends AbstractFOSRestController
+class ApiV1EventRestController extends AbstractFOSRestController
 {
     
     /**
