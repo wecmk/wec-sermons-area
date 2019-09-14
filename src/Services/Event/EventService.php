@@ -57,7 +57,8 @@ class EventService
      * @param type $id
      * @return Event
      */
-    public function getById($id) {
+    public function getById($id)
+    {
         return $this->repository->find($id);
     }
 }

@@ -21,22 +21,22 @@ class ApiV1EventAttachmentController extends AbstractFOSRestController
     
     /**
      * Saves a link between and Event and an AttachmentMetadata
-     * 
+     *
      * Post a json containing:
-     * 
+     *
      * {
      *    "attachmentMetadataId": "UUID"
      * }
      * @todo Move reference of EntityManager to it's own service
      * @Route("/{eventId}", name="link", methods={"POST"})
      */
-    public function postLink(Request $request, 
-            $eventId, 
-            \App\Services\Event\EventService $eventService,
-            \App\Services\File\UploadService $uploadService,
-            \Doctrine\ORM\EntityManagerInterface $em
-            )
-    {
+    public function postLink(
+        Request $request,
+        $eventId,
+        \App\Services\Event\EventService $eventService,
+        \App\Services\File\UploadService $uploadService,
+        \Doctrine\ORM\EntityManagerInterface $em
+            ) {
         $event = $eventService->getById($eventId);
         if (isEmpty($event)) {
             $this->createNotFoundException("$eventId is not found");
@@ -47,8 +47,8 @@ class ApiV1EventAttachmentController extends AbstractFOSRestController
         try {
             $attachmentId = json_decode($request->getContent(), true)['attachmentMetadataId'];
             $attachmentId = \Ramsey\Uuid\Uuid::fromString($attachmentId);
-            $file = $uploadService->getFile($attachmentId);   
-            $link->addAttachmentMetadata($file);                    
+            $file = $uploadService->getFile($attachmentId);
+            $link->addAttachmentMetadata($file);
             $em->persist($link);
             $em->commit();
         } catch (\Ramsey\Uuid\Exception\InvalidUuidStringException $ex) {
@@ -58,5 +58,4 @@ class ApiV1EventAttachmentController extends AbstractFOSRestController
         
         return new \Symfony\Component\HttpFoundation\Response('', 204);
     }
-
 }
