@@ -13,6 +13,12 @@ use Symfony\Component\HttpFoundation\Response;
 class ApiV2FilesResumableRestController extends AbstractController
 {
     /**
+     * Must be compatible with PHP hash function
+     * @var string Name of selected hashing algorithm (e.g. "md5", "sha256", "haval160,4", etc..)
+     */
+    private $algo = "sha512";
+    
+    /**
      * X-Upload-Content-Type. Optional. Set to the MIME type of the file data,
      *      which will be transferred in subsequent requests. If the MIME type
      *      of the data is not specified in metadata or through this header,
@@ -85,10 +91,9 @@ class ApiV2FilesResumableRestController extends AbstractController
         $response = new \Symfony\Component\HttpFoundation\Response();
         if ($pointer == intval($file->getContentLength())) {
             $response->setStatusCode(201);
-            $hashAlgo = "sha512";
             $body = [
-                "algo" => $hashAlgo,
-                "hash" => $file->getHash($hashAlgo),
+                "algo" => $this->algo,
+                "hash" => $file->getHash($this->algo),
             ];
             $response->setContent(json_encode($body));
         } else {
