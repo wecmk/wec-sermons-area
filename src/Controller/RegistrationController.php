@@ -38,10 +38,10 @@ class RegistrationController extends Controller
             $token = new UsernamePasswordToken($user, $password, 'main');
             $tokenStorage->setToken($token);
             $session->set('_security_main', serialize($token));
-            return $this->redirectToRoute('homepage');
+            return $this->redirectToRoute('members_area_home');
         }
         return $this->render(
-            'register.html.twig',
+            'security/register.html.twig',
             [
                 'form' => $form->createView(),
             ]
