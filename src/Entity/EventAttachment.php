@@ -23,9 +23,15 @@ class EventAttachment
      */
     private $Event;
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\AttachmentMetadata", mappedBy="eventAttachment")
+     */
+    private $AttachmentMetadata;
+
     public function __construct()
     {
         $this->Event = new ArrayCollection();
+        $this->AttachmentMetadata = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -54,6 +60,37 @@ class EventAttachment
     {
         if ($this->Event->contains($event)) {
             $this->Event->removeElement($event);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|AttachmentMetadata[]
+     */
+    public function getAttachmentMetadata(): Collection
+    {
+        return $this->AttachmentMetadata;
+    }
+
+    public function addAttachmentMetadata(AttachmentMetadata $attachmentMetadata): self
+    {
+        if (!$this->AttachmentMetadata->contains($attachmentMetadata)) {
+            $this->AttachmentMetadata[] = $attachmentMetadata;
+            $attachmentMetadata->setEventAttachment($this);
+        }
+
+        return $this;
+    }
+
+    public function removeAttachmentMetadata(AttachmentMetadata $attachmentMetadata): self
+    {
+        if ($this->AttachmentMetadata->contains($attachmentMetadata)) {
+            $this->AttachmentMetadata->removeElement($attachmentMetadata);
+            // set the owning side to null (unless already changed)
+            if ($attachmentMetadata->getEventAttachment() === $this) {
+                $attachmentMetadata->setEventAttachment(null);
+            }
         }
 
         return $this;

@@ -51,4 +51,13 @@ class EventService
         $this->em->flush();
         return $sermon;
     }
+    
+    /**
+     * Find Event by ID
+     * @param type $id
+     * @return Event
+     */
+    public function getById($id) {
+        return $this->repository->find($id);
+    }
 }

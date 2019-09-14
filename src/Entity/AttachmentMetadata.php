@@ -58,6 +58,12 @@ class AttachmentMetadata
      * @ORM\Column(type="string", length=128)
      */
     private $hash;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\EventAttachment", inversedBy="AttachmentMetadata")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $eventAttachment;
         
     public function getId(): ?\Ramsey\Uuid\Uuid
     {
@@ -128,6 +134,18 @@ class AttachmentMetadata
     public function setHash(string $hash): self
     {
         $this->hash = $hash;
+
+        return $this;
+    }
+
+    public function getEventAttachment(): ?EventAttachment
+    {
+        return $this->eventAttachment;
+    }
+
+    public function setEventAttachment(?EventAttachment $eventAttachment): self
+    {
+        $this->eventAttachment = $eventAttachment;
 
         return $this;
     }
