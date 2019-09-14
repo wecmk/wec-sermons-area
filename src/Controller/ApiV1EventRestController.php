@@ -14,7 +14,7 @@ use JMS\Serializer\SerializerInterface;
 /**
  * Download controller.
  *
- * @Route("/api/v1/sermons", name="api_v1_sermons_")
+ * @Route("/api/v1/events", name="api_v1_events_")
  */
 class ApiV1EventRestController extends AbstractFOSRestController
 {
@@ -22,9 +22,9 @@ class ApiV1EventRestController extends AbstractFOSRestController
     /**
      * Return the overall user list.
      *
-     * @Route("", name="get_all_sermons", methods={"GET"})
+     * @Route("", name="get_all", methods={"GET"})
      */
-    public function getAllSermonsAction(SerializerInterface $serialiser)
+    public function getAllEventsAction(SerializerInterface $serialiser)
     {
         $sermonsRepository = $this->getDoctrine()->getRepository(\App\Entity\Event::class);
         $entities = $sermonsRepository->findAll();
@@ -35,7 +35,7 @@ class ApiV1EventRestController extends AbstractFOSRestController
     }
 
     /**
-     * Creates a new sermon record.
+     * Creates a new event.
      *
      * @param Request $request
      *
@@ -43,7 +43,7 @@ class ApiV1EventRestController extends AbstractFOSRestController
      * Return an user identified by username/email.
      *
      * @param string $downloadId DownloadId
-     * @Route("", name="post_new_sermon", methods={"POST"})
+     * @Route("", name="post_new", methods={"POST"})
      */
     public function newAction(
         Request $request,
@@ -93,16 +93,16 @@ class ApiV1EventRestController extends AbstractFOSRestController
     }
 
     /**
-     * Create a Sermon from the submitted data.<br/>
+     * Create a Event from the submitted data.<br/>
      *
      *
      * @param ParamFetcher $paramFetcher Paramfetcher
 
-     * @Route("/download/{id}", name="update_sermon")
+     * @Route("/download/{id}", name="update_event")
      * @Method({"PUT"})
      * @return View
      */
-    public function putSermonAction(ParamFetcher $paramFetcher, $id)
+    public function putEventAction(ParamFetcher $paramFetcher, $id)
     {
         $sermon = $this->getDoctrine()->getRepository('WecMediaBundle:Sermons')->findOneBy(
             array('download' => $paramFetcher->get('download'))
