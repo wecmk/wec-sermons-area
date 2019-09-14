@@ -4,33 +4,41 @@ namespace App\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
+use Symfony\Component\HttpFoundation\ResponseHeaderBag;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
-  * @Route("/files", name="files_")
-  */
+ * @Route("/files", name="files_")
+ */
 class FilesController extends AbstractController
 {
+
     /**
      * Download file
      *
-     * @Route("/download/{id}", name="download")
+     * @Route("/{downloadType}/{id}", name="download")
      */
-    public function download($id)
+    public function serveFile(Request $request, $downloadType, $id)
     {
-        return $this->render('files/index.html.twig', [
-            'controller_name' => 'FilesController',
-        ]);
+        $response = $this->fileResponse($request, "");
+        
+        switch ($downloadType) {
+            case "steam":
+                $response->setContentDisposition(ResponseHeaderBag::DISPOSITION_INLINE);
+            break;
+            case "download":
+            default:
+                $response->setContentDisposition(ResponseHeaderBag::DISPOSITION_ATTACHMENT);
+            break;
+        }
+        
+        return $response;
     }
-    
-    /**
-     * Steam file
-     *
-     * @Route("/stream/{id}", name="steam")
-     */
-    public function steam($id)
+
+    private function fileResponse(Request $request, $pathToFile)
     {
-        return $this->render('files/index.html.twig', [
-            'controller_name' => 'FilesController',
-        ]);
+        BinaryFileResponse::trustXSendfileTypeHeader();
+        $response = new BinaryFileResponse($file);
     }
 }
