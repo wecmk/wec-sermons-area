@@ -1,14 +1,14 @@
 <?php
 
-namespace App\Services\Sermons;
+namespace App\Services\Event;
 
 use Psr\Log\LoggerInterface;
-use App\Entity\Sermon;
+use App\Entity\Event;
 
 /*
  * @author Samuel Pearce <samuel.pearce@open.ac.uk>
  */
-class SermonsService
+class EventService
 {
     /* @var $logger LoggerInterface */
 
@@ -24,7 +24,7 @@ class SermonsService
     {
         $this->logger = $logger;
         $this->em = $em;
-        $this->repository = $em->getRepository(Sermon::class);
+        $this->repository = $em->getRepository(Event::class);
     }
 
     /**
@@ -42,10 +42,10 @@ class SermonsService
     
     /**
      * Adds a sermon
-     * @param Sermon $sermon
-     * @return Sermon The managed persisted object
+     * @param Event $sermon
+     * @return Event The managed persisted object
      */
-    public function add(Sermon $sermon)
+    public function add(Event $sermon)
     {
         $this->em->persist($sermon);
         $this->em->flush();

@@ -26,7 +26,7 @@ class ApiV1SermonsRestController extends AbstractFOSRestController
      */
     public function getAllSermonsAction(SerializerInterface $serialiser)
     {
-        $sermonsRepository = $this->getDoctrine()->getRepository(\App\Entity\Sermon::class);
+        $sermonsRepository = $this->getDoctrine()->getRepository(\App\Entity\Event::class);
         $entities = $sermonsRepository->findAll();
         if (!$entities) {
             throw $this->createNotFoundException('Data not found.');
@@ -47,20 +47,20 @@ class ApiV1SermonsRestController extends AbstractFOSRestController
      */
     public function newAction(
         Request $request,
-        \App\Services\Sermons\SermonsService $sermonsService,
+        \App\Services\Event\EventService $sermonsService,
         \App\Services\Series\SeriesService $seriesService,
         \App\Services\Speaker\SpeakerService $speakerService
     ) {
         $em = $this->getDoctrine()->getManager();
 
-        /* @var $sermonNew App\Entity\Sermon */
+        /* @var $sermonNew App\Entity\Event */
         
         
-        $sermon = new \App\Entity\Sermon();
+        $event = new \App\Entity\Event();
         
-        $sermon->setId(\Ramsey\Uuid\Uuid::uuid4());
-        $sermon->setDate(\DateTime::createFromFormat("U", strtotime($request->get("date", ""))));
-        $sermon->setApm(strtoupper($request->get("apm", "")));
+        $event->setId(\Ramsey\Uuid\Uuid::uuid4());
+        $event->setDate(\DateTime::createFromFormat("U", strtotime($request->get("date", ""))));
+        $event->setApm(strtoupper($request->get("apm", "")));
         $seriesList = explode('/', $request->get('series', ""));
         
         foreach ($seriesList as $value) {
@@ -68,28 +68,28 @@ class ApiV1SermonsRestController extends AbstractFOSRestController
             if (empty($series)) {
                 $series = array($seriesService->create($value));
             }
-            $sermon->addSeries($series[0]);
+            $event->addSeries($series[0]);
         }
         
-        $sermon->setReading($request->get("reading", ""));
-        $sermon->setSecondReading($request->get("secondReading", ""));
-        $sermon->setTitle($request->get("title", ""));
-        $sermon->setCorrupt(boolval($request->get("corrupt", false)));
-        $sermon->setIsPublic(boolval($request->get("isPublic", true)));
-        $sermon->setTags($request->get("tags", ""));
-        $sermon->setPublicComments($request->get("publicComments", ""));
-        $sermon->setPrivateComments($request->get("privateComments", ""));
+        $event->setReading($request->get("reading", ""));
+        $event->setSecondReading($request->get("secondReading", ""));
+        $event->setTitle($request->get("title", ""));
+        $event->setCorrupt(boolval($request->get("corrupt", false)));
+        $event->setIsPublic(boolval($request->get("isPublic", true)));
+        $event->setTags($request->get("tags", ""));
+        $event->setPublicComments($request->get("publicComments", ""));
+        $event->setPrivateComments($request->get("privateComments", ""));
         
         $speakerString = $request->get("speaker", "");
         $speaker = $speakerService->findBy($speakerString);
         if (empty($speaker)) {
             $speaker = array($speakerService->create($speakerString));
         }
-        $sermon->setSpeaker($speaker[0]);
+        $event->setSpeaker($speaker[0]);
         
-        $sermonsService->add($sermon);
+        $sermonsService->add($event);
         
-        return $this->view($sermon, 201);
+        return $this->view($event, 201);
     }
 
     /**

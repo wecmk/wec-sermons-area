@@ -21,7 +21,7 @@ class SermonsController extends AbstractController
     /**
      * @Route("/", name="home")
      */
-    public function indexAction(Request $request, \App\Services\Sermons\SermonsSearchService $search)
+    public function indexAction(Request $request, \App\Services\Event\EventSearchService $search)
     {
         $searchQuery = $request->query->get("searchQuery", "*");
         // Fix search query so that empty matches everything
@@ -41,7 +41,7 @@ class SermonsController extends AbstractController
     /**
      * @Route("/series/{value}", name="list_by_series")
      */
-    public function searchFieldAction(Request $request, \App\Services\Sermons\SermonsSearchService $search, $value)
+    public function searchFieldAction(Request $request, \App\Services\Event\EventSearchService $search, $value)
     {
         return $this->render('sermons/index.html.twig', [
                     'results' => $search->searchBySeries($value),
@@ -52,7 +52,7 @@ class SermonsController extends AbstractController
     /**
      * @Route("/speaker/{value}", name="list_by_speaker")
      */
-    public function searchSpeakerAction(Request $request, \App\Services\Sermons\SermonsSearchService $search, $value)
+    public function searchSpeakerAction(Request $request, \App\Services\Event\EventSearchService $search, $value)
     {
         return $this->render('sermons/index.html.twig', [
                     'results' => $search->searchBySpeaker($value),

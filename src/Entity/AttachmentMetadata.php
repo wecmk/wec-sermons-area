@@ -13,7 +13,7 @@ use JMS\Serializer\Annotation as JMS;
 /**
  * @ORM\Entity(repositoryClass="App\Repository\UploadedFileMetadataRepository")
  */
-class UploadedFileMetadata
+class AttachmentMetadata
 {
 
     /**

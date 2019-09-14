@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Services\Sermons;
+namespace App\Services\Event;
 
 use Psr\Log\LoggerInterface;
 use App\Services\Cache\CacheService;
@@ -15,7 +15,7 @@ use FOS\ElasticaBundle\Finder\TransformedFinder;
  * @author Samuel Pearce <samuel.pearce@open.ac.uk>
  */
 
-class SermonsSearchService
+class EventSearchService
 {
     /* @var $logger LoggerInterface */
 

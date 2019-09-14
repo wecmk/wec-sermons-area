@@ -10,6 +10,7 @@
         "friendsofsymfony/rest-bundle": "^2.5",
         "jms/serializer-bundle": "^3.3",
         "mhujer/jms-serializer-uuid-bundle": "^4.0",
+        "ocramius/proxy-manager": "^1.0",
         "ramsey/uuid-doctrine": "^1.5",
         "sensio/framework-extra-bundle": "^5.1",
         "stof/doctrine-extensions-bundle": "^1.3",

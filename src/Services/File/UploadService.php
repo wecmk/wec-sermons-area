@@ -3,7 +3,7 @@
 namespace App\Services\File;
 
 use Psr\Log\LoggerInterface;
-use App\Entity\UploadedFileMetadata;
+use App\Entity\AttachmentMetadata;
 use Ramsey\Uuid\Uuid;
 use App\Entity\UploadedContent;
 /*
@@ -27,7 +27,7 @@ class UploadService {
     public function __construct(LoggerInterface $logger, \Doctrine\ORM\EntityManagerInterface $em) {
         $this->logger = $logger;
         $this->em = $em;
-        $this->repository = $em->getRepository(UploadedFileMetadata::class);
+        $this->repository = $em->getRepository(AttachmentMetadata::class);
         $this->fileRootPath = "/tmp";
     }
 
@@ -38,7 +38,7 @@ class UploadService {
      */
     public function create($mimeType, $contentLength) {
         // Based on https://developers.google.com/drive/api/v3/manage-uploads
-        $metadata = new \App\Entity\UploadedFileMetadata();
+        $metadata = new \App\Entity\AttachmentMetadata();
         $metadata->setMimeType($mimeType);
         $metadata->setContentLength($contentLength);
         $this->em->persist($metadata);
@@ -58,7 +58,7 @@ class UploadService {
      */
     public function update(Uuid $id, UploadedContent $uploadedContent) {
         // Based on https://developers.google.com/drive/api/v3/manage-uploads
-        /** @var UploadedFileMetadata $file */
+        /** @var AttachmentMetadata $file */
         $file = $this->getFile($id);
         if (empty($file)) {
             throw new FileNotFoundException("The uploaded file was not created");
@@ -75,9 +75,9 @@ class UploadService {
         return $pointer;        
     }
     
-    public function getFile(Uuid $uuid): UploadedFileMetadata
+    public function getFile(Uuid $uuid): AttachmentMetadata
     {
-        return $this->em->getRepository(UploadedFileMetadata::class)->find($uuid);
+        return $this->em->getRepository(AttachmentMetadata::class)->find($uuid);
     }
     
 }

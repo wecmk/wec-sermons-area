@@ -2,21 +2,21 @@
 
 namespace App\Repository;
 
-use App\Entity\UploadedFileMetadata;
+use App\Entity\AttachmentMetadata;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 
 /**
- * @method UploadedFileMetadata|null find($id, $lockMode = null, $lockVersion = null)
- * @method UploadedFileMetadata|null findOneBy(array $criteria, array $orderBy = null)
- * @method UploadedFileMetadata[]    findAll()
- * @method UploadedFileMetadata[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ * @method AttachmentMetadata|null find($id, $lockMode = null, $lockVersion = null)
+ * @method AttachmentMetadata|null findOneBy(array $criteria, array $orderBy = null)
+ * @method AttachmentMetadata[]    findAll()
+ * @method AttachmentMetadata[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class UploadedFileMetadataRepository extends ServiceEntityRepository
+class AttachmentMetadataRepository extends ServiceEntityRepository
 {
     public function __construct(RegistryInterface $registry)
     {
-        parent::__construct($registry, UploadedFileMetadata::class);
+        parent::__construct($registry, AttachmentMetadata::class);
     }
 
     // /**

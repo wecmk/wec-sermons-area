@@ -32,7 +32,7 @@ class ApiV2FilesResumableRestController extends AbstractController
     public function resumableUpload(Request $request, \App\Services\File\UploadService $uploadService)
     {
         // Based on https://developers.google.com/drive/api/v3/manage-uploads
-        $metadata = new \App\Entity\UploadedFileMetadata();
+        $metadata = new \App\Entity\AttachmentMetadata();
         $metadata->setMimeType($request->headers->get('X-Upload-Content-Type', 'application/octet-stream'));
         if ($request->headers->has('X-Upload-Content-Length')) {
             $metadata->setContentLength($request->headers->get('X-Upload-Content-Length'));
