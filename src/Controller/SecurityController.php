@@ -15,6 +15,7 @@ class SecurityController extends Controller
      */
     public function login(AuthenticationUtils $authenticationUtils)
     {
+        // @todo #3 If incorrect credentials are given, show user feedback
         $error = $authenticationUtils->getLastAuthenticationError();
         $lastUsername = $authenticationUtils->getLastUsername();
         $form = $this->createForm(UserLoginType::class);
