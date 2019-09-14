@@ -90,13 +90,14 @@ class ApiV2FilesResumableRestController extends AbstractController
         // once the upload is complete, return 200/201, along with any metadata associated with the resource
         $response = new \Symfony\Component\HttpFoundation\Response();
         if ($pointer == intval($file->getContentLength())) {
-            $uploadService->completeUpload($file);
             $response->setStatusCode(201);
             $body = [
                 "algo" => $this->algo,
                 "hash" => $file->getHash($this->algo),
             ];
             $response->setContent(json_encode($body));
+            $file->setHash($body['hash']);
+            $uploadService->completeUpload($file);
         } else {
             $response->setStatusCode(308, "Resume Incomplete");
             $rangeValue = "0-" . strval($pointer-1);
