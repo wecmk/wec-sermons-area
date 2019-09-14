@@ -14,13 +14,11 @@ use JMS\Serializer\Annotation\Exclude;
 use Gedmo\SoftDeleteable\Traits\SoftDeleteableEntity;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
 
-
-
 /**
- * @ORM\Entity(repositoryClass="App\Repository\SermonRepository")
+ * @ORM\Entity(repositoryClass="App\Repository\EventRepository")
  * @Gedmo\Loggable
  */
-class Sermon
+class Event
 {
     /**
      * Hook SoftDeleteable behavior
@@ -101,11 +99,17 @@ class Sermon
      */
     private $Speaker;
 
+    /**
+     * @ORM\ManyToMany(targetEntity="App\Entity\EventAttachment", mappedBy="Event")
+     */
+    private $eventAttachments;
+
     public function __construct()
     {
         $this->Series = new ArrayCollection();
         $this->setCreatedAt(new \DateTime());
         $this->setUpdatedAt(new \DateTime());
+        $this->eventAttachments = new ArrayCollection();
     }
 
     public function getId(): ?\Ramsey\Uuid\Uuid
@@ -272,6 +276,34 @@ class Sermon
     public function setSpeaker(?Speaker $speaker): self
     {
         $this->Speaker = $speaker;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|EventAttachment[]
+     */
+    public function getEventAttachments(): Collection
+    {
+        return $this->eventAttachments;
+    }
+
+    public function addEventAttachment(EventAttachment $eventAttachment): self
+    {
+        if (!$this->eventAttachments->contains($eventAttachment)) {
+            $this->eventAttachments[] = $eventAttachment;
+            $eventAttachment->addEvent($this);
+        }
+
+        return $this;
+    }
+
+    public function removeEventAttachment(EventAttachment $eventAttachment): self
+    {
+        if ($this->eventAttachments->contains($eventAttachment)) {
+            $this->eventAttachments->removeElement($eventAttachment);
+            $eventAttachment->removeEvent($this);
+        }
 
         return $this;
     }

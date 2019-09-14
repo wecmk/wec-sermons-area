@@ -51,7 +51,7 @@ class Series
     private $Complete;
 
     /**
-     * @ORM\ManyToMany(targetEntity="App\Entity\Sermon", mappedBy="Series")
+     * @ORM\ManyToMany(targetEntity="App\Entity\Event", mappedBy="Series")
      * @Exclude
      */
     private $sermons;
@@ -94,14 +94,14 @@ class Series
     }
 
     /**
-     * @return Collection|Sermon[]
+     * @return Collection|Event[]
      */
     public function getSermons(): Collection
     {
         return $this->sermons;
     }
 
-    public function addSermon(Sermon $sermon): self
+    public function addSermon(Event $sermon): self
     {
         if (!$this->sermons->contains($sermon)) {
             $this->sermons[] = $sermon;
@@ -111,7 +111,7 @@ class Series
         return $this;
     }
 
-    public function removeSermon(Sermon $sermon): self
+    public function removeSermon(Event $sermon): self
     {
         if ($this->sermons->contains($sermon)) {
             $this->sermons->removeElement($sermon);

@@ -29,7 +29,7 @@ class MessageFixture extends Fixture implements \Doctrine\Bundle\FixturesBundle\
         $SpeakerRoger->setName("Roger March");
         $manager->persist($SpeakerRoger);
         
-        $sermon = new \App\Entity\Sermon();
+        $sermon = new \App\Entity\Event();
         $sermon->setDate(new \DateTime());
         $sermon->setApm("AM");
         $sermon->addSeries($seriesColossians);
@@ -44,7 +44,7 @@ class MessageFixture extends Fixture implements \Doctrine\Bundle\FixturesBundle\
         $sermon->setPrivateComments("");
         $manager->persist($sermon);
 
-        $sermon = new \App\Entity\Sermon();
+        $sermon = new \App\Entity\Event();
         $sermon->setDate(new \DateTime());
         $sermon->setApm("PM");
         $sermon->addSeries($seriesHebrews);
@@ -59,7 +59,7 @@ class MessageFixture extends Fixture implements \Doctrine\Bundle\FixturesBundle\
         $sermon->setPrivateComments("");
         $manager->persist($sermon);
 
-        $sermon = new \App\Entity\Sermon();
+        $sermon = new \App\Entity\Event();
         $sermon->setDate(new \DateTime());
         $sermon->setApm("AM");
         $sermon->addSeries($seriesUncategorised);

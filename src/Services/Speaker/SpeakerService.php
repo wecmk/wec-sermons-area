@@ -33,7 +33,8 @@ class SpeakerService
      * @param string $name
      * @return array
      */
-    public function findBy($name) {
+    public function findBy($name)
+    {
         return $this->repository->findBy(['Name' => $name]);
     }
     
@@ -42,7 +43,8 @@ class SpeakerService
      * @param Speaker $speaker
      * @return Speaker The managed persisted object
      */
-    public function add(Speaker $speaker) {
+    public function add(Speaker $speaker)
+    {
         $this->em->persist($speaker);
         $this->em->flush();
         return $speaker;
@@ -53,11 +55,12 @@ class SpeakerService
      * @param Series $series
      * @return Series The managed persisted object
      */
-    public function create($name, $organisation = "", $website = "") {
+    public function create($name, $organisation = "", $website = "")
+    {
         $speaker = new Speaker();
         $speaker->setName($name);
         $speaker->setOrganisation($organisation);
-        $speaker->setWebsite($website);        
+        $speaker->setWebsite($website);
         return $this->add($speaker);
     }
 }

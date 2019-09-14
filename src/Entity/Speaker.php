@@ -52,7 +52,7 @@ class Speaker
     private $Website;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Sermon", mappedBy="Speaker")
+     * @ORM\OneToMany(targetEntity="App\Entity\Event", mappedBy="Speaker")
      * @Exclude
      */
     private $Sermon;
@@ -106,14 +106,14 @@ class Speaker
     }
 
     /**
-     * @return Collection|Sermon[]
+     * @return Collection|Event[]
      */
     public function getSermon(): Collection
     {
         return $this->Sermon;
     }
 
-    public function addSermon(Sermon $sermon): self
+    public function addSermon(Event $sermon): self
     {
         if (!$this->Sermon->contains($sermon)) {
             $this->Sermon[] = $sermon;
@@ -123,7 +123,7 @@ class Speaker
         return $this;
     }
 
-    public function removeSermon(Sermon $sermon): self
+    public function removeSermon(Event $sermon): self
     {
         if ($this->Sermon->contains($sermon)) {
             $this->Sermon->removeElement($sermon);

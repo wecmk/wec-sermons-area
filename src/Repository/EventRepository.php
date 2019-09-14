@@ -2,21 +2,21 @@
 
 namespace App\Repository;
 
-use App\Entity\Sermon;
+use App\Entity\Event;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 
 /**
- * @method Sermon|null find($id, $lockMode = null, $lockVersion = null)
- * @method Sermon|null findOneBy(array $criteria, array $orderBy = null)
- * @method Sermon[]    findAll()
- * @method Sermon[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ * @method Event|null find($id, $lockMode = null, $lockVersion = null)
+ * @method Event|null findOneBy(array $criteria, array $orderBy = null)
+ * @method Event[]    findAll()
+ * @method Event[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class SermonRepository extends ServiceEntityRepository
+class EventRepository extends ServiceEntityRepository
 {
     public function __construct(RegistryInterface $registry)
     {
-        parent::__construct($registry, Sermon::class);
+        parent::__construct($registry, Event::class);
     }
 
     // /**
