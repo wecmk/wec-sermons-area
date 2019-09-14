@@ -6,11 +6,13 @@ use Psr\Log\LoggerInterface;
 use App\Entity\AttachmentMetadata;
 use Ramsey\Uuid\Uuid;
 use App\Entity\UploadedContent;
+
 /*
  * @author Samuel Pearce <samuel.pearce@open.ac.uk>
  */
 
-class UploadService {
+class UploadService
+{
     /* @var $logger LoggerInterface */
 
     private $logger;
@@ -24,7 +26,8 @@ class UploadService {
     /** @var string $fileRootPath */
     private $fileRootPath;
 
-    public function __construct(LoggerInterface $logger, \Doctrine\ORM\EntityManagerInterface $em) {
+    public function __construct(LoggerInterface $logger, \Doctrine\ORM\EntityManagerInterface $em)
+    {
         $this->logger = $logger;
         $this->em = $em;
         $this->repository = $em->getRepository(AttachmentMetadata::class);
@@ -36,7 +39,8 @@ class UploadService {
      * @param string $name
      * @return array
      */
-    public function create($mimeType, $contentLength) {
+    public function create($mimeType, $contentLength)
+    {
         // Based on https://developers.google.com/drive/api/v3/manage-uploads
         $metadata = new \App\Entity\AttachmentMetadata();
         $metadata->setMimeType($mimeType);
@@ -56,7 +60,8 @@ class UploadService {
      * @param string $name
      * @return int Pointer of Stream
      */
-    public function update(Uuid $id, UploadedContent $uploadedContent) {
+    public function update(Uuid $id, UploadedContent $uploadedContent)
+    {
         // Based on https://developers.google.com/drive/api/v3/manage-uploads
         /** @var AttachmentMetadata $file */
         $file = $this->getFile($id);
@@ -72,10 +77,11 @@ class UploadService {
         fwrite($outputStream, $uploadedContent->getContent(), $uploadedContent->getUploadedContentRange()->length());
         $pointer = ftell($outputStream);
         fclose($outputStream);
-        return $pointer;        
+        return $pointer;
     }
     
-    public function completeUpload(AttachmentMetadata $completedFile) {
+    public function completeUpload(AttachmentMetadata $completedFile)
+    {
         $completedFile->setComplete(true);
         $this->em->persist($completedFile);
         $this->em->commit();
@@ -85,5 +91,4 @@ class UploadService {
     {
         return $this->em->getRepository(AttachmentMetadata::class)->find($uuid);
     }
-    
 }

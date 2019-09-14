@@ -108,7 +108,8 @@ class AttachmentMetadata
      * @param string $algo Name of selected hashing algorithm (i.e. "md5", "sha256", "haval160,4", etc..)
      * @return string Returns a string containing the calculated message digest as lowercase hexits unless raw_output is set to true in which case the raw binary representation of the message digest is returned.
      */
-    public function getHash($algo = "sha512") {
+    public function getHash($algo = "sha512")
+    {
         return hash_file($algo, $this->getFileLocation());
     }
 

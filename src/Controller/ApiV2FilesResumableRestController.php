@@ -6,6 +6,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+
 /**
  *
  * @Route("/api/v2/files", name="api_v2_files_")
@@ -45,7 +46,7 @@ class ApiV2FilesResumableRestController extends AbstractController
         } else {
             $response = new Response();
             $response->setStatusCode(411, "X-Upload-Content-Length Required");
-            return $response;            
+            return $response;
         }
         $contentType = $request->headers->get('Content-Type', "*");
 
@@ -63,11 +64,12 @@ class ApiV2FilesResumableRestController extends AbstractController
     /**
      * @Route("/upload/resumable/{id}", name="upload_resumable_put", methods={"PUT"})
      */
-    public function resumableUploadContinue(Request $request, 
-            \App\Services\File\UploadService $uploadService,
-            $id)
-    {
-        $uuid = \Ramsey\Uuid\Uuid::fromString($id);        
+    public function resumableUploadContinue(
+        Request $request,
+        \App\Services\File\UploadService $uploadService,
+        $id
+    ) {
+        $uuid = \Ramsey\Uuid\Uuid::fromString($id);
         // Based on https://developers.google.com/drive/api/v3/manage-uploads
         // input request
         /*
@@ -81,8 +83,8 @@ class ApiV2FilesResumableRestController extends AbstractController
         // Based on https://developers.google.com/drive/api/v3/manage-uploads
                 
         $uploadedContent = new \App\Entity\UploadedContent(
-                $request->headers->get('Content-Range'),
-                $request->getContent()
+            $request->headers->get('Content-Range'),
+            $request->getContent()
                 );
         $file = $uploadService->getFile($uuid);
         $pointer = $uploadService->update(\Ramsey\Uuid\Uuid::fromString($uuid), $uploadedContent);

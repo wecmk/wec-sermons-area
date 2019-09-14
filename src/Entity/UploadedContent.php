@@ -12,7 +12,8 @@ class UploadedContent
     /** @var Resource|string $uploadedContentRange */
     private $content;
     
-    function __construct($uploadedContentRange, $content) {
+    public function __construct($uploadedContentRange, $content)
+    {
         if ($uploadedContentRange instanceof UploadedContentRange) {
             $this->uploadedContentRange = $uploadedContentRange;
         } else {
@@ -21,16 +22,17 @@ class UploadedContent
         $this->content = $content;
     }
     
-    function getUploadedContentRange(): UploadedContentRange
+    public function getUploadedContentRange(): UploadedContentRange
     {
         return $this->uploadedContentRange;
     }
 
     /**
-     * 
+     *
      * @return string|resource
-     */            
-    function getContent() {
+     */
+    public function getContent()
+    {
         return $this->content;
-    }           
+    }
 }
