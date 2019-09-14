@@ -75,6 +75,12 @@ class UploadService {
         return $pointer;        
     }
     
+    public function completeUpload(AttachmentMetadata $completedFile) {
+        $completedFile->setComplete(true);
+        $this->em->persist($completedFile);
+        $this->em->commit();
+    }
+    
     public function getFile(Uuid $uuid): AttachmentMetadata
     {
         return $this->em->getRepository(AttachmentMetadata::class)->find($uuid);

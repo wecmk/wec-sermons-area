@@ -48,6 +48,16 @@ class AttachmentMetadata
      * @ORM\Column(type="string", length=50, nullable=true))
      */
     private $fileLocation;
+
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $complete = false;
+
+    /**
+     * @ORM\Column(type="string", length=128)
+     */
+    private $hash;
         
     public function getId(): ?\Ramsey\Uuid\Uuid
     {
@@ -100,5 +110,24 @@ class AttachmentMetadata
      */
     public function getHash($algo = "sha512") {
         return hash_file($algo, $this->getFileLocation());
+    }
+
+    public function getComplete(): ?bool
+    {
+        return $this->complete;
+    }
+
+    public function setComplete(bool $complete): self
+    {
+        $this->complete = $complete;
+
+        return $this;
+    }
+
+    public function setHash(string $hash): self
+    {
+        $this->hash = $hash;
+
+        return $this;
     }
 }
