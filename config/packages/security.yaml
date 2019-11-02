@@ -21,8 +21,8 @@ security:
                 login_path: login
                 check_path: login
             logout:
-                path:   /logout
-                target: /
+                path:   security_logout
+                target: members_area_home
             anonymous:    true
 
     role_hierarchy:
