@@ -1,0 +1,32 @@
+{% extends 'base.html.twig' %}
+
+{% set breadcrumbs = { "Login": ""} %}
+
+{% block title %}Login{% endblock %}
+
+{% block content %}
+    <div class="form-signin">
+        <div class="intro">
+            <h3 class="form-signin-heading">Login</h3>            
+            Forgot your password? <a href="{{ path("contact_form") }}">Contact us</a>
+        </div>
+
+        {{ form_start(form) }}
+
+        <div class="form-group">
+            {{ form_label(form._username, null, {'label': 'Username', 'label_attr': {'class': 'sr-only'}}) }}
+            {{ form_widget(form._username, {'attr': {'class': 'form-control', 'placeholder': 'Username'}}) }}
+            {{ form_errors(form._username) }}
+        </div>  
+        
+        <div class="form-group">
+            {{ form_label(form._password, null, {'label': 'Password', 'label_attr': {'class': 'sr-only'}}) }}
+            {{ form_widget(form._password, {'attr': {'class': 'form-control', 'placeholder': 'Password'}}) }}
+            {{ form_errors(form._password) }}
+        </div>
+
+        {{ form_widget(form.submit, {'label': 'Login', 'attr': {'class': 'btn btn-primary'}}) }}
+
+        {{ form_end(form) }}
+    </div>
+{% endblock %}

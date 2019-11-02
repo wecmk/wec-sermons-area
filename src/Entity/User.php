@@ -4,12 +4,22 @@ namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Gedmo\SoftDeleteable\Traits\SoftDeleteableEntity;
+use Gedmo\Timestampable\Traits\TimestampableEntity;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\UserRepository")
  */
 class User implements UserInterface
 {
+
+    /**
+     * Hook SoftDeleteable behavior
+     * updates deletedAt field
+     */
+    use SoftDeleteableEntity;
+    use TimestampableEntity;
+
     /**
      * @ORM\Id()
      * @ORM\GeneratedValue()
@@ -23,9 +33,9 @@ class User implements UserInterface
     private $username;
 
     /**
-     * @ORM\Column(type="text")
+     * @ORM\Column(type="array")
      */
-    private $roles = [];
+    private $roles = ['ROLE_USER'];
 
     /**
      * @var string The hashed password
@@ -33,10 +43,27 @@ class User implements UserInterface
      */
     private $password;
 
+    /**
+     * @ORM\Column(type="string", length=30)
+     */
+    private $email;
+
+    /**
+     * @var string|null
+     */
+    protected $plainPassword;
+
     public function getId(): ?int
     {
         return $this->id;
     }
+
+    /**
+     * @var string|null
+     *
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    protected $passwordRequestToken;
 
     /**
      * A visual identifier that represents this user.
@@ -104,5 +131,55 @@ class User implements UserInterface
     {
         // If you store any temporary, sensitive data on the user, clear it here
         // $this->plainPassword = null;
+    }
+
+    public function getEmail(): ?string
+    {
+        return $this->email;
+    }
+
+    public function setEmail(string $email): self
+    {
+        $this->email = $email;
+
+        return $this;
+    }
+
+    /**
+     * @return null|string
+     */
+    public function getPlainPassword(): ?string
+    {
+        return $this->plainPassword;
+    }
+
+    /**
+     * @param null|string $plainPassword
+     *
+     * @return User
+     */
+    public function setPlainPassword(?string $plainPassword): User
+    {
+        $this->plainPassword = $plainPassword;
+        return $this;
+    }
+
+    /**
+     * @return null|string
+     */
+    public function getPasswordRequestToken(): ?string
+    {
+        return $this->passwordRequestToken;
+    }
+
+    /**
+     * @param null|string $passwordRequestToken
+     *
+     * @return User
+     */
+    public function setPasswordRequestToken(?string $passwordRequestToken): User
+    {
+        $this->passwordRequestToken = $passwordRequestToken;
+        return $this;
     }
 }
