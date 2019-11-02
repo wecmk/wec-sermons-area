@@ -27,7 +27,7 @@ class ApiV1EventAttachmentController extends AbstractFOSRestController
      * {
      *    "attachmentMetadataId": "UUID"
      * }
-     * @todo Move reference of EntityManager to it's own service
+     * @todo #2 Move reference of EntityManager to it's own service
      * @Route("/{eventId}", name="link", methods={"POST"})
      */
     public function postLink(
