@@ -28,13 +28,13 @@
                 </p>
             {% endif %}
             {% for question in questions %}
-                {% if question.publishDate < date() or true %} {# is_granted('ROLE_QUESTIONS_EDITOR') #}
+                {% if question.publishDate < date() or is_granted('ROLE_QUESTIONS_EDITOR') %}
                     <div class="col-md-4 col-sm-6 col-sm-6 col-xs-6">
                         <div class="question">
                             <h3>{{ question.number }}. {{ question.question }}</h3>
                             <p>{{ question.answer }}</p>
                         </div>
-                        {#{% if is_granted('ROLE_QUESTIONS_EDITOR') %}#}
+                        {% if is_granted('ROLE_QUESTIONS_EDITOR') %}
                             <div class="hidden-print">
                                 <table class="table table-responsive">
                                     <tr>
@@ -76,7 +76,7 @@
                                 </tr>
                             </table>
                         </div>
-                    {#{% endif %}#}
+                    {% endif %}
 
                 </div><!--/span-->
                 {% endif %}
