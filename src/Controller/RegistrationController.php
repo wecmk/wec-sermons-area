@@ -29,6 +29,7 @@ class RegistrationController extends Controller
         $user = new User();
         $form = $this->createForm(UserRegistrationType::class, $user);
         $form->handleRequest($request);
+        # @todo #3 Move User Registration and validation to UserService.php
         if ($form->isSubmitted() && $form->isValid()) {
             $password = $encoder->encodePassword($user, $user->getPlainPassword());
             $user->setPassword($password);
