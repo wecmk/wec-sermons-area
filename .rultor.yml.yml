@@ -1,0 +1,13 @@
+architect: 
+  - samuelpearce
+reader:
+  - urn:github:3008688
+assets: 
+
+install: 
+  - "wget https://cs.symfony.com/download/php-cs-fixer-v2.phar -O php-cs-fixer"
+merge: 
+  script: |-
+      php php-cs-fixer fix src/ -v --dry-run --stop-on-violation --using-cache=no
+  squash: true
+  fast-forward: default
