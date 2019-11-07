@@ -45,7 +45,8 @@ fos_elastica:
                                 id: { type: text }
                                 Name: { type: text }
                                 Organisation: { type: text }
-                                Website: ~                                
+                                Website: ~
+                        AttachmentMetadata: ~
                     persistence:
                         # the driver can be orm, mongodb or phpcr
                         driver: orm

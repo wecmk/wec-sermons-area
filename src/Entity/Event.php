@@ -100,9 +100,9 @@ class Event
     private $Speaker;
 
     /**
-     * @ORM\ManyToMany(targetEntity="App\Entity\EventAttachment", mappedBy="Event")
+     * @ORM\OneToMany(targetEntity="App\Entity\AttachmentMetadata", mappedBy="Event", orphanRemoval=true)
      */
-    private $eventAttachments;
+    private $attachmentMetadata;
 
     public function __construct()
     {
@@ -110,6 +110,7 @@ class Event
         $this->setCreatedAt(new \DateTime());
         $this->setUpdatedAt(new \DateTime());
         $this->eventAttachments = new ArrayCollection();
+        $this->attachmentMetadata = new ArrayCollection();
     }
 
     public function getId(): ?\Ramsey\Uuid\Uuid
@@ -298,11 +299,32 @@ class Event
         return $this;
     }
 
-    public function removeEventAttachment(EventAttachment $eventAttachment): self
+    /**
+     * @return Collection|AttachmentMetadata[]
+     */
+    public function getAttachmentMetadata(): Collection
     {
-        if ($this->eventAttachments->contains($eventAttachment)) {
-            $this->eventAttachments->removeElement($eventAttachment);
-            $eventAttachment->removeEvent($this);
+        return $this->attachmentMetadata;
+    }
+
+    public function addAttachmentMetadata(AttachmentMetadata $attachmentMetadata): self
+    {
+        if (!$this->attachmentMetadata->contains($attachmentMetadata)) {
+            $this->attachmentMetadata[] = $attachmentMetadata;
+            $attachmentMetadata->setEvent($this);
+        }
+
+        return $this;
+    }
+
+    public function removeAttachmentMetadata(AttachmentMetadata $attachmentMetadata): self
+    {
+        if ($this->attachmentMetadata->contains($attachmentMetadata)) {
+            $this->attachmentMetadata->removeElement($attachmentMetadata);
+            // set the owning side to null (unless already changed)
+            if ($attachmentMetadata->getEvent() === $this) {
+                $attachmentMetadata->setEvent(null);
+            }
         }
 
         return $this;

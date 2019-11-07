@@ -60,10 +60,21 @@ class AttachmentMetadata
     private $hash;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\EventAttachment", inversedBy="AttachmentMetadata")
+     * @ORM\ManyToOne(targetEntity="App\Entity\Event", inversedBy="attachmentMetadata")
      * @ORM\JoinColumn(nullable=false)
      */
-    private $eventAttachment;
+    private $event;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\AttachmentMetadataType")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $type;
+
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $isPublic;
         
     public function getId(): ?\Ramsey\Uuid\Uuid
     {
@@ -138,15 +149,44 @@ class AttachmentMetadata
         return $this;
     }
 
-    public function getEventAttachment(): ?EventAttachment
+    public function getEvent(): ?Event
     {
-        return $this->eventAttachment;
+        return $this->event;
     }
 
-    public function setEventAttachment(?EventAttachment $eventAttachment): self
+    public function setEvent(?Event $event): self
     {
-        $this->eventAttachment = $eventAttachment;
+        $this->event = $event;
 
+        return $this;
+    }
+
+    public function getType(): ?AttachmentMetadataType
+    {
+        return $this->type;
+    }
+
+    public function setType(?AttachmentMetadataType $type): self
+    {
+        $this->type = $type;
+
+        return $this;
+    }
+
+    public function getIsPublic(): ?bool
+    {
+        if ($this->type->canBePublic()) {
+            return $this->isPublic;
+        } else {
+            return $this->isPublic = false;            
+        }
+        
+    }
+
+    public function setIsPublic(bool $isPublic): self
+    {        
+        $this->isPublic = $isPublic;
+     
         return $this;
     }
 }
