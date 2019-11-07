@@ -22,7 +22,7 @@ final class Version20191107232415 extends AbstractMigration
         // this up() migration is auto-generated, please modify it to your needs
         $this->abortIf($this->connection->getDatabasePlatform()->getName() !== 'mysql', 'Migration can only be executed safely on \'mysql\'.');
 
-        $this->addSql('ALTER TABLE attachment_metadata_type CHANGE type type VARCHAR(30) NOT NULL');        
+        $this->addSql('ALTER TABLE attachment_metadata_type CHANGE type type VARCHAR(30) NOT NULL');
     }
 
     public function down(Schema $schema) : void

@@ -36,7 +36,8 @@ class AttachmentMetadataType
      */
     private $canBePublic;
 
-    function __construct($type, $name, $description, $canBePublic = true) {
+    public function __construct($type, $name, $description, $canBePublic = true)
+    {
         $this->type = $type;
         $this->name = $name;
         $this->description = $description;

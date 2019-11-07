@@ -32,7 +32,7 @@ final class Version20191107231804 extends AbstractMigration
         $this->addSql('ALTER TABLE attachment_metadata ADD CONSTRAINT FK_4B07875471F7E88B FOREIGN KEY (event_id) REFERENCES event (id)');
         $this->addSql('ALTER TABLE attachment_metadata ADD CONSTRAINT FK_4B078754C54C8C93 FOREIGN KEY (type_id) REFERENCES attachment_metadata_type (id)');
         $this->addSql('CREATE INDEX IDX_4B07875471F7E88B ON attachment_metadata (event_id)');
-        $this->addSql('CREATE INDEX IDX_4B078754C54C8C93 ON attachment_metadata (type_id)');   
+        $this->addSql('CREATE INDEX IDX_4B078754C54C8C93 ON attachment_metadata (type_id)');
     }
 
     public function down(Schema $schema) : void

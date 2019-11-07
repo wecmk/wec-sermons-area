@@ -178,13 +178,12 @@ class AttachmentMetadata
         if ($this->type->canBePublic()) {
             return $this->isPublic;
         } else {
-            return $this->isPublic = false;            
+            return $this->isPublic = false;
         }
-        
     }
 
     public function setIsPublic(bool $isPublic): self
-    {        
+    {
         $this->isPublic = $isPublic;
      
         return $this;

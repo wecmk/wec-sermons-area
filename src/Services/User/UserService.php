@@ -31,7 +31,7 @@ class UserService
         EntityManagerInterface $em,
         UserPasswordEncoderInterface $encoder,
         EntityManagerInterface $entityManager
-            ) {
+    ) {
         $this->logger = $logger;
         $this->em = $em;
         $this->repository = $em->getRepository(User::class);
