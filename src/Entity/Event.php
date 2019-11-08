@@ -109,7 +109,6 @@ class Event
         $this->Series = new ArrayCollection();
         $this->setCreatedAt(new \DateTime());
         $this->setUpdatedAt(new \DateTime());
-        $this->eventAttachments = new ArrayCollection();
         $this->attachmentMetadata = new ArrayCollection();
     }
 
