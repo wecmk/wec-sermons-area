@@ -3,11 +3,37 @@ architect:
 reader:
   - urn:github:3008688
 assets: 
-
-install: 
-  - "wget https://cs.symfony.com/download/php-cs-fixer-v2.phar -O php-cs-fixer"
+  id_rsa: samuelpearce/home#wec-members/assets/members-key
+  id_rsa.pub: samuelpearce/home#wec-members/assets/members-key.pub
+install: |-
+  sudo locale-gen en_US en_US.UTF-8
+  sudo dpkg-reconfigure locales
+  export LC_ALL=en_US.UTF-8
+  export LANG=en_US.UTF-8
+  export LANGUAGE=en_US.UTF-8
+  sudo apt-get install bsdmainutils
+  env
+  alias
+  ruby --version
+  sudo ruby --version
+  sudo -i ruby --version
+  sudo env
+  sudo gem install --no-rdoc --no-ri pdd est
+  "wget https://cs.symfony.com/download/php-cs-fixer-v2.phar -O php-cs-fixer"
 merge: 
   script: |-
       php php-cs-fixer fix src/ -v --dry-run --stop-on-violation --using-cache=no
-  squash: true
+  squash: false
   fast-forward: no-ff
+release:
+    pre: false
+    script: |-
+      echo "Author of the request: ${author}"
+      mvn versions:set "-DnewVersion=${tag}" --quiet
+      git commit -am "${tag}"
+      mkdir -p ~/.ssh
+      mv ../id_rsa ../id_rsa.pub ~/.ssh
+      chmod -R 600 ~/.ssh/*
+      echo -e "Host *\n  StrictHostKeyChecking no\n  UserKnownHostsFile=/dev/null" > ~/.ssh/config
+      build=$(git rev-parse --short HEAD)
+      rsync -av --progress . members.wecmk.org@w:/data/web/members.wecmk.org/project
