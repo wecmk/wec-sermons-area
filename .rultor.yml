@@ -29,4 +29,4 @@ release:
       chmod -R 600 ~/.ssh/*
       echo -e "Host *\n  StrictHostKeyChecking no\n  UserKnownHostsFile=/dev/null" > ~/.ssh/config
       build=$(git rev-parse --short HEAD)
-      rsync -av --progress repo/ members.wecmk.org@w:/data/web/members.wecmk.org/project/
+      rsync -av --progress repo/ members.wecmk.org@web01.wecmk.org:/data/web/members.wecmk.org/project/
