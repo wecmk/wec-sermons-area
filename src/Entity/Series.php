@@ -54,12 +54,12 @@ class Series
      * @ORM\ManyToMany(targetEntity="App\Entity\Event", mappedBy="Series")
      * @Exclude
      */
-    private $sermons;
+    private $event;
 
     public function __construct()
     {
         $this->Complete = false;
-        $this->sermons = new ArrayCollection();
+        $this->event = new ArrayCollection();
         $this->setCreatedAt(new \DateTime());
         $this->setUpdatedAt(new \DateTime());
     }
@@ -96,25 +96,25 @@ class Series
     /**
      * @return Collection|Event[]
      */
-    public function getSermons(): Collection
+    public function getEvents(): Collection
     {
-        return $this->sermons;
+        return $this->event;
     }
 
-    public function addSermon(Event $sermon): self
+    public function addEvent(Event $sermon): self
     {
-        if (!$this->sermons->contains($sermon)) {
-            $this->sermons[] = $sermon;
+        if (!$this->event->contains($sermon)) {
+            $this->event[] = $sermon;
             $sermon->addSeries($this);
         }
 
         return $this;
     }
 
-    public function removeSermon(Event $sermon): self
+    public function removeEvent(Event $sermon): self
     {
-        if ($this->sermons->contains($sermon)) {
-            $this->sermons->removeElement($sermon);
+        if ($this->event->contains($sermon)) {
+            $this->event->removeElement($sermon);
             $sermon->removeSeries($this);
         }
 

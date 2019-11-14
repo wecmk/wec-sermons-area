@@ -49,7 +49,7 @@ class Event
     private $Apm;
 
     /**
-     * @ORM\ManyToMany(targetEntity="App\Entity\Series", inversedBy="sermons")
+     * @ORM\ManyToMany(targetEntity="App\Entity\Series", inversedBy="Event")
      * @var Collection
      */
     private $Series;
@@ -95,12 +95,12 @@ class Event
     private $PrivateComments;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\Speaker", inversedBy="Sermon")
+     * @ORM\ManyToOne(targetEntity="App\Entity\Speaker", inversedBy="event")
      */
     private $Speaker;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\AttachmentMetadata", mappedBy="Event", orphanRemoval=true)
+     * @ORM\OneToMany(targetEntity="App\Entity\AttachmentMetadata", mappedBy="event", orphanRemoval=true, cascade={"persist"})
      */
     private $attachmentMetadata;
 

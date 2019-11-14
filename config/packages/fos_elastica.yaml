@@ -46,7 +46,16 @@ fos_elastica:
                                 Name: { type: text }
                                 Organisation: { type: text }
                                 Website: ~
-                        AttachmentMetadata: ~
+                        attachmentMetadata: 
+                            type: "nested"
+                            properties: 
+                                id: { type: text }
+                                mimeType: { type: text }
+                                contentLength: { type: text }
+                                fileLocation: { type: text }
+                                complete: ~
+                                hash: { type: text }
+                                isPublic: ~
                     persistence:
                         # the driver can be orm, mongodb or phpcr
                         driver: orm

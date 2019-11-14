@@ -4,9 +4,17 @@ namespace App\DataFixtures;
 
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\Persistence\ObjectManager;
+use App\Repository\AttachmentMetadataRepository;
 
 class MessageFixture extends Fixture implements \Doctrine\Bundle\FixturesBundle\FixtureGroupInterface
 {
+    /** @var AttachmentMetadataTypeRepository $attachmentMetadataTypeRepository */
+    private $attachmentMetadataTypeRepository;
+    
+    public function __construct(\App\Repository\AttachmentMetadataTypeRepository $attachmentMetadataTypeRepository) {
+        $this->attachmentMetadataTypeRepository = $attachmentMetadataTypeRepository;
+    }
+    
     public function load(ObjectManager $manager)
     {
         $seriesColossians = new \App\Entity\Series();
@@ -42,6 +50,18 @@ class MessageFixture extends Fixture implements \Doctrine\Bundle\FixturesBundle\
         $sermon->setTags("");
         $sermon->setPublicComments("");
         $sermon->setPrivateComments("");
+        
+        $attachmentMetadata = new \App\Entity\AttachmentMetadata();
+        $attachmentMetadata->setMimeType("audio/mpeg");
+        $attachmentMetadata->setContentLength("200");
+        $attachmentMetadata->setFileLocation("asdf/345.mp3");
+        $attachmentMetadata->setComplete(true);
+        $attachmentMetadata->setHash("asdf"); 
+        $attachmentMetadata->setIsPublic(true);
+        
+        $type = $this->attachmentMetadataTypeRepository->findOneBy(["type" => "sermon-recording"]);
+        $attachmentMetadata->setType($type);        
+        $sermon->addAttachmentMetadata($attachmentMetadata);
         $manager->persist($sermon);
 
         $sermon = new \App\Entity\Event();

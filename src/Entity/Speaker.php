@@ -55,11 +55,11 @@ class Speaker
      * @ORM\OneToMany(targetEntity="App\Entity\Event", mappedBy="Speaker")
      * @Exclude
      */
-    private $Sermon;
+    private $Event;
 
     public function __construct()
     {
-        $this->Sermon = new ArrayCollection();
+        $this->Event = new ArrayCollection();
         $this->setCreatedAt(new \DateTime());
         $this->setUpdatedAt(new \DateTime());
     }
@@ -108,16 +108,16 @@ class Speaker
     /**
      * @return Collection|Event[]
      */
-    public function getSermon(): Collection
+    public function getEvent(): Collection
     {
-        return $this->Sermon;
+        return $this->Event;
     }
 
-    public function addSermon(Event $sermon): self
+    public function addEvent(Event $event): self
     {
-        if (!$this->Sermon->contains($sermon)) {
-            $this->Sermon[] = $sermon;
-            $sermon->setSpeaker($this);
+        if (!$this->Event->contains($event)) {
+            $this->Event[] = $event;
+            $event->setSpeaker($this);
         }
 
         return $this;
@@ -125,8 +125,8 @@ class Speaker
 
     public function removeSermon(Event $sermon): self
     {
-        if ($this->Sermon->contains($sermon)) {
-            $this->Sermon->removeElement($sermon);
+        if ($this->Event->contains($sermon)) {
+            $this->Event->removeElement($sermon);
             // set the owning side to null (unless already changed)
             if ($sermon->getSpeaker() === $this) {
                 $sermon->setSpeaker(null);

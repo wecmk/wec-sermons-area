@@ -66,7 +66,7 @@ class AttachmentMetadata
     private $event;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\AttachmentMetadataType")
+     * @ORM\ManyToOne(targetEntity="App\Entity\AttachmentMetadataType", cascade={"persist"})
      * @ORM\JoinColumn(nullable=false)
      */
     private $type;
@@ -74,7 +74,7 @@ class AttachmentMetadata
     /**
      * @ORM\Column(type="boolean")
      */
-    private $isPublic;
+    private $isPublic = false;
         
     public function getId(): ?\Ramsey\Uuid\Uuid
     {
@@ -127,7 +127,11 @@ class AttachmentMetadata
      */
     public function getHash($algo = "sha512")
     {
-        return hash_file($algo, $this->getFileLocation());
+        if (file_exists($this->getFileLocation())) {
+            return $this->setHash(hash_file($algo, $this->getFileLocation()))->hash;
+        } else {
+            return hash($algo, "asdf");
+        }
     }
 
     public function getComplete(): ?bool
@@ -175,7 +179,7 @@ class AttachmentMetadata
 
     public function getIsPublic(): ?bool
     {
-        if ($this->type->canBePublic()) {
+        if ($this->type->getCanBePublic()) {
             return $this->isPublic;
         } else {
             return $this->isPublic = false;
