@@ -1,6 +1,7 @@
 
 # Do not commit these fixtures
 QuestionFixture.php
+UsersFixture.php
 
 
 
