@@ -21,6 +21,10 @@ class MessageFixture extends Fixture implements \Doctrine\Bundle\FixturesBundle\
         $seriesColossians->setName("Colossians");
         $manager->persist($seriesColossians);
         
+        $seriesVisitingSpeaker = new \App\Entity\Series();
+        $seriesVisitingSpeaker->setName("Visiting Speaker");        
+        $manager->persist($seriesVisitingSpeaker);
+        
         $seriesUncategorised = new \App\Entity\Series();
         $seriesUncategorised->setName("Uncategorised");
         $manager->persist($seriesUncategorised);
@@ -36,6 +40,12 @@ class MessageFixture extends Fixture implements \Doctrine\Bundle\FixturesBundle\
         $SpeakerRoger = new \App\Entity\Speaker();
         $SpeakerRoger->setName("Roger March");
         $manager->persist($SpeakerRoger);
+        
+        $speakerVisitorWithLink = new \App\Entity\Speaker();
+        $speakerVisitorWithLink->setName("Visiting Speaker w link");
+        $speakerVisitorWithLink->setOrganisation("Organisation");
+        $speakerVisitorWithLink->setWebsite("https://www.wecmk.org");
+        $manager->persist($speakerVisitorWithLink);
         
         $sermon = new \App\Entity\Event();
         $sermon->setDate(new \DateTime());
@@ -93,6 +103,36 @@ class MessageFixture extends Fixture implements \Doctrine\Bundle\FixturesBundle\
         $sermon->setPublicComments("");
         $sermon->setPrivateComments("");
         $manager->persist($sermon);
+       
+        $sermon = new \App\Entity\Event();
+        $sermon->setDate(\DateTime::createFromFormat('Y-m-d', "2016-10-23"));
+        $sermon->setApm("THU");
+        $sermon->addSeries($seriesVisitingSpeaker);
+        $sermon->setReading("Mark 6 v. 1 - 15");
+        $sermon->setSecondReading("");
+        $sermon->setTitle("Christianity; a heart and spirit religion");
+        $sermon->setSpeaker($speakerVisitorWithLink);
+        $sermon->setCorrupt(false);
+        $sermon->setIsPublic(true);
+        $sermon->setTags("");
+        $sermon->setPublicComments("");
+        $sermon->setPrivateComments("");
+        
+        $attachmentMetadata = new \App\Entity\AttachmentMetadata();
+        $attachmentMetadata->setMimeType("audio/mpeg");
+        $attachmentMetadata->setContentLength("250");
+        $attachmentMetadata->setFileLocation("asdf/15345.mp3");
+        $attachmentMetadata->setComplete(true);
+        $attachmentMetadata->setHash("2346afg"); 
+        $attachmentMetadata->setIsPublic(true);
+        
+        $type = $this->attachmentMetadataTypeRepository->findOneBy(["type" => "sermon-recording"]);
+        $attachmentMetadata->setType($type);        
+        $sermon->addAttachmentMetadata($attachmentMetadata);
+        $manager->persist($sermon);
+        
+        
+        
         
         $manager->flush();
     }

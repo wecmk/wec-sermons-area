@@ -97,13 +97,13 @@
                         <td>{{ entity.Title }}</td>
                         <td>            
                             {{ entity.Speaker.Name }}
-                            {% if entity.Speaker.Organisation is not null %}
-                                {{ entity.Speaker.Organisation }}
-                            {% elseif entity.Speaker.Website is not null %}
-                                <a href="{{ entity.Speaker.Website }}">
-                                    {{ entity.Speaker.Organisation }}
-                                </a>
-                            {%  endif %}
+                            {% if entity.Speaker.Organisation is not null %}                                
+                                {% if entity.Speaker.Website is not null %}
+                                    (<a href="{{ entity.Speaker.Website }}">{{ entity.Speaker.Organisation }}</a>)
+                                {%  else %}
+                                    ({{ entity.Speaker.Organisation }})
+                                {% endif %}
+                            {% endif %}
                         </td>
                         {#                        {% set GAString = entity.Date|date('d-m-Y') ~ " - " ~ entity.Apm ~ " - " ~ entity.Title ~ " - " ~ entity.Speaker.Name ~ " - " ~ entity.Download %}#}
                         {% set GAString = entity.Date|date('d-m-Y') ~ " - " ~ entity.Apm %}
