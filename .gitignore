@@ -1,4 +1,11 @@
 
+# Do not commit these fixtures
+QuestionFixture.php
+
+
+
+
+
 ###> symfony/framework-bundle ###
 /.env.local
 /.env.local.php
