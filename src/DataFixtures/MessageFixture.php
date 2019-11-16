@@ -78,7 +78,7 @@ class MessageFixture extends Fixture implements \Doctrine\Bundle\FixturesBundle\
         $sermon->setDate(new \DateTime());
         $sermon->setApm("PM");
         $sermon->addSeries($seriesHebrews);
-        $sermon->setReading("Hebrews 2 v.1 - 4");
+        $sermon->setReading("Hebrews 2:1-4");
         $sermon->setSecondReading("");
         $sermon->setTitle("'Must pay more attention'");
         $sermon->setSpeaker($speakerAllan);
@@ -131,8 +131,54 @@ class MessageFixture extends Fixture implements \Doctrine\Bundle\FixturesBundle\
         $sermon->addAttachmentMetadata($attachmentMetadata);
         $manager->persist($sermon);
         
+        $sermon = new \App\Entity\Event();
+        $sermon->setDate(\DateTime::createFromFormat('d-m-Y', "26-05-2013"));
+        $sermon->setApm("AM");
         
+        $seriesBaptisms = new \App\Entity\Series();
+        $seriesBaptisms->setName("Baptisms");
+        $manager->persist($seriesBaptisms);
         
+        $sermon->addSeries($seriesBaptisms);
+        $sermon->addSeries($seriesColossians);
+        $sermon->setReading("Philippians 3 - 4 v. 1");
+        $sermon->setSecondReading("Mark 15 v. 21 - 39");
+        $sermon->setTitle("A longish title for a baptism (Rosie and Jim's Baptism)");
+        $sermon->setSpeaker($speakerAllan);
+        $sermon->setCorrupt(false);
+        $sermon->setIsPublic(true);
+        $sermon->setTags("");
+        $sermon->setPublicComments("");
+        $sermon->setPrivateComments("");
+        
+        $manager->persist($sermon);
+        
+        $sermon = new \App\Entity\Event();
+        $sermon->setDate(\DateTime::createFromFormat('d-m-Y', "16-01-2005"));
+        $sermon->setApm("AM");
+        $sermon->addSeries($seriesColossians);
+        $sermon->setReading("Colossians 2 v. 1 - 23");
+        $sermon->setSecondReading("");
+        $sermon->setTitle("");
+        $sermon->setSpeaker($speakerAllan);
+        $sermon->setCorrupt(false);
+        $sermon->setIsPublic(true);
+        $sermon->setTags("");
+        $sermon->setPublicComments("");
+        $sermon->setPrivateComments("");
+        
+        $attachmentMetadata = new \App\Entity\AttachmentMetadata();
+        $attachmentMetadata->setMimeType("application/pdf");
+        $attachmentMetadata->setContentLength("200");
+        $attachmentMetadata->setFileLocation("asdf/345.pdf");
+        $attachmentMetadata->setComplete(true);
+        $attachmentMetadata->setHash("asdf"); 
+        $attachmentMetadata->setIsPublic(true);
+        
+        $type = $this->attachmentMetadataTypeRepository->findOneBy(["type" => "service-sheet"]);
+        $attachmentMetadata->setType($type);        
+        $sermon->addAttachmentMetadata($attachmentMetadata);
+        $manager->persist($sermon);
         
         $manager->flush();
     }
