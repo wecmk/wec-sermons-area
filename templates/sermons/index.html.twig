@@ -84,18 +84,17 @@
                         <td>{{ entity.Apm }}</td>
                         <td>
                             {% for series in entity.Series %}
-                                <a href="{{ path("sermons_list_by_series", { 'value': series.Name }) }}">
-                                    {{ series.Name }}
-                                </a>
+                                <a id="{{ entity.Speaker.id }}" href="{{ path("sermons_list_by_series", { 'value': series.Name }) }}">{{ series.Name }}</a>
+                                {% if not loop.last %}/{% endif %}
                             {% endfor %}
                         </td>
                         <td>{{ entity.Reading }}
-                            {% if entity.SecondReading == 'none' %}
+                            {% if entity.SecondReading %}
                                 <br>{{ entity.SecondReading }}
                             {% endif %}
                         </td>
                         <td>{{ entity.Title }}</td>
-                        <td>            
+                        <td id="{{ entity.Speaker.id }}">            
                             {{ entity.Speaker.Name }}
                             {% if entity.Speaker.Organisation is not null %}                                
                                 {% if entity.Speaker.Website is not null %}
