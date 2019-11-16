@@ -281,24 +281,6 @@ class Event
     }
 
     /**
-     * @return Collection|EventAttachment[]
-     */
-    public function getEventAttachments(): Collection
-    {
-        return $this->eventAttachments;
-    }
-
-    public function addEventAttachment(EventAttachment $eventAttachment): self
-    {
-        if (!$this->eventAttachments->contains($eventAttachment)) {
-            $this->eventAttachments[] = $eventAttachment;
-            $eventAttachment->addEvent($this);
-        }
-
-        return $this;
-    }
-
-    /**
      * @return Collection|AttachmentMetadata[]
      */
     public function getAttachmentMetadata(): Collection
