@@ -105,70 +105,46 @@
                                 {% endif %}
                             {% endif %}
                         </td>
-                        {#                        {% set GAString = entity.Date|date('d-m-Y') ~ " - " ~ entity.Apm ~ " - " ~ entity.Title ~ " - " ~ entity.Speaker.Name ~ " - " ~ entity.Download %}#}
                         {% set GAString = entity.Date|date('d-m-Y') ~ " - " ~ entity.Apm %}
 
                         <td>
-                            {#{% if entity.webAudioFile %}
-
-                                <a class="btn btn-default sermon-button-margin"
-                                   href="{{ path('download_mp3', {'id': entity.download}) }}" onClick="
-                                           ga('send', {
-                                               'hitType': 'event', // Required.
-                                               'eventCategory': 'Media', // Required.
-                                               'eventAction': 'Download', // Required.
-                                               'eventLabel': '{{ GAString }}'
-                                           });
-                                   ">Download</a>&nbsp;
-
-                                <a class="btn btn-default sermon-button-margin"
-                                   href="{{ path('stream_mp3', {'id': entity.download}) }}" onClick="
-                                           ga('send', {
-                                               'hitType': 'event', // Required.
-                                               'eventCategory': 'Media', // Required.
-                                               'eventAction': 'Stream', // Required.
-                                               'eventLabel': '{{ GAString }}'
-                                           });
-                                   ">Stream</a>
-
-                            {% elseif not entity.webAudioFile and entity.corrupt == "0" %}
-                                <a class="btn btn-default sermon-button-margin"
-                                   href="{{ path('request_sermon', {'id': entity.download}) }}" onClick="
-                                           ga('send', {
-                                               'hitType': 'event', // Required.
-                                               'eventCategory': 'Media', // Required.
-                                               'eventAction': 'Request Sermon', // Required.
-                                               'eventLabel': '{{ GAString }}'
-                                           });
-                                   ">Request Sermon</a>&nbsp;
-                            {% elseif not entity.webAudioFile and entity.corrupt == "2" %}
-                                Pending Audio File
-                            {% else %}
-                                Download Unavailable
-                            {% endif %}
-
-                            {% if entity.hasServiceSheet %}
-                                <a class="btn btn-default sermon-button-margin"
-                                   href="{{ path('service_sheet_get', {'filename': entity.download}) }}" onClick="
-                                           ga('send', {
-                                               'hitType': 'event', // Required.
-                                               'eventCategory': 'Media', // Required.
-                                               'eventAction': 'Service Sheet', // Required.
-                                               'eventLabel': '{{ GAString }}'
-                                           });
-                                   ">Service Sheet</a>
-                            {% endif %}#}
-
-
-                        </td>
-                        {#{% if is_granted('ROLE_MANAGER') %}
-                            <td>
-                                Notes: {{ entity.sermonNotes }}<br/>
-                                Audio File: {{ entity.webAudioFile }}<br/>
-                                Sermon Sheet: {{ entity.hasServiceSheet }}<br/>
-                                Download ID: {{ entity.download }} <br/>
-                            </td>
-                        {% endif %}#}
+                            {% for attachmentMetadata in entity.attachmentMetadata %}                                
+                                <div>
+                                    {% if attachmentMetadata.type.canBePublic %}
+                                        {% if attachmentMetadata.type.type == "sermon-recording" %}
+                                            <a class="btn btn-primary" id="{{ attachmentMetadata.id }}"
+                                               href="{{ path('attachment_index', {'id': attachmentMetadata.id, 'force-dl': "true" }) }}" onClick="
+                                                       ga('send', {
+                                                           'hitType': 'event', // Required.
+                                                           'eventCategory': 'Media', // Required.
+                                                           'eventAction': 'Download', // Required.
+                                                           'eventLabel': '{{ GAString }}'
+                                                       });"                                           
+                                               >Download</a>&nbsp;
+                                            <a class="btn btn-primary" id="{{ attachmentMetadata.id }}"
+                                               href="{{ path('attachment_index', {'id': attachmentMetadata.id, 'force-dl': "false" }) }}" onClick="
+                                                       ga('send', {
+                                                           'hitType': 'event', // Required.
+                                                           'eventCategory': 'Media', // Required.
+                                                           'eventAction': 'Stream', // Required.
+                                                           'eventLabel': '{{ GAString }}'
+                                                       });
+                                               ">Stream</a>
+                                        {% else %}
+                                            <a class="btn btn-primary" id="{{ attachmentMetadata.id }}"
+                                               href="{{ path('attachment_index', {'id': attachmentMetadata.id, 'force-dl': "false" }) }}" onClick="
+                                                       ga('send', {
+                                                           'hitType': 'event', // Required.
+                                                           'eventCategory': 'Media', // Required.
+                                                           'eventAction': '{{ attachmentMetadata.type.name }}', // Required.
+                                                           'eventLabel': '{{ GAString }}'
+                                                       });
+                                               ">{{ attachmentMetadata.type.name }}</a><br />
+                                        {% endif %}
+                                    {%  endif %}
+                                </div>
+                            {% endfor %}
+                        </td>                      
                     </tr>
                 {% endfor %}
             </tbody>
