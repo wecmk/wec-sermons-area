@@ -29,7 +29,7 @@ class ApiV1EventAttachmentController extends AbstractFOSRestController
         Request $request,
         $eventId,
         \App\Services\Event\EventService $eventService,
-        \App\Services\File\UploadService $uploadService,
+        \App\Services\Attachment\UploadService $uploadService,
         \Doctrine\ORM\EntityManagerInterface $em
     ) {
         $event = $eventService->getById($eventId);

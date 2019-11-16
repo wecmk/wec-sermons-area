@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Services\File;
+namespace App\Services\Attachment;
 
 use Psr\Log\LoggerInterface;
 use App\Entity\AttachmentMetadata;

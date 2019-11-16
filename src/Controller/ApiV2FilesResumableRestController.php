@@ -6,7 +6,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-
+use App\Services\Attachment\UploadService;
 /**
  *
  * @Route("/api/v2/files", name="api_v2_files_")
@@ -36,7 +36,7 @@ class ApiV2FilesResumableRestController extends AbstractController
      *
      * @Route("/upload/resumable", name="upload_resumable_post", methods={"POST"})
      */
-    public function resumableUpload(Request $request, \App\Services\File\UploadService $uploadService)
+    public function resumableUpload(Request $request, UploadService $uploadService)
     {
         // Based on https://developers.google.com/drive/api/v3/manage-uploads
         $metadata = new \App\Entity\AttachmentMetadata();
@@ -66,7 +66,7 @@ class ApiV2FilesResumableRestController extends AbstractController
      */
     public function resumableUploadContinue(
         Request $request,
-        \App\Services\File\UploadService $uploadService,
+        UploadService $uploadService,
         $id
     ) {
         $uuid = \Ramsey\Uuid\Uuid::fromString($id);
