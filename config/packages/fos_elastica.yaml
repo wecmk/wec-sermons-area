@@ -29,7 +29,7 @@ fos_elastica:
                     properties:
                         id: { type: keyword }
                         Date: { type: date }
-                        Apm: { type: text, fielddata: true }
+                        Apm: { type: keyword }
                         Series: 
                             type: "nested"
                             properties:

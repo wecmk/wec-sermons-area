@@ -38,7 +38,9 @@ class EventSearchService
         $fieldQuery->setQuery($searchTerm);
         $boolQuery->addShould($fieldQuery);
         
-        $results = $this->index->find($boolQuery);
+        $searchQuery = new \Elastica\Query($boolQuery);
+        $searchQuery->addSort(array('Date' => 'desc', 'Apm' => 'desc'));
+        $results = $this->index->find($searchQuery);
 
         return array(
             'results' => $results,
@@ -57,9 +59,12 @@ class EventSearchService
         );
         $nested->setQuery($nested_bool);
         $query_part->addMust($nested);
-
+        
+        $searchQuery = new \Elastica\Query($query_part);
+        $searchQuery->addSort(array('Date' => 'asc', 'Apm' => 'asc'));
+        $results = $this->index->find($searchQuery);
         return array(
-            'results' => $this->index->find($query_part),
+            'results' => $this->index->find($searchQuery),
         );
     }
 
