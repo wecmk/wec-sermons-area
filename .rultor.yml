@@ -6,13 +6,24 @@ assets:
   id_rsa: samuelpearce/home#wec-members/assets/members-key
   id_rsa.pub: samuelpearce/home#wec-members/assets/members-key.pub
 install: |-
-  sudo apt-get install bsdmainutils
-  ruby --version
-  sudo ruby --version
-  sudo -i ruby --version
-  sudo env
-  sudo gem install --no-rdoc --no-ri pdd est
-  "wget https://cs.symfony.com/download/php-cs-fixer-v2.phar -O php-cs-fixer"
+    sudo apt-get install bsdmainutils
+    ruby --version
+    sudo ruby --version
+    sudo -i ruby --version
+    sudo env
+    sudo gem install --no-rdoc --no-ri pdd est
+    "wget https://cs.symfony.com/download/php-cs-fixer-v2.phar -O php-cs-fixer"
+    EXPECTED_SIGNATURE="$(wget -q -O - https://composer.github.io/installer.sig)"
+    php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
+    ACTUAL_SIGNATURE="$(php -r "echo hash_file('sha384', 'composer-setup.php');")"
+    if [ "$EXPECTED_SIGNATURE" != "$ACTUAL_SIGNATURE" ]
+    then
+        >&2 echo 'ERROR: Invalid installer signature'
+        rm composer-setup.php
+        exit 1
+    fi
+    php composer-setup.php --quiet
+    rm composer-setup.php
 merge: 
   script: |-
       php php-cs-fixer fix src/ -v --dry-run --stop-on-violation --using-cache=no
@@ -21,12 +32,17 @@ merge:
 release:
     pre: false
     script: |-
-      echo "Author of the request: ${author}"
-      mvn versions:set "-DnewVersion=${tag}" --quiet
-      git commit -am "${tag}"
-      mkdir -p ~/.ssh
-      mv ../id_rsa ../id_rsa.pub ~/.ssh
-      chmod -R 600 ~/.ssh/*
-      echo -e "Host *\n  StrictHostKeyChecking no\n  UserKnownHostsFile=/dev/null" > ~/.ssh/config
-      build=$(git rev-parse --short HEAD)
-      rsync -av --progress repo/ members.wecmk.org@web01.wecmk.org:/data/web/members.wecmk.org/project/
+        echo "Author of the request: ${author}"
+        mvn versions:set "-DnewVersion=${tag}" --quiet
+        git commit -am "${tag}"
+        mkdir -p ~/.ssh
+        mv ../id_rsa ../id_rsa.pub ~/.ssh
+        chmod -R 600 ~/.ssh/*
+        echo -e "Host *\n  StrictHostKeyChecking no\n  UserKnownHostsFile=/dev/null" > ~/.ssh/config
+        build=$(git rev-parse --short HEAD)
+        REMOTE_DEPLOY_PATH=/data/web/members.wecmk.org/project/
+        REMOTE_LOGIN=members.wecmk.org@web01.wecmk.org
+        composer install --no-ansi --no-dev --no-interaction --no-plugins --no-progress --no-scripts --no-suggest --optimize-autoloader"
+        php bin/console cache:clear
+        rsync -av --progress repo/ $REMOTE_LOGIN:$REMOTE_DEPLOY_PATH        
+        ssh $REMOTE_LOGIN "cd $REMOTE_DEPLOY_PATH; php bin/console fos:elastica:populate"
