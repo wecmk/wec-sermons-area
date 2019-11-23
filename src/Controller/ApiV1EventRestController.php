@@ -98,8 +98,7 @@ class ApiV1EventRestController extends AbstractFOSRestController
      *
      * @param ParamFetcher $paramFetcher Paramfetcher
 
-     * @Route("/download/{id}", name="update_event")
-     * @Method({"PUT"})
+     * @Route("/download/{id}", name="update_event", methods={"PUT"}))
      * @return View
      */
     public function putEventAction(ParamFetcher $paramFetcher, $id)
