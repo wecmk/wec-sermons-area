@@ -3,7 +3,7 @@ fos_elastica:
     clients:
         default:
             connections:
-                - url: '%env(resolve:INDEX)%'
+                - url: '%env(resolve:INDEX_URL)%'
     indexes:
         app:
             index_name: app_%kernel.environment%
