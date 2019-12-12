@@ -104,6 +104,11 @@ class Event
      */
     private $attachmentMetadata;
 
+    /**
+     * @ORM\Column(type="string", length=10, nullable=true)
+     */
+    private $legacyId;
+
     public function __construct()
     {
         $this->Series = new ArrayCollection();
@@ -307,6 +312,18 @@ class Event
                 $attachmentMetadata->setEvent(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getLegacyId(): ?string
+    {
+        return $this->legacyId;
+    }
+
+    public function setLegacyId(?string $legacyId): self
+    {
+        $this->legacyId = $legacyId;
 
         return $this;
     }
