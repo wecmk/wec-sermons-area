@@ -38,7 +38,7 @@ class SeriesService
         if ($name == "") {
             $name = "Uncategorised";
         }
-        return $this->repository->findBy(['Name' => $name]);
+        return $this->repository->findOneBy(['Name' => $name]);
     }
     
     /**

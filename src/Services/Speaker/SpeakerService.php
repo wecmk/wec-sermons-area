@@ -35,7 +35,7 @@ class SpeakerService
      */
     public function findBy($name)
     {
-        return $this->repository->findBy(['Name' => $name]);
+        return $this->repository->findOneBy(['Name' => $name]);
     }
     
     /**
