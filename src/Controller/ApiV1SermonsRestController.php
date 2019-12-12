@@ -28,9 +28,6 @@ class ApiV1SermonsRestController extends AbstractFOSRestController {
         $this->denyAccessUnlessGranted('ROLE_API');
                 
         $entities = $eventRepository->findAll();
-        if (!$entities) {
-            throw $this->createNotFoundException('Data not found.');
-        }                
         return $this->view($entities, 200);
     }
 
@@ -56,12 +53,17 @@ class ApiV1SermonsRestController extends AbstractFOSRestController {
     /**
      * Creates a new event.
      *
-     * @Route("/{id}", name="new", methods={"POST"}, defaults={"id"=""})
-     * @return View
+     * @Route("", name="new", methods={"POST"}, defaults={"id"=""})
      */
-    public function new(Request $request, EventRepository $eventRepository, $id) {
+    public function new(Request $request, EventRepository $eventRepository, 
+            \App\Services\Event\EventService $eventService,
+            \App\Services\Speaker\SpeakerService $speakerService,
+            \App\Services\Series\SeriesService $seriesService
+            ) {
         $this->denyAccessUnlessGranted('ROLE_API');
-
+        $body = json_decode($request->getContent(), true);
+        $id = $body['id'];
+        
         /* @var $event Event */
         if (!empty($id)) { 
             $event = $eventRepository->find($id);
@@ -76,102 +78,38 @@ class ApiV1SermonsRestController extends AbstractFOSRestController {
             }
         }
 
-        $event->setDate(\DateTime::createFromFormat('Y-m-d', $request->get("date")));
-        $event->setApm($request->get("apm"));
-        $event->setReading($request->get("reading"));
-        $event->setSecondReading($request->get("secondReading"));
-        $event->setTitle($request->get("title"));
+        $event->setDate(\DateTime::createFromFormat("U", strtotime($body['date'])));
+        $event->setApm($body["apm"]);
+        $event->setReading($body["reading"]);
+        $event->setSecondReading(isset($body["secondReading"]) ? $body["secondReading"] : "");
+        $event->setTitle($body["title"]);
         
         // Get SPeaker from Doctrine
-        
-        
-        $event->setCorrupt($request->get("corrupt"));
-        $event->setTags($request->get("tags"));
-
-        return $this->json($event);
-        
-        $seriesName = $sermonNew->getSeries()->getName();
-        $event->setSeries(null);
-        $series = $this->container->get('doctrine')->getRepository('WecMediaBundle:Series')->findOneBy(
-                array('name' => $seriesName)
-        );
-        if ($series === null) {
-            $series = new \Wec\MediaBundle\Entity\Series();
-            $series->setName($seriesName);
+        $speaker = $speakerService->findBy($body["speaker"]);
+        if ($speaker == null) {
+            $speaker = $speakerService->create($body["speaker"]);
         }
-        $event->setSeries($series);
-        $em->persist($event);
-        $em->flush();
-
-        $response = new \Symfony\Component\HttpFoundation\Response();
-        $response->setStatusCode(201);
-        $response->headers->set(
-                'Location', $this->generateUrl(
-                        'get_sermon_by_downloadid', array('downloadId' => $sermonNew->getDownload())
-                )
-        );
-        return $response;
-    }
-
-    /**
-     * Create a Sermon from the submitted data.<br/>
-     *
-     *
-     * @param ParamFetcher $paramFetcher Paramfetcher
-     *
-     * @Route("/download/{id}", name="update_sermon", methods={"POST"})
-     * @return View
-     */
-    public function putSermonAction(ParamFetcher $paramFetcher, $id) {
-        $this->denyAccessUnlessGranted('ROLE_API');
-        $sermon = $this->getDoctrine()->getRepository('WecMediaBundle:Sermons')->findOneBy(
-                array('download' => $paramFetcher->get('download'))
-        );
-
-        if ($paramFetcher->get('date')) {
-            $sermon->setDate(new \DateTime($paramFetcher->get('date')));
-        }
-        if ($paramFetcher->get('apm')) {
-            $sermon->setApm($paramFetcher->get('apm'));
-        }
-        if ($paramFetcher->get('series')) {
-            $series = $this->container->get('doctrine')->getRepository('WecMediaBundle:Series')->findOneBy(array('name' => $paramFetcher->get('series')));
-            if ($series === null) {
-                $series = new \Wec\MediaBundle\Entity\Series();
-                $series->setName($paramFetcher->get('series'));
+        $event->setSpeaker($speaker);
+        
+        // Get Series
+        $series = $body["series"];
+        $seriesList = explode("/", $body["series"]['name']);
+        
+        foreach ($seriesList as $seriesName) {
+            $seriesItem = $seriesService->findBy($seriesName);
+            if ($seriesItem == null) {
+                $event->addSeries($seriesService->create($seriesName));
+            } else {
+                $event->addSeries($seriesItem);
             }
-            $sermon->setSeries($series);
         }
-        if ($paramFetcher->get('reading')) {
-            $sermon->setReading($paramFetcher->get('reading'));
-        }
-        if ($paramFetcher->get('second_reading')) {
-            $sermon->setSecondReading($paramFetcher->get('second_reading'));
-        }
-        if ($paramFetcher->get('title')) {
-            $sermon->setTitle($paramFetcher->get('title'));
-        }
-        if ($paramFetcher->get('speaker')) {
-            $sermon->setSpeaker($paramFetcher->get('speaker'));
-        }
-        if ($paramFetcher->get('download')) {
-            $sermon->setDownload($paramFetcher->get('download'));
-        }
-        if ($paramFetcher->get('corrupt')) {
-            $sermon->setCorrupt($paramFetcher->get('corrupt'));
-        }
-        if ($paramFetcher->get('tags')) {
-            $sermon->setTags($paramFetcher->get('tags'));
-        }
-        $errors = $this->get('validator')->validate($sermon, array('Update'));
-        if (count($errors) == 0) {
-            $em = $this->container->get('doctrine')->getManager();
-            $em->persist($sermon);
-            $em->flush();
-            return $this->view("", 200);
-        } else {
-            return $this->view("", 400);
-        }
+        
+        $event->setCorrupt(boolval($body["corrupt"]));
+        $event->setTags(isset($body["tags"]) ? $body["tags"] : "");
+
+        $event->setLegacyId(isset($body["download"]) ? $body["download"] : null);
+        
+        return $this->json($eventService->add($event));
     }
 
     /**
