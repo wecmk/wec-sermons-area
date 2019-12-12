@@ -34,7 +34,7 @@ class Event
      * @ORM\Id
      * @ORM\Column(type="uuid", unique=true)
      * @ORM\GeneratedValue(strategy="CUSTOM")
-     * @ORM\CustomIdGenerator(class="Ramsey\Uuid\Doctrine\UuidGenerator")
+     * @ORM\CustomIdGenerator(class="App\Doctrine\CustomUuidGenerator")
      */
     protected $id;
 
@@ -72,27 +72,27 @@ class Event
     /**
      * @ORM\Column(type="boolean")
      */
-    private $corrupt;
+    private $corrupt = false;
 
     /**
      * @ORM\Column(type="boolean")
      */
-    private $IsPublic;
+    private $IsPublic = true;
 
     /**
      * @ORM\Column(type="text")
      */
-    private $Tags;
+    private $Tags = "";
 
     /**
      * @ORM\Column(type="text")
      */
-    private $PublicComments;
+    private $PublicComments = "";
 
     /**
      * @ORM\Column(type="text")
      */
-    private $PrivateComments;
+    private $PrivateComments = "";
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Speaker", inversedBy="event")
