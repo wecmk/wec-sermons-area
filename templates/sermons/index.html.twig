@@ -96,8 +96,8 @@
                         <td>{{ entity.Title }}</td>
                         <td id="{{ entity.Speaker.id }}">            
                             {{ entity.Speaker.Name }}
-                            {% if entity.Speaker.Organisation is not null %}                                
-                                {% if entity.Speaker.Website is not null %}
+                            {% if entity.Speaker.Organisation is not empty %}                                
+                                {% if entity.Speaker.Website is not empty %}
                                     (<a href="{{ entity.Speaker.Website }}">{{ entity.Speaker.Organisation }}</a>)
                                 {%  else %}
                                     ({{ entity.Speaker.Organisation }})
@@ -145,6 +145,10 @@
                             {% endfor %}
                         </td>                      
                     </tr>
+                    {% else %}
+                        <tr colspan="7">
+                            Sorry, there is a system error which prevents us from dislaying the latest sermons. We're investigating now.
+                        </tr>
                 {% endfor %}
             </tbody>
         </table>
