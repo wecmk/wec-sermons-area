@@ -11,7 +11,7 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 use JMS\Serializer\Annotation as JMS;
 
 /**
- * @ORM\Entity(repositoryClass="App\Repository\UploadedFileMetadataRepository")
+ * @ORM\Entity(repositoryClass="App\Repository\AttachmentMetadataRepository")
  */
 class AttachmentMetadata
 {
@@ -40,6 +40,11 @@ class AttachmentMetadata
     private $mimeType;
 
     /**
+     * @ORM\Column(type="string", length=10)
+     */
+    private $extension;
+
+    /**
      * @ORM\Column(type="string", length=255)
      */
     private $contentLength;
@@ -57,17 +62,15 @@ class AttachmentMetadata
     /**
      * @ORM\Column(type="string", length=128)
      */
-    private $hash;
+    private $hash = "";
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Event", inversedBy="attachmentMetadata")
-     * @ORM\JoinColumn(nullable=false)
      */
     private $event;
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\AttachmentMetadataType", cascade={"persist"})
-     * @ORM\JoinColumn(nullable=false)
      */
     private $type;
 
@@ -93,6 +96,18 @@ class AttachmentMetadata
         return $this;
     }
 
+    public function getExtension(): ?string
+    {
+        return $this->extension;
+    }
+
+    public function setExtension(string $extension): self
+    {
+        $this->extension = $extension;
+
+        return $this;
+    }
+
     public function getContentLength(): ?string
     {
         return $this->contentLength;
@@ -108,7 +123,7 @@ class AttachmentMetadata
     public function getFileLocation(): ?string
     {
         if (null == $this->fileLocation) {
-            return "/data/media/tmp/uploaded_file/" . $this->id->toString();
+            return $this->id->toString();
         }
         return $this->fileLocation;
     }
@@ -125,13 +140,9 @@ class AttachmentMetadata
      * @param string $algo Name of selected hashing algorithm (i.e. "md5", "sha256", "haval160,4", etc..)
      * @return string Returns a string containing the calculated message digest as lowercase hexits unless raw_output is set to true in which case the raw binary representation of the message digest is returned.
      */
-    public function getHash($algo = "sha512")
+    public function getHash()
     {
-        if (file_exists($this->getFileLocation())) {
-            return $this->setHash(hash_file($algo, $this->getFileLocation()))->hash;
-        } else {
-            return hash($algo, "asdf");
-        }
+        return $this->hash;
     }
 
     public function getComplete(): ?bool

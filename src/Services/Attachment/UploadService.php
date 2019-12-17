@@ -39,16 +39,13 @@ class UploadService
      * @param string $name
      * @return array
      */
-    public function create($mimeType, $contentLength)
+    public function create($metadata)
     {
-        // Based on https://developers.google.com/drive/api/v3/manage-uploads
-        $metadata = new \App\Entity\AttachmentMetadata();
-        $metadata->setMimeType($mimeType);
-        $metadata->setContentLength($contentLength);
         $this->em->persist($metadata);
         $this->em->flush();
         
-        $temp_file = $metadata->getFileLocation();
+        $temp_file = $this->getFullFileName($metadata);
+        touch($temp_file);
         $handle = fopen($temp_file, "c+b");
         fclose($handle);
                 
@@ -70,7 +67,7 @@ class UploadService
         }
         
         // Create a session token
-        $temp_file = $file->getFileLocation();
+        $temp_file = $this->getFullFileName($file);
         $outputStream = fopen($temp_file, "c+b");
         fseek($outputStream, $uploadedContent->getUploadedContentRange()->startsAt());
         
@@ -84,11 +81,24 @@ class UploadService
     {
         $completedFile->setComplete(true);
         $this->em->persist($completedFile);
-        $this->em->commit();
+        $this->em->flush();
+        return $completedFile;
     }
     
     public function getFile(Uuid $uuid): AttachmentMetadata
     {
         return $this->em->getRepository(AttachmentMetadata::class)->find($uuid);
+    }
+    
+    public function getFullFileName(AttachmentMetadata $attachmentMetadata) {
+        $path = "/data/media/tmp/uploaded_file/";
+        if (!file_exists($path)) {
+            mkdir($path, 0775, true);
+        }
+        return $path . $attachmentMetadata->getFileLocation();
+    }
+    
+    public function getHash($algo = "sha512", $fileName) {
+        return hash_file($algo, $fileName);
     }
 }
