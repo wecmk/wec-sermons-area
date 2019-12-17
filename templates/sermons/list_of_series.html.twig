@@ -27,19 +27,11 @@
             </div>
         </div>
         <div class="btn-group-lg" role="group" aria-label="...">
-            {% if 'searchQuery' in app.request.query.all|keys %}
-                <div class="btn-group" role="group">
-                    <!-- Button trigger modal -->
-                    <a class="btn btn-secondary" href="{% if mainPage is defined %}{{ path('search_all') }}{% else %}{{ path('sermons_home') }}{% endif %}">
-                        Start again
-                    </a>
-                </div>
-            {% endif %}
             <div class="btn-group" role="group">
-                <a type="btn btn-secondary" class="btn btn-secondary" href="{{ path("sermons_list_series") }}">
-                    List all Series
+                <a type="btn btn-secondary" class="btn btn-secondary" href="{% if mainPage is defined %}{{ path('search_all') }}{% else %}{{ path('sermons_home') }}{% endif %}">
+                    Back to Sermons
                 </a>
-            </div>
+            </div>           
             <div class="btn-group" role="group">
                 <button type="button" class="btn btn-secondary" data-toggle="modal" data-target=".help-modal-dialog">
                     Help
