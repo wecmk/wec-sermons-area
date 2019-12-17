@@ -18,7 +18,7 @@ use Gedmo\Timestampable\Traits\TimestampableEntity;
  * @ORM\Entity(repositoryClass="App\Repository\EventRepository")
  * @Gedmo\Loggable
  */
-class Event
+class Event implements CanBeDownloaded
 {
     /**
      * Hook SoftDeleteable behavior
@@ -326,5 +326,18 @@ class Event
         $this->legacyId = $legacyId;
 
         return $this;
+    }
+    
+    public function getFilename($extension) {
+        return $this->getDate()->format("Y-m-d")
+                . $this->formatFileNamePart($this->getApm())
+                . $this->formatFileNamePart($this->getReading())
+                . $this->formatFileNamePart($this->getTitle())
+                . $this->formatFileNamePart($this->getSpeaker()->getName())
+                . ".mp3";
+    }
+    
+    private function formatFileNamePart($stringPart) {
+        return (!empty($stringPart)) ? " - " . $stringPart : "";
     }
 }
