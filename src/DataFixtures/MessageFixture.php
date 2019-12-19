@@ -69,7 +69,8 @@ class MessageFixture extends Fixture implements \Doctrine\Bundle\FixturesBundle\
         $attachmentMetadata->setComplete(true);
         $attachmentMetadata->setHash("asdf");
         $attachmentMetadata->setIsPublic(true);
-        
+        $attachmentMetadata->setExtension(".mp3");
+
         $type = $this->attachmentMetadataTypeRepository->findOneBy(["type" => "sermon-recording"]);
         $attachmentMetadata->setType($type);
         $sermon->addAttachmentMetadata($attachmentMetadata);
@@ -126,7 +127,8 @@ class MessageFixture extends Fixture implements \Doctrine\Bundle\FixturesBundle\
         $attachmentMetadata->setComplete(true);
         $attachmentMetadata->setHash("2346afg");
         $attachmentMetadata->setIsPublic(true);
-        
+        $attachmentMetadata->setExtension(".mp3");
+
         $type = $this->attachmentMetadataTypeRepository->findOneBy(["type" => "sermon-recording"]);
         $attachmentMetadata->setType($type);
         $sermon->addAttachmentMetadata($attachmentMetadata);
@@ -175,6 +177,7 @@ class MessageFixture extends Fixture implements \Doctrine\Bundle\FixturesBundle\
         $attachmentMetadata->setComplete(true);
         $attachmentMetadata->setHash("asdf");
         $attachmentMetadata->setIsPublic(true);
+        $attachmentMetadata->setExtension(".pdf");
         
         $type = $this->attachmentMetadataTypeRepository->findOneBy(["type" => "service-sheet"]);
         $attachmentMetadata->setType($type);
