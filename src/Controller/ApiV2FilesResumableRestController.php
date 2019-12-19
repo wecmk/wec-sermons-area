@@ -39,12 +39,12 @@ class ApiV2FilesResumableRestController extends AbstractController
      * @Route("/upload/resumable", name="upload_resumable_post", methods={"POST"})
      */
     public function resumableUpload(
-            Request $request, 
-            \Psr\Log\LoggerInterface $logger,
-            \App\Services\Event\EventService $eventService,
-            UploadService $uploadService, 
-            AttachmentTypeService $attachmentTypeService)
-    {
+        Request $request,
+        \Psr\Log\LoggerInterface $logger,
+        \App\Services\Event\EventService $eventService,
+        UploadService $uploadService,
+        AttachmentTypeService $attachmentTypeService
+    ) {
         $body = json_decode($request->getContent(), true);
         $typeString = (isset($body['type'])) ? $body['type'] : null;
         $eventUuidString = (isset($body['eventUuid'])) ? $body['eventUuid'] : null;
@@ -124,14 +124,14 @@ class ApiV2FilesResumableRestController extends AbstractController
         $pointer = $uploadService->update(\Ramsey\Uuid\Uuid::fromString($uuid), $uploadedContent);
         
         // once the upload is complete, return 200/201, along with any metadata associated with the resource
-        $response;           
+        $response;
         if ($pointer == intval($file->getContentLength())) {
             $hash = $uploadService->getHash($this->algo, $uploadService->getFullFileName($file));
             $logger->info($hash);
             $logger->info($file->getHash());
             if ($hash == $file->getHash()) {
                 $status = 201;
-                $attachmentMetadata = $uploadService->completeUpload($file); 
+                $attachmentMetadata = $uploadService->completeUpload($file);
                 $body = [
                     'id' => $attachmentMetadata->getId(),
                     'mimeType' => $attachmentMetadata->getMimeType(),
@@ -144,7 +144,6 @@ class ApiV2FilesResumableRestController extends AbstractController
                 $response = new \Symfony\Component\HttpFoundation\Response();
                 $response->setStatusCode(400, "Hash does not match. Retry upload");
             }
-            
         } else {
             $response = new \Symfony\Component\HttpFoundation\Response();
             $response->setStatusCode(308, "Resume Incomplete");

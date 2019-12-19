@@ -10,21 +10,24 @@ use FOS\RestBundle\View\View;
 use FOS\RestBundle\Request\ParamFetcher;
 use App\Repository\EventRepository;
 use App\Entity\Event;
+
 /**
- * This API Controller supports the old version of the API, converting 
+ * This API Controller supports the old version of the API, converting
  * the old API methods to the new entities
  *
  * @Route("/api/v1/sermons", name="api_v1_sermons_")
 
  */
-class ApiV1SermonsRestController extends AbstractFOSRestController {
+class ApiV1SermonsRestController extends AbstractFOSRestController
+{
 
     /**
      * Return all recorded events
      *
      * @Route("/all", name="all", methods={"GET"})
      */
-    public function getAllSermonsAction(EventRepository $eventRepository) {
+    public function getAllSermonsAction(EventRepository $eventRepository)
+    {
         $this->denyAccessUnlessGranted('ROLE_API');
                 
         $entities = $eventRepository->findAll();
@@ -33,16 +36,17 @@ class ApiV1SermonsRestController extends AbstractFOSRestController {
 
     /**
      * Return a sermon by ID
-     * 
+     *
      * @Route("/{id}", name="id", methods={"GET"})
      */
-    public function getSermonById(EventRepository $eventRepository, $id) {
+    public function getSermonById(EventRepository $eventRepository, $id)
+    {
         $this->denyAccessUnlessGranted('ROLE_API');
         $entity = $eventRepository->find($id);
 
         if (!$entity) {
             throw $this->createNotFoundException('Data not found.');
-        } else if ($entity->isDeleted()) {
+        } elseif ($entity->isDeleted()) {
             $view = View::create();
             $view->setStatusCode(410);
             return $view;
@@ -55,17 +59,19 @@ class ApiV1SermonsRestController extends AbstractFOSRestController {
      *
      * @Route("", name="new", methods={"POST"}, defaults={"id"=""})
      */
-    public function new(Request $request, EventRepository $eventRepository, 
-            \App\Services\Event\EventService $eventService,
-            \App\Services\Speaker\SpeakerService $speakerService,
-            \App\Services\Series\SeriesService $seriesService
-            ) {
+    public function new(
+        Request $request,
+        EventRepository $eventRepository,
+        \App\Services\Event\EventService $eventService,
+        \App\Services\Speaker\SpeakerService $speakerService,
+        \App\Services\Series\SeriesService $seriesService
+    ) {
         $this->denyAccessUnlessGranted('ROLE_API');
         $body = json_decode($request->getContent(), true);
         $id = $body['id'];
         
         /* @var $event Event */
-        if (!empty($id)) { 
+        if (!empty($id)) {
             $event = $eventRepository->find($id);
         }
         
@@ -114,10 +120,11 @@ class ApiV1SermonsRestController extends AbstractFOSRestController {
 
     /**
      * Delete a sermon
-     *   
-     * @param string $id 
+     *
+     * @param string $id
      */
-    public function deleteUserAction(EventRepository $eventRepository, \Doctrine\ORM\EntityManager $em, $id) {
+    public function deleteUserAction(EventRepository $eventRepository, \Doctrine\ORM\EntityManager $em, $id)
+    {
         $this->denyAccessUnlessGranted('ROLE_API');
         $entity = $eventRepository->find($id);
         if (!$entity) {
@@ -127,5 +134,4 @@ class ApiV1SermonsRestController extends AbstractFOSRestController {
         $em->persist($entity);
         return $this->view("User deteled.")->setStatusCode(204);
     }
-
 }

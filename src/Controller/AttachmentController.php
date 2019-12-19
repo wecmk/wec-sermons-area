@@ -18,10 +18,10 @@ class AttachmentController extends AbstractController
 {
 
     /**
-     * 
-     * Optional GET parameter force-dl=true (default to force the download or 
+     *
+     * Optional GET parameter force-dl=true (default to force the download or
      * false to stream
-     * 
+     *
      * @Route("/{id}", name="index")
      */
     public function index(Request $request, \Psr\Log\LoggerInterface $logger, UploadService $uploadService, AttachmentMetadata $attachment)

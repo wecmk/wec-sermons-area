@@ -12,6 +12,7 @@ namespace App\Entity;
  *
  * @author samue
  */
-interface CanBeDownloaded {
+interface CanBeDownloaded
+{
     public function getFilename($extension);
 }

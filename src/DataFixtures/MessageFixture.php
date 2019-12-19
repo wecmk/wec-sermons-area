@@ -11,7 +11,8 @@ class MessageFixture extends Fixture implements \Doctrine\Bundle\FixturesBundle\
     /** @var AttachmentMetadataTypeRepository $attachmentMetadataTypeRepository */
     private $attachmentMetadataTypeRepository;
     
-    public function __construct(\App\Repository\AttachmentMetadataTypeRepository $attachmentMetadataTypeRepository) {
+    public function __construct(\App\Repository\AttachmentMetadataTypeRepository $attachmentMetadataTypeRepository)
+    {
         $this->attachmentMetadataTypeRepository = $attachmentMetadataTypeRepository;
     }
     
@@ -22,7 +23,7 @@ class MessageFixture extends Fixture implements \Doctrine\Bundle\FixturesBundle\
         $manager->persist($seriesColossians);
         
         $seriesVisitingSpeaker = new \App\Entity\Series();
-        $seriesVisitingSpeaker->setName("Visiting Speaker");        
+        $seriesVisitingSpeaker->setName("Visiting Speaker");
         $manager->persist($seriesVisitingSpeaker);
         
         $seriesUncategorised = new \App\Entity\Series();
@@ -66,11 +67,11 @@ class MessageFixture extends Fixture implements \Doctrine\Bundle\FixturesBundle\
         $attachmentMetadata->setContentLength("200");
         $attachmentMetadata->setFileLocation("asdf/345.mp3");
         $attachmentMetadata->setComplete(true);
-        $attachmentMetadata->setHash("asdf"); 
+        $attachmentMetadata->setHash("asdf");
         $attachmentMetadata->setIsPublic(true);
         
         $type = $this->attachmentMetadataTypeRepository->findOneBy(["type" => "sermon-recording"]);
-        $attachmentMetadata->setType($type);        
+        $attachmentMetadata->setType($type);
         $sermon->addAttachmentMetadata($attachmentMetadata);
         $manager->persist($sermon);
 
@@ -123,11 +124,11 @@ class MessageFixture extends Fixture implements \Doctrine\Bundle\FixturesBundle\
         $attachmentMetadata->setContentLength("250");
         $attachmentMetadata->setFileLocation("asdf/15345.mp3");
         $attachmentMetadata->setComplete(true);
-        $attachmentMetadata->setHash("2346afg"); 
+        $attachmentMetadata->setHash("2346afg");
         $attachmentMetadata->setIsPublic(true);
         
         $type = $this->attachmentMetadataTypeRepository->findOneBy(["type" => "sermon-recording"]);
-        $attachmentMetadata->setType($type);        
+        $attachmentMetadata->setType($type);
         $sermon->addAttachmentMetadata($attachmentMetadata);
         $manager->persist($sermon);
         
@@ -172,11 +173,11 @@ class MessageFixture extends Fixture implements \Doctrine\Bundle\FixturesBundle\
         $attachmentMetadata->setContentLength("200");
         $attachmentMetadata->setFileLocation("asdf/345.pdf");
         $attachmentMetadata->setComplete(true);
-        $attachmentMetadata->setHash("asdf"); 
+        $attachmentMetadata->setHash("asdf");
         $attachmentMetadata->setIsPublic(true);
         
         $type = $this->attachmentMetadataTypeRepository->findOneBy(["type" => "service-sheet"]);
-        $attachmentMetadata->setType($type);        
+        $attachmentMetadata->setType($type);
         $sermon->addAttachmentMetadata($attachmentMetadata);
         $manager->persist($sermon);
         

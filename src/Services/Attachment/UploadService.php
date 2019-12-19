@@ -90,7 +90,8 @@ class UploadService
         return $this->em->getRepository(AttachmentMetadata::class)->find($uuid);
     }
     
-    public function getFullFileName(AttachmentMetadata $attachmentMetadata) {
+    public function getFullFileName(AttachmentMetadata $attachmentMetadata)
+    {
         $path = "/data/media/tmp/uploaded_file/";
         if (!file_exists($path)) {
             mkdir($path, 0775, true);
@@ -98,7 +99,8 @@ class UploadService
         return $path . $attachmentMetadata->getFileLocation();
     }
     
-    public function getHash($algo = "sha512", $fileName) {
+    public function getHash($algo = "sha512", $fileName)
+    {
         return hash_file($algo, $fileName);
     }
 }

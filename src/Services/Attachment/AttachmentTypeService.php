@@ -47,7 +47,7 @@ class AttachmentTypeService
         return $attachment;
     }
     
-    public function findByType($type) 
+    public function findByType($type)
     {
         return $this->repository->findOneBy([
             'type' => $type

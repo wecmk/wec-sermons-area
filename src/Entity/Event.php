@@ -5,12 +5,10 @@ namespace App\Entity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-
 use JMS\Serializer\Annotation as JMS;
 use JMS\Serializer\Annotation\SerializedName;
 use Gedmo\Mapping\Annotation as Gedmo;
 use JMS\Serializer\Annotation\Exclude;
-
 use Gedmo\SoftDeleteable\Traits\SoftDeleteableEntity;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
 
@@ -20,13 +18,14 @@ use Gedmo\Timestampable\Traits\TimestampableEntity;
  */
 class Event implements CanBeDownloaded
 {
+
     /**
      * Hook SoftDeleteable behavior
      * updates deletedAt field
      */
     use SoftDeleteableEntity;
     use TimestampableEntity;
-    
+
     /**
      * @var \Ramsey\Uuid\UuidInterface
      * @JMS\Type("uuid")
@@ -121,7 +120,7 @@ class Event implements CanBeDownloaded
     {
         return $this->id;
     }
- 
+
     public function getDate(): ?\DateTimeInterface
     {
         return $this->Date;
@@ -143,7 +142,7 @@ class Event implements CanBeDownloaded
     {
         $this->id = $id;
     }
-        
+
     public function setApm($Apm): self
     {
         $this->Apm = $Apm;
@@ -327,8 +326,9 @@ class Event implements CanBeDownloaded
 
         return $this;
     }
-    
-    public function getFilename($extension) {
+
+    public function getFilename($extension)
+    {
         return $this->getDate()->format("Y-m-d")
                 . $this->formatFileNamePart($this->getApm())
                 . $this->formatFileNamePart($this->getReading())
@@ -336,8 +336,9 @@ class Event implements CanBeDownloaded
                 . $this->formatFileNamePart($this->getSpeaker()->getName())
                 . ".mp3";
     }
-    
-    private function formatFileNamePart($stringPart) {
+
+    private function formatFileNamePart($stringPart)
+    {
         return (!empty($stringPart)) ? " - " . $stringPart : "";
     }
 }
