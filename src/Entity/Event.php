@@ -334,7 +334,7 @@ class Event implements CanBeDownloaded
                 . $this->formatFileNamePart($this->getReading())
                 . $this->formatFileNamePart($this->getTitle())
                 . $this->formatFileNamePart($this->getSpeaker()->getName())
-                . ".mp3";
+                . $extension;
     }
 
     private function formatFileNamePart($stringPart)
