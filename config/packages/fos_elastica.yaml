@@ -56,13 +56,13 @@ fos_elastica:
                                 complete: ~
                                 hash: { type: text }
                                 isPublic: ~
-                    persistence:
-                        # the driver can be orm, mongodb or phpcr
-                        driver: orm
-                        model: App\Entity\Event
-                        provider: ~
-                        finder: ~
-                        elastica_to_model_transformer:
-                            ignore_missing: true
-                        provider:
-                            batch_size: 100
+#                    persistence:
+#                        # the driver can be orm, mongodb or phpcr
+#                        driver: orm
+#                        model: App\Entity\Event
+#                        provider: ~
+#                        finder: ~
+#                        elastica_to_model_transformer:
+#                            ignore_missing: true
+#                        provider:
+#                            batch_size: 100

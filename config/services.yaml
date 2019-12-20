@@ -30,7 +30,7 @@ services:
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
 
-    App\Services\Event\EventSearchService:
+    App\Services\Event\IndexEventSearchService:
         arguments:
             # the '@' symbol is important: that's what tells the container
             # you want to pass the *service* whose id is 'monolog.logger.request',
@@ -38,3 +38,6 @@ services:
             $logger: '@monolog.logger.request'
             $index: '@fos_elastica.finder.app.event'
             $em: '@doctrine.orm.default_entity_manager'            
+    
+    App\Service\Event\DbEventSearchService: ~
+    App\Service\Event\EventSearchService: '@App\Service\Event\DbEventSearchService'
