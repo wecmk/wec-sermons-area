@@ -1,8 +1,9 @@
 {% extends 'base.html.twig' %}
 
-{% set breadcrumbs = { "Home": "members_area_home", 
-    "Children's talk questions and answers": "questions_home", 
-    "Question Series": ""
+{% set breadcrumbs = { 
+    "members_area_home": "Home",
+    "questions_home": "Children's talk questions and answers", 
+    "questions_series": questionSeries.number ~ ". " ~ questionSeries.name
 } %}
 
 {% block title %}Children's talk question and answers{% endblock %}

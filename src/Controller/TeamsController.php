@@ -35,11 +35,11 @@ class TeamsController extends AbstractController
         $form = $this->createForm(TeamsType::class, $team);
         $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {          
+        if ($form->isSubmitted() && $form->isValid()) {
             /** @var UploadedFile $uploadedFile */
             $uploadedFile = $form['imageFile']->getData();
             $fileContentsAsBase64 = base64_encode(file_get_contents($uploadedFile->getRealPath()));
-            $team->setImageAsBase64($fileContentsAsBase64);            
+            $team->setImageAsBase64($fileContentsAsBase64);
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($team);
             $entityManager->flush();

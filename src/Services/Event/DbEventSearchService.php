@@ -32,7 +32,7 @@ class DbEventSearchService implements EventSearchService
     }
 
     public function search($searchTerm)
-    {        
+    {
         return $this->repository->findBy([], [
             "Date" => "DESC",
             "Apm" => "DESC"
