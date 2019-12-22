@@ -1,0 +1,13 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Edit Teams{% endblock %}
+
+{% block body %}
+    <h1>Edit Teams</h1>
+
+    {{ include('teams/_form.html.twig', {'button_label': 'Update'}) }}
+
+    <a href="{{ path('teams_index') }}">back to list</a>
+
+    {{ include('teams/_delete_form.html.twig') }}
+{% endblock %}

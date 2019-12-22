@@ -1,0 +1,13 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Create new Teams List{% endblock %}
+
+{% block content %}
+    <div class="container">
+        <h1>Create new Teams</h1>
+
+        {{ include('teams/_form.html.twig') }}
+
+        <a href="{{ path('teams_index') }}">back to list</a>
+    </div>
+{% endblock %}

@@ -1,0 +1,50 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Teams List{% endblock %}
+
+{% set breadcrumbs = {
+    "Home": "members_area_home", 
+    "Team Lists": "team_index", 
+} %}
+
+
+{% block content %}
+    <div class="container">
+
+        <h1>Team Lists</h1>
+        <div class="menu-row">
+            {% for team in teams %}
+                
+                {% if is_granted('ROLE_ADMIN') %} 
+                    {% set inner = '
+                            <td>
+                                <a href="' ~ path("teams_edit", {"id": team.id }) ~ '">edit</a>
+                            </td>
+                    ' %}
+                {% else %}
+                    {% set inner = '' %}
+                {% endif %}
+                
+                {{ include('components/menu-item.html.twig', {
+                    'path': team.link, 
+                    'asset': "data:image/svg+xml;base64," ~ team.imageAsBase64, 
+                    'heading': team.name, 
+                    'inner': inner                            
+                    }) 
+                }}
+                {% if loop.index is divisible by(3) %}
+                </div>
+                <div class="menu-row">
+                {% endif %}
+            {% else %}
+                <tr>
+                    <td colspan="5">no records found</td>
+                </tr>
+            {% endfor %}
+
+        </div>
+        {% if is_granted('ROLE_ADMIN') %} 
+            <a href="{{ path('teams_new') }}">Create new</a>
+        {% endif %}
+    </div>
+{% endblock %}
