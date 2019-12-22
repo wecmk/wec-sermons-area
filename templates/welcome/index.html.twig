@@ -6,14 +6,24 @@
 
 {% block content %} 
     <div class="container">
-        <div class="menu-row">
-            {{ include('components/menu-item.html.twig', {'path': path('sermons_home'), 'asset': asset('build/images/search.svg') , 'heading': 'Sermons'}) }}
-            {{ include('components/menu-item.html.twig', {'path': path('teams_index'), 'asset': asset('build/images/rota.svg') , 'heading': 'Team Lists'}) }}
-            {{ include('components/menu-item.html.twig', {'path': path('questions_home'), 'asset': asset('build/images/question.svg') , 'heading': 'Question and Answers'}) }}
-        </div>
-        <div class="menu-row">
-            {{ include('components/menu-item.html.twig', {'path': path('members_area_home'), 'asset': asset('build/images/logout.svg') , 'heading': 'Logout'}) }}
-            {{ include('components/menu-item.html.twig', {'path': path('wecmk_public_home'), 'asset': asset('build/images/leftarrow.svg') , 'heading': 'Public Website'}) }}
-        </div>
+        {% for key,submenu in menuList %}
+            <h1>{{ key }}</h1>
+            <div class="menu-row">
+
+                {%  for value,params in submenu %}
+                    {% if params is iterable %}
+                        {% set path = params.path %}
+                        {% set alt = params.alt %}
+                        {% set img = params.img %}
+                    {% else %}
+                        {% set path = params %}
+                        {% set alt = "" %}
+                        {% set img = "build/images/search.svg" %}
+                    {% endif %}
+
+                    {{ include('components/menu-item.html.twig', {'path': path, 'alt': alt, 'asset': asset(img), 'heading': value}) }}
+                {% endfor %}
+            </div>
+        {% endfor %}
     </div>
 {% endblock %}
