@@ -41,21 +41,19 @@ class DbEventSearchService implements EventSearchService
 
     public function searchBySeries($name)
     {
-        return $this->repository->findBy([
-            "Series" => $name
-        ], [
-            "Date" => "ASC",
-            "Apm" => "ASC"
-        ]);
+        /** @var \App\Entity\Series $series */
+        $series = $this->em->getRepository(\App\Entity\Series::class)->findOneBy(
+                ['Name' => $name]
+                );
+        return $series->getEvents();
     }
 
     public function searchBySpeaker($name)
     {
-        return $this->repository->findBy([
-            "Speaker.Name" => $name
-        ], [
-            "Date" => "ASC",
-            "Apm" => "ASC"
-        ]);
+        /** @var \App\Entity\Speaker $speaker */
+        $speaker = $this->em->getRepository(\App\Entity\Speaker::class)->findOneBy(
+                ['Name' => $name]
+                );
+        return $speaker->getEvent();
     }
 }
