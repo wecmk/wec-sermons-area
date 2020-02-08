@@ -124,15 +124,10 @@ class ApiV1SermonsRestController extends AbstractFOSRestController
      * @Route("/{id}", name="delete", methods={"DELETE"})
      * @param string $id
      */
-    public function deleteSermonAction(EventRepository $eventRepository, \Doctrine\ORM\EntityManager $em, $id)
+    public function deleteSermonAction(\App\Services\Event\EventService $eventService, $id)
     {
         $this->denyAccessUnlessGranted('ROLE_API');
-        $entity = $eventRepository->find($id);
-        if (!$entity) {
-            throw $this->createNotFoundException('Data not found.');
-        }
-        $entity->setDeletedAt();
-        $em->persist($entity);
-        return $this->view("Sermon deteled.")->setStatusCode(204);
+        $eventService->deleteById($id);
+        return $this->view("Sermon deleted.")->setStatusCode(204);
     }
 }

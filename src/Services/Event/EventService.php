@@ -61,4 +61,11 @@ class EventService
     {
         return $this->repository->find($id);
     }
+    
+    public function deleteById($id) 
+    {
+        $event = $this->em->getReference(Event::class, $id);
+        $this->em->remove($event);
+        $this->em->flush();
+    }
 }
