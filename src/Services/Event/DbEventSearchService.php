@@ -43,8 +43,8 @@ class DbEventSearchService implements EventSearchService
     {
         /** @var \App\Entity\Series $series */
         $series = $this->em->getRepository(\App\Entity\Series::class)->findOneBy(
-                ['Name' => $name]
-                );
+            ['Name' => $name]
+        );
         return $series->getEvents();
     }
 
@@ -52,8 +52,8 @@ class DbEventSearchService implements EventSearchService
     {
         /** @var \App\Entity\Speaker $speaker */
         $speaker = $this->em->getRepository(\App\Entity\Speaker::class)->findOneBy(
-                ['Name' => $name]
-                );
+            ['Name' => $name]
+        );
         return $speaker->getEvent();
     }
 }
