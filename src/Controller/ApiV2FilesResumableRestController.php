@@ -49,6 +49,8 @@ class ApiV2FilesResumableRestController extends AbstractController
         $typeString = (isset($body['type'])) ? $body['type'] : null;
         $eventUuidString = (isset($body['eventUuid'])) ? $body['eventUuid'] : null;
         $isPublic = (isset($body['isPublic'])) ? boolval($body['isPublic']) : false;
+        $extension = (isset($body['extension'])) ? $body['extension'] : "";
+
         $logger->info($typeString);
         // Based on https://developers.google.com/drive/api/v3/manage-uploads
         $metadata = new \App\Entity\AttachmentMetadata();
@@ -79,6 +81,9 @@ class ApiV2FilesResumableRestController extends AbstractController
             $metadata->setHash($request->headers->get("X-Upload-Hash"));
             //$metadata->setHash($hash)
         }
+        
+        $metadata->setExtension($extension);
+        
         $contentType = $request->headers->get('Content-Type', "*");
 
         // Content of the body (not the overall file length)
