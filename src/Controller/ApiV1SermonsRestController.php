@@ -10,6 +10,7 @@ use FOS\RestBundle\View\View;
 use FOS\RestBundle\Request\ParamFetcher;
 use App\Repository\EventRepository;
 use App\Entity\Event;
+use App\Entity\Series;
 
 /**
  * This API Controller supports the old version of the API, converting
@@ -111,8 +112,9 @@ class ApiV1SermonsRestController extends AbstractFOSRestController
         }
         
         $existingSeries = $event->getSeries();
+        /** @var Series $existing */
         foreach ($existingSeries as $existing) {
-            if (!in_array($existing, $seriesList)) {
+            if (!in_array($existing->getName(), $seriesList)) {
                 $event->removeSeries($existing);
             }
         }
