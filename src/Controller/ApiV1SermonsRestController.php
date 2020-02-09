@@ -110,6 +110,13 @@ class ApiV1SermonsRestController extends AbstractFOSRestController
             }
         }
         
+        $existingSeries = $event->getSeries();
+        foreach ($existingSeries as $existing) {
+            if (!in_array($existing, $seriesList)) {
+                $event->removeSeries($existing);
+            }
+        }
+        
         $event->setCorrupt(boolval($body["corrupt"]));
         $event->setTags(isset($body["tags"]) ? $body["tags"] : "");
 
