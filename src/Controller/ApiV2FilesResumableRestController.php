@@ -2,11 +2,15 @@
 
 namespace App\Controller;
 
+use App\Services\Event\EventService;
+use App\Services\Filesystem\FilesystemService;
+use Psr\Log\LoggerInterface;
+use Ramsey\Uuid\Uuid;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use App\Services\Attachment\UploadService;
 use App\Services\Attachment\AttachmentTypeService;
 
 /**
@@ -20,7 +24,7 @@ class ApiV2FilesResumableRestController extends AbstractController
      * @var string Name of selected hashing algorithm (e.g. "md5", "sha256", "haval160,4", etc..)
      */
     private $algo = "sha512";
-    
+
     /**
      * X-Upload-Content-Type. Optional. Set to the MIME type of the file data,
      *      which will be transferred in subsequent requests. If the MIME type
@@ -37,12 +41,18 @@ class ApiV2FilesResumableRestController extends AbstractController
      *      Set to the number of bytes in the body of this initial request.
      *
      * @Route("/upload/resumable", name="upload_resumable_post", methods={"POST"})
+     * @param Request $request
+     * @param LoggerInterface $logger
+     * @param EventService $eventService
+     * @param FilesystemService $filesystemService
+     * @param AttachmentTypeService $attachmentTypeService
+     * @return Response
      */
     public function resumableUpload(
         Request $request,
-        \Psr\Log\LoggerInterface $logger,
-        \App\Services\Event\EventService $eventService,
-        UploadService $uploadService,
+        LoggerInterface $logger,
+        EventService $eventService,
+        FilesystemService $filesystemService,
         AttachmentTypeService $attachmentTypeService
     ) {
         $body = json_decode($request->getContent(), true);
@@ -50,65 +60,46 @@ class ApiV2FilesResumableRestController extends AbstractController
         $eventUuidString = (isset($body['eventUuid'])) ? $body['eventUuid'] : null;
         $isPublic = (isset($body['isPublic'])) ? boolval($body['isPublic']) : false;
         $extension = (isset($body['extension'])) ? $body['extension'] : "";
+        $hash = (isset($body['hash'])) ? $body['hash'] : "";
+        $hashAlgo = (isset($body['hashAlgo'])) ? $body['hashAlgo'] : "";
+
+        $event = $eventService->getById($eventUuidString);
 
         $logger->info($typeString);
-        // Based on https://developers.google.com/drive/api/v3/manage-uploads
-        $metadata = new \App\Entity\AttachmentMetadata();
-        $metadata->setMimeType($request->headers->get('X-Upload-Content-Type', 'application/octet-stream'));
-        if ($request->headers->has('X-Upload-Content-Length')) {
-            $metadata->setContentLength($request->headers->get('X-Upload-Content-Length'));
-        } else {
-            $response = new Response();
-            $response->setStatusCode(411, "X-Upload-Content-Length Required");
-            return $response;
-        }
-        if (!empty($typeString)) {
-            $logger->info("type - not empty");
-            $type = $attachmentTypeService->findByType($typeString);
-            if (null != $type) {
-                $logger->info("type - set");
-                $metadata->setType($type);
-            }
-        }
-        if (!empty($eventUuidString)) {
-            $event = $eventService->getById($eventUuidString);
-            if (null != $event) {
-                $metadata->setEvent($event);
-            }
-        }
-        $metadata->setIsPublic($isPublic);
-        if ($request->headers->has("X-Upload-Hash") && $request->headers->has("X-Upload-Hash-Algo")) {
-            $metadata->setHash($request->headers->get("X-Upload-Hash"));
-            //$metadata->setHash($hash)
-        }
-        
-        $metadata->setExtension($extension);
-        
-        $contentType = $request->headers->get('Content-Type', "*");
 
-        // Content of the body (not the overall file length)
-        $contentLength = $request->headers->get('Content-Length', "*");
-        
-        $uploadedFile = $uploadService->create($metadata);
+        $attachmentMetadata = $filesystemService->create(
+            $event,
+            $request->headers->get('X-Upload-Content-Type', 'application/octet-stream'),
+            $request->headers->get('X-Upload-Content-Length'),
+            $attachmentTypeService->findByType($typeString),
+            $hash,
+            $hashAlgo,
+            $extension,
+            $isPublic
+        );
 
-        
-        
         // return a Location Header
         $response = new \Symfony\Component\HttpFoundation\Response('', 201);
-        $response->headers->set("Location", $this->generateUrl('api_v2_files_upload_resumable_put', ['id' => $uploadedFile->getId()->toString()]), true);
+        $response->headers->set("Location", $this->generateUrl('api_v2_files_upload_resumable_put', ['id' => $attachmentMetadata->getId()->toString()]), true);
         return $response;
     }
-    
+
     /**
      * @Route("/upload/resumable/{id}", name="upload_resumable_put", methods={"PUT"})
+     *
+     * @param Request $request
+     * @param LoggerInterface $logger
+     * @param FilesystemService $filesystemService
+     * @param $id
+     * @return JsonResponse|Response
      */
     public function resumableUploadContinue(
         Request $request,
-        \Psr\Log\LoggerInterface $logger,
-        UploadService $uploadService,
+        LoggerInterface $logger,
+        FilesystemService $filesystemService,
         $id
     ) {
-        $uuid = \Ramsey\Uuid\Uuid::fromString($id);
+        $uuid = Uuid::fromString($id);
         // Based on https://developers.google.com/drive/api/v3/manage-uploads
         // input request
         /*
@@ -120,23 +111,22 @@ class ApiV2FilesResumableRestController extends AbstractController
             [BYTES 0-524287]
         */
         // Based on https://developers.google.com/drive/api/v3/manage-uploads
-                
+
         $uploadedContent = new \App\Entity\UploadedContent(
             $request->headers->get('Content-Range'),
             $request->getContent()
         );
-        $file = $uploadService->getFile($uuid);
-        $pointer = $uploadService->update(\Ramsey\Uuid\Uuid::fromString($uuid), $uploadedContent);
-        
+        $pointer = $filesystemService->appendContentToFile($uuid, $uploadedContent);
+        $fileMetadata = $filesystemService->getFileMetadata($uuid);
+
         // once the upload is complete, return 200/201, along with any metadata associated with the resource
-        $response;
-        if ($pointer == intval($file->getContentLength())) {
-            $hash = $uploadService->getHash($this->algo, $uploadService->getFullFileName($file));
-            $logger->info($hash);
-            $logger->info($file->getHash());
-            if ($hash == $file->getHash()) {
+        $response = null;
+        if ($pointer == intval($fileMetadata->getContentLength())) {
+            $hashIsValid =  $filesystemService->hashIsValid($uuid);
+            $logger->info("Is Hash Valid: " . $hashIsValid);
+            if ($hashIsValid) {
                 $status = 201;
-                $attachmentMetadata = $uploadService->completeUpload($file);
+                $attachmentMetadata = $filesystemService->completeAndValidateUpload($uuid);
                 $body = [
                     'id' => $attachmentMetadata->getId(),
                     'mimeType' => $attachmentMetadata->getMimeType(),
@@ -152,7 +142,7 @@ class ApiV2FilesResumableRestController extends AbstractController
         } else {
             $response = new \Symfony\Component\HttpFoundation\Response();
             $response->setStatusCode(308, "Resume Incomplete");
-            $rangeValue = "0-" . strval($pointer-1);
+            $rangeValue = "0-" . strval($pointer - 1);
             $response->headers->set("Content-Range", $rangeValue);
         }
         return $response;

@@ -65,6 +65,11 @@ class AttachmentMetadata
     private $hash = "";
 
     /**
+     * @ORM\Column(type="string", length=10)
+     */
+    private $hashAlgo = "sha512";
+
+    /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Event", inversedBy="attachmentMetadata")
      */
     private $event;
@@ -78,7 +83,7 @@ class AttachmentMetadata
      * @ORM\Column(type="boolean")
      */
     private $isPublic = false;
-        
+
     public function getId(): ?\Ramsey\Uuid\Uuid
     {
         return $this->id;
@@ -120,26 +125,6 @@ class AttachmentMetadata
         return $this;
     }
 
-    public function getFileLocation(): ?string
-    {
-        if (null == $this->fileLocation) {
-            return $this->id->toString();
-        }
-        return $this->fileLocation;
-    }
-
-    public function setFileLocation(string $fileLocation): self
-    {
-        $this->fileLocation = $fileLocation;
-
-        return $this;
-    }
-    
-    /**
-     * Generate a hash value using the contents of a given file
-     * @param string $algo Name of selected hashing algorithm (i.e. "md5", "sha256", "haval160,4", etc..)
-     * @return string Returns a string containing the calculated message digest as lowercase hexits unless raw_output is set to true in which case the raw binary representation of the message digest is returned.
-     */
     public function getHash()
     {
         return $this->hash;
@@ -201,6 +186,18 @@ class AttachmentMetadata
     {
         $this->isPublic = $isPublic;
      
+        return $this;
+    }
+
+    public function getHashAlgo(): ?string
+    {
+        return $this->hashAlgo;
+    }
+
+    public function setHashAlgo(string $hashAlgo): self
+    {
+        $this->hashAlgo = $hashAlgo;
+
         return $this;
     }
 }

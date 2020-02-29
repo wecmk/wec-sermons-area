@@ -2,6 +2,8 @@
 
 namespace App\Controller;
 
+use App\Services\Filesystem\FilesystemService;
+use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
@@ -23,14 +25,19 @@ class AttachmentController extends AbstractController
      * false to stream
      *
      * @Route("/{id}", name="index")
+     * @param Request $request
+     * @param LoggerInterface $logger
+     * @param FilesystemService $filesystemService
+     * @param AttachmentMetadata $attachment
+     * @return BinaryFileResponse
      */
-    public function index(Request $request, \Psr\Log\LoggerInterface $logger, UploadService $uploadService, AttachmentMetadata $attachment)
+    public function index(Request $request, LoggerInterface $logger, FilesystemService $filesystemService, AttachmentMetadata $attachment)
     {
         $forceDownload = $request->query->get("force-dl", "true") == "true";
         $deposition = ($forceDownload) ? ResponseHeaderBag::DISPOSITION_ATTACHMENT : ResponseHeaderBag::DISPOSITION_INLINE;
-        $fileName = $uploadService->getFullFileName($attachment);
-        
-        $response = new BinaryFileResponse($fileName, 200, array());
+
+
+        $response = $filesystemService->generateBinaryFileResponse($attachment->getId(), 200);
         if ($attachment->getEvent() instanceof CanBeDownloaded
                 && !$attachment->isDeleted()
                 && $attachment->getIsPublic()

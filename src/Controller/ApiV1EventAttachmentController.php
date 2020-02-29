@@ -2,7 +2,12 @@
 
 namespace App\Controller;
 
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use App\Services\Event\EventService;
+use App\Services\Filesystem\FilesystemService;
+use Doctrine\ORM\EntityManagerInterface;
+use Ramsey\Uuid\Uuid;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
 use FOS\RestBundle\Controller\AbstractFOSRestController;
 
@@ -13,7 +18,7 @@ use FOS\RestBundle\Controller\AbstractFOSRestController;
  */
 class ApiV1EventAttachmentController extends AbstractFOSRestController
 {
-    
+
     /**
      * Saves a link between and Event and an AttachmentMetadata
      *
@@ -24,13 +29,19 @@ class ApiV1EventAttachmentController extends AbstractFOSRestController
      * }
      * @todo #2 Move reference of EntityManager to it's own service
      * @Route("/{eventId}", name="link", methods={"POST"})
+     * @param Request $request
+     * @param $eventId
+     * @param EventService $eventService
+     * @param FilesystemService $filesystemService
+     * @param EntityManagerInterface $em
+     * @return Response
      */
     public function postLink(
         Request $request,
         $eventId,
-        \App\Services\Event\EventService $eventService,
-        \App\Services\Attachment\UploadService $uploadService,
-        \Doctrine\ORM\EntityManagerInterface $em
+        EventService $eventService,
+        FilesystemService $filesystemService,
+        EntityManagerInterface $em
     ) {
         $event = $eventService->getById($eventId);
         if (isEmpty($event)) {
@@ -41,8 +52,8 @@ class ApiV1EventAttachmentController extends AbstractFOSRestController
                 
         try {
             $attachmentId = json_decode($request->getContent(), true)['attachmentMetadataId'];
-            $attachmentId = \Ramsey\Uuid\Uuid::fromString($attachmentId);
-            $file = $uploadService->getFile($attachmentId);
+            $attachmentId = Uuid::fromString($attachmentId);
+            $file = $filesystemService->getFileMetadata($attachmentId);
             $link->addAttachmentMetadata($file);
             $em->persist($link);
             $em->commit();
@@ -51,6 +62,6 @@ class ApiV1EventAttachmentController extends AbstractFOSRestController
             throw new BadRequestHttpException("The request body is not valid");
         }
         
-        return new \Symfony\Component\HttpFoundation\Response('', 204);
+        return new Response('', 204);
     }
 }
