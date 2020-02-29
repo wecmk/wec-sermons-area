@@ -41,7 +41,8 @@ class AttachmentController extends AbstractController
         if ($attachment->getEvent() instanceof CanBeDownloaded
                 && !$attachment->isDeleted()
                 && $attachment->getIsPublic()
-                && $attachment->getType()->getCanBePublic()) {
+                && $attachment->getType()->getCanBePublic()
+                && $attachment->getComplete()) {
             /** @var CanBeDownloaded $canBeDownloaded */
             $canBeDownloaded = $attachment->getEvent();
             $response->setContentDisposition($deposition, $canBeDownloaded->getFilename($attachment->getExtension()));
