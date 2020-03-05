@@ -47,7 +47,7 @@ class AttachmentController extends AbstractController
             $canBeDownloaded = $attachment->getEvent();
             $response->setContentDisposition($deposition, $canBeDownloaded->getFilename($attachment->getExtension()));
         } else {
-            throw $this->createAccessDeniedException("File is not downloadable - ERROR: Does not implement interface CanBeDownloaded");
+            throw $this->createAccessDeniedException("File is not downloadable - ERROR: Does not implement interface CanBeDownloaded " . $attachment->getId());
         }
         return $response;
     }
