@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
@@ -15,7 +16,7 @@ class ContactFormController extends AbstractController
     /**
      * @Route("/", name="form")
      */
-    public function index(Request $request, \Swift_Mailer $mailer)
+    public function index(Request $request, LoggerInterface $logger, \Swift_Mailer $mailer)
     {
         $form = $this->createForm(\App\Form\ContactUsType::class);
         $form->handleRequest($request);
@@ -25,13 +26,15 @@ class ContactFormController extends AbstractController
             // but, the original `$task` variable has also been updated
             /** @var \App\Entity\ContactUsFormResults $contactUs */
             $contactUs = $form->getData();
-
+            $toEmail = getenv("DEFAULT_TO_ADDRESS");
+            $logger->debug($toEmail);
             $message = $mailer->createMessage()
                     ->setSubject("Message from Members Area - " . date("Y-m-d H:i:s"))
-                    ->setTo(getenv("DEFAULT_TO_ADDRESS"))
+                    ->setTo($toEmail)
+                    ->setFrom(getenv("DEFAULT_FROM_ADDRESS"))
                     ->setReplyTo(array(
                         $contactUs->getEmail(),
-                        getenv("DEFAULT_TO_ADDRESS"),
+                        $toEmail,
                     ))
                     ->setBody(nl2br(print_r($contactUs, true)), 'text/html');
 
