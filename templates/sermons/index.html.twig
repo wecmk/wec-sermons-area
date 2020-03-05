@@ -8,14 +8,14 @@
 {% block title %}Sermons{% endblock %}
 
 {% block header_right %}
-    <form name="search" class="header-search__form" method="get" action="{{ path('sermons_home') }}">
+{#    <form name="search" class="header-search__form" method="get" action="{{ path('sermons_home') }}">
         <div class="input-group mb-3 header-search" class="">
             <input type="text" class="form-control" name="searchQuery" placeholder="Search all sermons" aria-label="search sermons" value="{{ searchQuery }}">
             <div class="input-group-append">
                 <button class="btn btn-primary" type="submit">Search</button>
             </div>
         </div>
-    </form>
+    </form>#}
 {% endblock %}
 
 {% block content %} 
@@ -27,7 +27,7 @@
             </div>
         </div>
         <div class="btn-group-lg" role="group" aria-label="...">
-            {% if 'searchQuery' in app.request.query.all|keys %}
+            {% if app.request.attributes.get('_route') != 'sermons_home' %}
                 <div class="btn-group" role="group">
                     <!-- Button trigger modal -->
                     <a class="btn btn-secondary" href="{% if mainPage is defined %}{{ path('search_all') }}{% else %}{{ path('sermons_home') }}{% endif %}">
@@ -153,11 +153,42 @@
                 {% endfor %}
             </tbody>
         </table>
-        {# display navigation #}
-        <div class="navigation">
-            {#{{ knp_pagination_render(pagination) }}#}
-        </div>
+
+        {% if enablePagination is defined and enablePagination %}
+            <nav aria-label="Page navigation example">
+                {% if maxPages > 1 %}
+                    <ul class="pagination">
+                        {% set isDisabled = thisPage == 1 ? 'disabled' %}
+                        <li class="page-item {{ isDisabled }}">
+                            <a class="page-link" href="{{ path(app.request.attributes.get('_route'), {page: thisPage-1 < 1 ? 1 : thisPage-1}) }}" aria-label="Previous">
+                                <span aria-hidden="true">&laquo;</span>
+                                <span class="sr-only">Previous</span>
+                            </a>
+                        </li>
+
+                        {# Render each page number #}
+                        {% for i in 1..maxPages %}
+                            {% set isCurrentPage = thisPage == i %}
+                            {% set active = isCurrentPage ? 'active' : '' %}
+                            {% set disabledObject = isCurrentPage ? 'span' : 'a' %}
+                            <li class='page-item {{ active }}' >
+                                <{{ disabledObject }} href="{{ path(app.request.attributes.get('_route'), {page: i}) }}" class="page-link">{{ i }}</{{ disabledObject }}>
+                                {% if isCurrentPage %}
+                                    <span class="sr-only">(current)</span>
+                                {% endif %}
+                            </li>
+                        {% endfor %}
+
+                        <li {{ thisPage == maxPages ? 'class="page-item disabled"' }}>
+                            <a href="{{ path(app.request.attributes.get('_route'), {page: thisPage+1 <= maxPages ? thisPage+1 : thisPage}) }}" class="page-link">»</a>
+                        </li>
+                    </ul>
+                {% endif %}
+            </nav>
+        {% endif %}
     </div>
+
+
 
 
     <div class="modal fade help-modal-dialog" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"

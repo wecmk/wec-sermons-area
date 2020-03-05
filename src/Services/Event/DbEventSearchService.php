@@ -2,6 +2,10 @@
 
 namespace App\Services\Event;
 
+use App\Entity\Series;
+use App\Entity\Speaker;
+use App\Repository\EventRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use Psr\Log\LoggerInterface;
 use FOS\ElasticaBundle\Finder\TransformedFinder;
 use App\Entity\Event;
@@ -15,34 +19,31 @@ class DbEventSearchService implements EventSearchService
     /* @var $logger LoggerInterface */
     private $logger;
 
-    /* @var $index \FOS\ElasticaBundle\Finder\TransformedFinder */
+    /* @var $index TransformedFinder */
     private $index;
 
-    /** @var \Doctrine\ORM\EntityManagerInterface $em */
+    /** @var EntityManagerInterface $em */
     private $em;
     
-    /** @var \App\Repository\EventRepository $repository */
+    /** @var EventRepository $repository */
     private $repository;
     
-    public function __construct(LoggerInterface $logger, \Doctrine\ORM\EntityManagerInterface $em)
+    public function __construct(LoggerInterface $logger, EntityManagerInterface $em)
     {
         $this->logger = $logger;
         $this->em = $em;
         $this->repository = $em->getRepository(Event::class);
     }
 
-    public function search($searchTerm)
+    public function search($searchTerm, $page, $limit)
     {
-        return $this->repository->findBy([], [
-            "Date" => "DESC",
-            "Apm" => "DESC"
-        ]);
+        return $this->repository->findAllWithPagination($page, $limit);
     }
 
     public function searchBySeries($name)
     {
-        /** @var \App\Entity\Series $series */
-        $series = $this->em->getRepository(\App\Entity\Series::class)->findOneBy(
+        /** @var Series $series */
+        $series = $this->em->getRepository(Series::class)->findOneBy(
             ['Name' => $name]
         );
         return $series->getEvents();
@@ -50,8 +51,8 @@ class DbEventSearchService implements EventSearchService
 
     public function searchBySpeaker($name)
     {
-        /** @var \App\Entity\Speaker $speaker */
-        $speaker = $this->em->getRepository(\App\Entity\Speaker::class)->findOneBy(
+        /** @var Speaker $speaker */
+        $speaker = $this->em->getRepository(Speaker::class)->findOneBy(
             ['Name' => $name]
         );
         return $speaker->getEvent();
