@@ -7,7 +7,6 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
 use Symfony\Component\HttpFoundation\File\File;
 use Gedmo\SoftDeleteable\Traits\SoftDeleteableEntity;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
-use Symfony\Component\HttpFoundation\File\UploadedFile;
 use JMS\Serializer\Annotation as JMS;
 
 /**
@@ -71,6 +70,7 @@ class AttachmentMetadata
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Event", inversedBy="attachmentMetadata")
+     * @JMS\Exclude()
      */
     private $event;
 
