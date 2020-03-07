@@ -82,13 +82,11 @@ class WecFilesystem extends Filesystem
     /**
      * Removes files or directories.
      *
-     * @param string|iterable $files A filename, an array of files, or a \Traversable instance to remove
-     *
-     * @throws IOException When removal fails
+     * @param string $file
      */
-    public function remove($files)
+    public function remove($file)
     {
-        parent::remove($files);
+        parent::remove($this->getFilePath($file));
     }
 
     /**

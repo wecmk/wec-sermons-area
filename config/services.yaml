@@ -43,3 +43,12 @@ services:
     
     App\Service\Event\DbEventSearchService: ~
     App\Service\Event\EventSearchService: '@App\Service\Event\DbEventSearchService'
+
+    App\EventListener\AttachmentMetadataDeletedNotifier:
+        tags:
+            -
+                name: 'doctrine.orm.entity_listener'
+                event: 'preRemove'
+                entity: 'App\Entity\AttachmentMetadata'
+                lazy: true
+

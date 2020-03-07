@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Services\Attachment\AttachmentService;
 use App\Services\Event\EventService;
 use App\Services\Filesystem\FilesystemService;
 use Doctrine\ORM\EntityManagerInterface;
@@ -63,5 +64,21 @@ class ApiV1EventAttachmentController extends AbstractFOSRestController
         }
         
         return new Response('', 204);
+    }
+
+    /**
+     *
+     * @Route("/{eventId}", name="delete", methods={"DELETE"})
+     * @param AttachmentService $attachmentService
+     * @param $eventId
+     * @return Response
+     */
+    public function delete(AttachmentService $attachmentService, $eventId)
+    {
+        if ($attachmentService->delete($eventId)) {
+            return new Response('', 204);
+        } else {
+            return new Response('', 500);
+        }
     }
 }

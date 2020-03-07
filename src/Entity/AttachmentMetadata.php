@@ -14,7 +14,6 @@ use JMS\Serializer\Annotation as JMS;
  */
 class AttachmentMetadata
 {
-
     use TimestampableEntity;
     
     /**
