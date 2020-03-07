@@ -15,11 +15,6 @@ use JMS\Serializer\Annotation as JMS;
 class AttachmentMetadata
 {
 
-    /**
-     * Hook SoftDeleteable behavior
-     * updates deletedAt field
-     */
-    use SoftDeleteableEntity;
     use TimestampableEntity;
     
     /**
