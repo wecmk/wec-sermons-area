@@ -39,7 +39,6 @@ class AttachmentController extends AbstractController
 
         $response = $filesystemService->generateBinaryFileResponse($attachment->getId(), 200);
         if ($attachment->getEvent() instanceof CanBeDownloaded
-                && !$attachment->isDeleted()
                 && $attachment->getIsPublic()
                 && $attachment->getType()->getCanBePublic()
                 && $attachment->getComplete()) {
