@@ -80,7 +80,7 @@
 
             <tbody>
                 {% for entity in results %}
-                    <tr>
+                    <tr id="{{ entity.Id }}">
                         <td>{% if entity.Date %}{{ entity.Date|date('d-m-Y') }}{% endif %}</td>
                         <td>{{ entity.Apm }}</td>
                         <td>
