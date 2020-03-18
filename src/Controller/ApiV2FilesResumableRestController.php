@@ -80,6 +80,7 @@ class ApiV2FilesResumableRestController extends AbstractController
 
         // return a Location Header
         $response = new \Symfony\Component\HttpFoundation\Response('', 201);
+        $response->headers->set("AttachmentId", $attachmentMetadata->getId()->toString());
         $response->headers->set("Location", $this->generateUrl('api_v2_files_upload_resumable_put', ['id' => $attachmentMetadata->getId()->toString()]), true);
         return $response;
     }
