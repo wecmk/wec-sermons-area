@@ -27,7 +27,7 @@
             </div>
         </div>
         <div class="btn-group-lg" role="group" aria-label="...">
-            {% if app.request.attributes.get('_route') != 'sermons_home' %}
+            {% if (app.request.attributes.get('page') is defined and app.request.attributes.get('page') > 1) or app.request.attributes.get('_route') != 'sermons_home' %}
                 <div class="btn-group" role="group">
                     <!-- Button trigger modal -->
                     <a class="btn btn-secondary" href="{% if mainPage is defined %}{{ path('search_all') }}{% else %}{{ path('sermons_home') }}{% endif %}">
@@ -160,6 +160,12 @@
                     <ul class="pagination">
                         {% set isDisabled = thisPage == 1 ? 'disabled' %}
                         <li class="page-item {{ isDisabled }}">
+                            <a class="page-link {{ isDisabled }}" href="{{ path(app.request.attributes.get('_route'), {page: 1}) }}" class="page-link">
+                                <span>First</span>
+                            </a>
+                        </li>
+
+                        <li class="page-item {{ isDisabled }}">
                             <a class="page-link" href="{{ path(app.request.attributes.get('_route'), {page: thisPage-1 < 1 ? 1 : thisPage-1}) }}" aria-label="Previous">
                                 <span aria-hidden="true">&laquo;</span>
                                 <span class="sr-only">Previous</span>
@@ -167,7 +173,7 @@
                         </li>
 
                         {# Render each page number #}
-                        {% for i in 1..maxPages %}
+                        {% for i in startPages..maxPages %}
                             {% set isCurrentPage = thisPage == i %}
                             {% set active = isCurrentPage ? 'active' : '' %}
                             {% set disabledObject = isCurrentPage ? 'span' : 'a' %}
@@ -182,8 +188,15 @@
                         <li {{ thisPage == maxPages ? 'class="page-item disabled"' }}>
                             <a href="{{ path(app.request.attributes.get('_route'), {page: thisPage+1 <= maxPages ? thisPage+1 : thisPage}) }}" class="page-link">»</a>
                         </li>
+
+                        <li {{ thisPage == maxPages ? 'class="page-item disabled"' }}>
+                            <a href="{{ path(app.request.attributes.get('_route'), {page: maxPagesToDisplay}) }}" class="page-link">
+                                <span>Last</span>
+                            </a>
+                        </li>
                     </ul>
                 {% endif %}
+
             </nav>
         {% endif %}
     </div>

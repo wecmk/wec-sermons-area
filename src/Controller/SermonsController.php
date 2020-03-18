@@ -45,14 +45,17 @@ class SermonsController extends AbstractController
         $totalPostsReturned = $results->getIterator()->count();
         $totalPosts = $results->count();
         $iterator = $results->getIterator();
+        $startPages = 0 < ($page - 10) ? $page - 10 : 1;
         $maxPages = ceil($results->count() / $limit);
+        $maxPagesToDisplay = $maxPages > $page + 10 ? $page + 10 : $maxPages;
         $thisPage = $page;
 
         return $this->render('sermons/index.html.twig', [
                     'results' => $results,
                     'enablePagination' => true,
                     'searchQuery' => $searchQueryDisplay,
-                    'maxPages' => $maxPages,
+                    'startPages' => $startPages,
+                    'maxPages' => $maxPagesToDisplay,
                     'thisPage' => $thisPage,
         ]);
     }

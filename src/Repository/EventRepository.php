@@ -33,6 +33,7 @@ class EventRepository extends ServiceEntityRepository
         // Create our query
         $query = $this->createQueryBuilder('s')
             ->orderBy('s.Date', 'DESC')
+            ->addOrderBy('s.Apm', 'DESC')
             ->getQuery();
 
         // No need to manually get get the result ($query->getResult())
