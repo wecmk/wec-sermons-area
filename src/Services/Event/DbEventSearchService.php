@@ -40,6 +40,11 @@ class DbEventSearchService implements EventSearchService
         return $this->repository->findAllWithPagination($page, $limit);
     }
 
+    public function searchMaxPagesItems()
+    {
+        return $this->repository->findAllCount();
+    }
+
     public function searchBySeries($name)
     {
         /** @var Series $series */

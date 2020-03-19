@@ -38,6 +38,7 @@ class SermonsController extends AbstractController
         $searchQuery = ($searchQuery == "") ? "*" : $searchQuery;
 
         $results = $search->search($searchQuery, $page, $limit);
+        $resultsCount = $search->searchMaxPagesItems();
 
         // Fix search display so that a match all (*) is written as an empty string
         $searchQueryDisplay = ($searchQuery == "*") ? "" : $searchQuery;
@@ -46,7 +47,7 @@ class SermonsController extends AbstractController
         $totalPosts = $results->count();
         $iterator = $results->getIterator();
         $startPages = 0 < ($page - 10) ? $page - 10 : 1;
-        $maxPages = ceil($results->count() / $limit);
+        $maxPages = ceil($resultsCount / $limit);
         $maxPagesToDisplay = $maxPages > $page + 10 ? $page + 10 : $maxPages;
         $thisPage = $page;
 
@@ -56,6 +57,7 @@ class SermonsController extends AbstractController
                     'searchQuery' => $searchQueryDisplay,
                     'startPages' => $startPages,
                     'maxPages' => $maxPagesToDisplay,
+                    'maxPagesToDisplay' => $maxPages,
                     'thisPage' => $thisPage,
         ]);
     }

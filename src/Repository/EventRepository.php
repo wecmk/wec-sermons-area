@@ -42,6 +42,22 @@ class EventRepository extends ServiceEntityRepository
     }
 
     /**
+     *
+     * @return Paginator
+     */
+    public function findAllCount()
+    {
+        /** @var $query Query */
+        $query = $this->createQueryBuilder('s')
+            ->select('count(s.id)')
+            ->orderBy('s.Date', 'DESC')
+            ->addOrderBy('s.Apm', 'DESC')
+            ->getQuery();
+
+        return $query->getSingleScalarResult();
+    }
+
+    /**
      * Paginator Helper
      *
      * Pass through a query object, current page & limit
