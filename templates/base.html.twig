@@ -23,9 +23,10 @@
 {% block stylesheets %}
     <link href='https://fonts.googleapis.com/css?family=Lato&amp;subset=latin,latin-ext' rel='stylesheet' type='text/css'>
     <link href='{{ asset('build/app.css') }}' rel='stylesheet' type='text/css'>
-
+    {{ parent() }}
 {% endblock %}
 
+{% set currentPath = path(app.request.attributes.get('_route'), app.request.attributes.get('_route_params')) %}
 
 {% block headjavascript %}
     <!-- LOAD JAVASCRIPT FILES in footer.jsp so page appears faster-->
