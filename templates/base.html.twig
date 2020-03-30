@@ -100,9 +100,21 @@
     <div class="container">
         <div class="alert alert-danger" role="alert">
             <h4 class="alert-heading">Important updates</h4>
-            <p>We have taken the difficult decision to <b>suspend all of
-                    our physical meetings for the foreseeable future</b> – this includes Sunday services and home groups,
-                all outreach work and youth work... <a href="https://wecmk.org/latest-update" class="alert-link">read more here</a>
+            <p>We have taken the difficult decision to <i>suspend all of
+                    our physical meetings for the foreseeable future</i> – this includes Sunday services and home groups,
+                all outreach work and youth work... <a href="https://www.wecmk.org/covid-community/" class="alert-link"
+                                           onClick="
+                                               ga('send', {
+                                               'hitType': 'event',
+                                               'eventCategory': 'Outbound Link Click',
+                                               'eventAction': 'https://www.wecmk.org/covid-community/',
+                                               'eventLabel': '{{ currentPath  }}'
+                                               });
+                                               " {{ path(app.request.attributes.get('_route'),
+                    app.request.attributes.get('_route_params')) }}
+
+
+                >read more here</a>
             </p>
         </div>
     </div>
