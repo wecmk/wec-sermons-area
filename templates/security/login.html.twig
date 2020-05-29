@@ -5,6 +5,11 @@
 {% block title %}Login{% endblock %}
 
 {% block content %}
+    {% if error %}
+        <div class="container">
+            <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+        </div>
+    {% endif %}
     <div class="form-signin">
         <div class="intro">
             <h3 class="form-signin-heading">Login</h3>            
