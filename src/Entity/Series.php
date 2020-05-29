@@ -46,6 +46,11 @@ class Series
     private $Name;
 
     /**
+     * @ORM\Column(type="text")
+     */
+    private $Description;
+
+    /**
      * @ORM\Column(type="boolean")
      * @Gedmo\Versioned
      */
@@ -119,6 +124,18 @@ class Series
             $this->event->removeElement($sermon);
             $sermon->removeSeries($this);
         }
+
+        return $this;
+    }
+
+    public function getDescription(): ?string
+    {
+        return $this->Description;
+    }
+
+    public function setDescription(string $Description): self
+    {
+        $this->Description = $Description;
 
         return $this;
     }
