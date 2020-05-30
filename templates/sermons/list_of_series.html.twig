@@ -11,7 +11,7 @@
 {% block header_right %}
     <form name="search" class="header-search__form" method="get" action="{{ path('sermons_home') }}">
         <div class="input-group mb-3 header-search" class="">
-            <input type="text" class="form-control" name="searchQuery" placeholder="Search all sermons" aria-label="search sermons" value="{{ searchQuery }}">
+            <input type="text" class="form-control" name="q" placeholder="Search all sermons" aria-label="search sermons" value="{{ searchQuery }}">
             <div class="input-group-append">
                 <button class="btn btn-primary" type="submit">Search</button>
             </div>

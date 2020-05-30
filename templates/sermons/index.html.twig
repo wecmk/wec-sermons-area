@@ -8,14 +8,14 @@
 {% block title %}Sermons{% endblock %}
 
 {% block header_right %}
-{#    <form name="search" class="header-search__form" method="get" action="{{ path('sermons_home') }}">
+    <form name="search" class="header-search__form" method="get" action="{{ path('sermons_home') }}">
         <div class="input-group mb-3 header-search" class="">
-            <input type="text" class="form-control" name="searchQuery" placeholder="Search all sermons" aria-label="search sermons" value="{{ searchQuery }}">
+            <input type="text" class="form-control" name="q" placeholder="Search all sermons" aria-label="search sermons" value="{{ searchQuery }}">
             <div class="input-group-append">
                 <button class="btn btn-primary" type="submit">Search</button>
             </div>
         </div>
-    </form>#}
+    </form>
 {% endblock %}
 
 {% block content %} 
@@ -27,7 +27,7 @@
             </div>
         </div>
         <div class="btn-group-lg" role="group" aria-label="...">
-            {% if (app.request.attributes.get('page') is defined and app.request.attributes.get('page') > 1) or app.request.attributes.get('_route') != 'sermons_home' %}
+            {% if showReset | default(false) or (app.request.attributes.get('page') is defined and app.request.attributes.get('page') > 1) or app.request.attributes.get('_route') != 'sermons_home' %}
                 <div class="btn-group" role="group">
                     <!-- Button trigger modal -->
                     <a class="btn btn-secondary" href="{% if mainPage is defined %}{{ path('search_all') }}{% else %}{{ path('sermons_home') }}{% endif %}">

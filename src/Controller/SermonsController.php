@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\BibleBooks;
 use App\Entity\Series;
 use App\Services\Event\EventSearchService;
+use App\Services\Event\IndexEventSearchService;
 use FOS\ElasticaBundle\FOSElasticaBundle;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -28,38 +29,51 @@ class SermonsController extends AbstractController
      * @param EventSearchService $search
      * @return Response
      */
-    public function indexAction(Request $request, EventSearchService $search)
+    public function indexAction(Request $request, EventSearchService $search, IndexEventSearchService $indexService)
     {
         $page = $request->query->get('page', 1);
         $limit = 10;
 
-        $searchQuery = $request->query->get("searchQuery", "*");
-        // Fix search query so that empty matches everything
-        $searchQuery = ($searchQuery == "") ? "*" : $searchQuery;
+        $searchQuery = $request->query->get("q", null);
 
-        $results = $search->search($searchQuery, $page, $limit);
-        $resultsCount = $search->searchMaxPagesItems();
+        if (is_null($searchQuery)) {
+            // Fix search query so that empty matches everything
+            $searchQuery = ($searchQuery == "") ? "*" : $searchQuery;
 
-        // Fix search display so that a match all (*) is written as an empty string
-        $searchQueryDisplay = ($searchQuery == "*") ? "" : $searchQuery;
+            $results = $search->search($searchQuery, $page, $limit);
+            $resultsCount = $search->searchMaxPagesItems();
 
-        $totalPostsReturned = $results->getIterator()->count();
-        $totalPosts = $results->count();
-        $iterator = $results->getIterator();
-        $startPages = 0 < ($page - 10) ? $page - 10 : 1;
-        $maxPages = ceil($resultsCount / $limit);
-        $maxPagesToDisplay = $maxPages > $page + 10 ? $page + 10 : $maxPages;
-        $thisPage = $page;
+            // Fix search display so that a match all (*) is written as an empty string
+            $searchQueryDisplay = ($searchQuery == "*") ? "" : $searchQuery;
 
-        return $this->render('sermons/index.html.twig', [
-                    'results' => $results,
-                    'enablePagination' => true,
-                    'searchQuery' => $searchQueryDisplay,
-                    'startPages' => $startPages,
-                    'maxPages' => $maxPagesToDisplay,
-                    'maxPagesToDisplay' => $maxPages,
-                    'thisPage' => $thisPage,
-        ]);
+            $totalPostsReturned = $results->getIterator()->count();
+            $totalPosts = $results->count();
+            $iterator = $results->getIterator();
+            $startPages = 0 < ($page - 10) ? $page - 10 : 1;
+            $maxPages = ceil($resultsCount / $limit);
+            $maxPagesToDisplay = $maxPages > $page + 10 ? $page + 10 : $maxPages;
+            $thisPage = $page;
+
+            return $this->render('sermons/index.html.twig', [
+                'results' => $results,
+                'enablePagination' => true,
+                'searchQuery' => $searchQueryDisplay,
+                'startPages' => $startPages,
+                'maxPages' => $maxPagesToDisplay,
+                'maxPagesToDisplay' => $maxPages,
+                'thisPage' => $thisPage,
+            ]);
+        } else {
+            $results = $indexService->search($searchQuery);
+            $searchQueryDisplay = ($searchQuery == "*") ? "" : $searchQuery;
+
+            return $this->render('sermons/index.html.twig', [
+                'results' => $results,
+                'enablePagination' => true,
+                'searchQuery' => $searchQueryDisplay,
+                'showReset' => true,
+            ]);
+        }
     }
 
     /**
