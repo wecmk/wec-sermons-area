@@ -46,6 +46,8 @@ fos_elastica:
                                 Name: { type: text }
                                 Organisation: { type: text }
                                 Website: ~
+                        LegacyId:
+                            type: keyword
                         attachmentMetadata: 
                             type: "nested"
                             properties: 
