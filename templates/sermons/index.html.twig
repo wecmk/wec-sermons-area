@@ -144,6 +144,17 @@
                                     {%  endif %}
                                 </div>
                             {% endfor %}
+
+                            {% for url in entity.eventUrls %}
+                                {% set label = entity.Date|date('d-m-Y') ~ "-" ~ entity.Apm %}
+                                {{ include('components/button-item-conditional-show.html.twig', {'url': url.url, 'eventLabel': label, 'linkText': url.title }) }}
+                            {% endfor %}
+
+                            {% if is_granted("ROLE_ADMIN") %}
+                                {{ include('components/button-item.html.twig', {'url':  path('public_sermon_new', { 'id': entity.Id }), 'linkText': "Make public"}) }}
+                            {% endif %}
+
+
                         </td>                      
                     </tr>
                     {% else %}

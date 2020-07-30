@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\EventUrl;
 use Symfony\Component\Routing\Annotation\Method;
 use Symfony\Component\Routing\Annotation\Route;
 use FOS\RestBundle\Controller\AbstractFOSRestController;
@@ -123,7 +124,23 @@ class ApiV1SermonsRestController extends AbstractFOSRestController
         $event->setTags(isset($body["tags"]) ? $body["tags"] : "");
 
         $event->setLegacyId(isset($body["download"]) ? $body["download"] : null);
-        
+
+        // Get Series
+        if (isset($body["youTubeUrl"])) {
+            if (!$event->getEventUrls()->isEmpty()) {
+                foreach ($event->getEventUrls() as $eventUrl) {
+                    $event->removeEventUrl($eventUrl);
+                }
+            }
+
+            if (empty($link)) {
+                $url = new EventUrl();
+                $url->setTitle("Watch");
+                $url->setUrl($body["youTubeUrl"]);
+                $event->addEventUrl($url);
+            }
+        }
+
         return $this->json($eventService->add($event));
     }
 

@@ -108,12 +108,18 @@ class Event implements CanBeDownloaded
      */
     private $legacyId;
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\EventUrl", mappedBy="Event", orphanRemoval=true, cascade={"persist"})
+     */
+    private $eventUrls;
+
     public function __construct()
     {
         $this->Series = new ArrayCollection();
         $this->setCreatedAt(new \DateTime());
         $this->setUpdatedAt(new \DateTime());
         $this->attachmentMetadata = new ArrayCollection();
+        $this->eventUrls = new ArrayCollection();
     }
 
     public function getId(): ?\Ramsey\Uuid\Uuid
@@ -340,5 +346,36 @@ class Event implements CanBeDownloaded
     private function formatFileNamePart($stringPart)
     {
         return (!empty($stringPart)) ? " - " . $stringPart : "";
+    }
+
+    /**
+     * @return Collection|EventUrl[]
+     */
+    public function getEventUrls(): Collection
+    {
+        return $this->eventUrls;
+    }
+
+    public function addEventUrl(EventUrl $eventUrl): self
+    {
+        if (!$this->eventUrls->contains($eventUrl)) {
+            $this->eventUrls[] = $eventUrl;
+            $eventUrl->setEvent($this);
+        }
+
+        return $this;
+    }
+
+    public function removeEventUrl(EventUrl $eventUrl): self
+    {
+        if ($this->eventUrls->contains($eventUrl)) {
+            $this->eventUrls->removeElement($eventUrl);
+            // set the owning side to null (unless already changed)
+            if ($eventUrl->getEvent() === $this) {
+                $eventUrl->setEvent(null);
+            }
+        }
+
+        return $this;
     }
 }

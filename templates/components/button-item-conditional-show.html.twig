@@ -1,0 +1,10 @@
+<a class="btn btn-primary" style="margin-top: 5px;" href="{{ url }}"
+   onClick="
+       ga('send', {
+       'hitType': 'event', // Required.
+       'eventCategory': 'Virtual Church', // Required.
+       'eventAction': 'Join', // Required.
+       'eventLabel': '{{ eventLabel }}'
+       });
+       "
+>{{ linkText }}</a>
