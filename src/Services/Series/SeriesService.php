@@ -52,16 +52,19 @@ class SeriesService
         $this->em->flush();
         return $series;
     }
-    
+
     /**
      * Adds a series
-     * @param Series $series
+     * @param $seriesName
+     * @param string $description
+     * @param bool $complete
      * @return Series The managed persisted object
      */
-    public function create($seriesName, $complete = false)
+    public function create($seriesName, string $description, $complete = false)
     {
         $series = new Series();
         $series->setName($seriesName);
+        $series->setDescription($description);
         $series->setComplete($complete);
         return $this->add($series);
     }

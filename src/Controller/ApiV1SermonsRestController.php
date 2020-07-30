@@ -106,7 +106,7 @@ class ApiV1SermonsRestController extends AbstractFOSRestController
         foreach ($seriesList as $seriesName) {
             $seriesItem = $seriesService->findBy($seriesName);
             if ($seriesItem == null) {
-                $event->addSeries($seriesService->create($seriesName));
+                $event->addSeries($seriesService->create($seriesName, "", false));
             } else {
                 $event->addSeries($seriesItem);
             }
