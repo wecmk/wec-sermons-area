@@ -41,4 +41,5 @@ security:
         - { path: ^/register, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/reset_password, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/contact, role: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/api/v2/public, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/, role: ROLE_USER }
