@@ -53,17 +53,24 @@ class User implements UserInterface
      */
     protected $plainPassword;
 
-    public function getId(): ?int
-    {
-        return $this->id;
-    }
-
     /**
      * @var string|null
      *
      * @ORM\Column(type="string", length=255, nullable=true)
      */
     protected $passwordRequestToken;
+
+    public function __construct()
+    {
+        $this->setCreatedAt(new \DateTime());
+        $this->setUpdatedAt(new \DateTime());
+    }
+
+
+    public function getId(): ?int
+    {
+        return $this->id;
+    }
 
     /**
      * A visual identifier that represents this user.

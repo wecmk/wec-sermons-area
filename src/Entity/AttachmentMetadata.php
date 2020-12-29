@@ -3,9 +3,8 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use Vich\UploaderBundle\Mapping\Annotation as Vich;
-use Symfony\Component\HttpFoundation\File\File;
-use Gedmo\SoftDeleteable\Traits\SoftDeleteableEntity;
+use Ramsey\Uuid\Uuid;
+use Ramsey\Uuid\UuidInterface;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
 use JMS\Serializer\Annotation as JMS;
 
@@ -78,7 +77,14 @@ class AttachmentMetadata
      */
     private $isPublic = false;
 
-    public function getId(): ?\Ramsey\Uuid\Uuid
+    public function __construct()
+    {
+        $this->id = Uuid::uuid4();
+        $this->setCreatedAt(new \DateTime());
+        $this->setUpdatedAt(new \DateTime());
+    }
+
+    public function getId(): ?UuidInterface
     {
         return $this->id;
     }

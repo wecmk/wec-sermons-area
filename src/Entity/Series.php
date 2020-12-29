@@ -49,7 +49,7 @@ class Series
     /**
      * @ORM\Column(type="text")
      */
-    private $Description;
+    private string $Description = '';
 
     /**
      * @ORM\Column(type="boolean")
