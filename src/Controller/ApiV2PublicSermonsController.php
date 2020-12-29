@@ -15,13 +15,30 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+use AppBundle\Entity\User;
+use AppBundle\Entity\Reward;
+use Nelmio\ApiDocBundle\Annotation\Model;
+use Nelmio\ApiDocBundle\Annotation\Security;
+use OpenApi\Annotations as OA;
 
 class ApiV2PublicSermonsController extends AbstractController
 {
     /**
-     * @Route("/api/v2/publicsermons/youtube", name="api_v2_public_sermons_youtube")
+     * Lists links to last weeks sermons on YouTube and next weeks (if available)
+     *
+     * @Route("/api/v2/publicsermons/youtube", name="api_v2_public_sermons_youtube", methods={"GET"})
+     * @OA\Response(
+     *     response=200,
+     *     description="Returns an array of dates (YYYY-MM-DD) and another key-value pairs of [AM|PM] => Link",
+     *     @OA\JsonContent(
+     *        type="array",
+     *        @OA\Items(ref=@Model(type="array", groups={"full"}))
+     *     )
+     * )
+     * @OA\Tag(name="v2")
+     * @Security(name="Bearer")
      */
-    public function youTubeSermons()
+    public function youTubeSermons(): View
     {
         $response = array();
         $response['lastSunday'] = $this->getServices("Last Sunday");

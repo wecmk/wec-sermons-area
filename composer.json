@@ -15,6 +15,7 @@
         "friendsofsymfony/rest-bundle": "^2.5",
         "jms/serializer-bundle": "^3.3",
         "mhujer/jms-serializer-uuid-bundle": "^4.0",
+        "nelmio/api-doc-bundle": "^4.1",
         "nelmio/cors-bundle": "^2.1",
         "ocramius/proxy-manager": "^2.9",
         "phpdocumentor/reflection-docblock": "^5.2",
