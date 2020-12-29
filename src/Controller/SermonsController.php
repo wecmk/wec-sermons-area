@@ -3,18 +3,16 @@
 namespace App\Controller;
 
 use App\Entity\BibleBooks;
+use App\Entity\Event;
 use App\Entity\Series;
 use App\Services\Event\EventSearchService;
 use App\Services\Event\IndexEventSearchService;
-use FOS\ElasticaBundle\FOSElasticaBundle;
+use Doctrine\ORM\Tools\Pagination\Paginator;
+use Ramsey\Uuid\Uuid;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\HttpFoundation\Request;
-use FOS\ElasticaBundle\Elastica\Client;
-use Elastica\Query\QueryString;
-use Elastica\Query;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 
 /**
  * @Route("/sermons", name="sermons_")
@@ -40,6 +38,7 @@ class SermonsController extends AbstractController
             // Fix search query so that empty matches everything
             $searchQuery = ($searchQuery == "") ? "*" : $searchQuery;
 
+            /** @var Paginator $results */
             $results = $search->search($searchQuery, $page, $limit);
             $resultsCount = $search->searchMaxPagesItems();
 
@@ -54,6 +53,29 @@ class SermonsController extends AbstractController
             $maxPagesToDisplay = $maxPages > $page + 10 ? $page + 10 : $maxPages;
             $thisPage = $page;
 
+            $additionalService = [];
+            if ($page == 1) {
+                $liveSermon = new Event();
+                $liveSermon->setId(Uuid::fromString("3beb4e09-8c06-47dd-be47-e06d28dcca7a"));
+                $liveSermon->setDate(new \DateTime("next Sunday"));
+                $liveSermon->setApm("AM/PM");
+
+                $title = "Watch live";
+                if (date('D') == "Sun") {
+                    if (date('H') < 10 && date('i') < 30) {
+                        $title .= " (starts at 10:30 am)";
+                    } elseif (date('H') < 18 && date('i') < 30) {
+                        $title .= " (starts at 6:30 pm)";
+                    }
+                } else {
+                    $title .= " this Sunday";
+                }
+
+                $liveSermon->setApm("Sunday");
+                $liveSermon->setTitle($title);
+                $additionalService[] = $liveSermon;
+            }
+
             return $this->render('sermons/index.html.twig', [
                 'results' => $results,
                 'enablePagination' => true,
@@ -62,6 +84,7 @@ class SermonsController extends AbstractController
                 'maxPages' => $maxPagesToDisplay,
                 'maxPagesToDisplay' => $maxPages,
                 'thisPage' => $thisPage,
+                'liveSermon' => $additionalService,
             ]);
         } else {
             $results = $indexService->search($searchQuery);
