@@ -99,16 +99,20 @@
                         </td>
                         <td>{{ entity.Title }}</td>
 
-                        <td id="{{ entity.Speaker.id }}">
-                            {{ entity.Speaker.Name }}
-                            {% if entity.Speaker.Organisation is not empty %}                                
-                                {% if entity.Speaker.Website is not empty %}
-                                    (<a href="{{ entity.Speaker.Website }}">{{ entity.Speaker.Organisation }}</a>)
-                                {%  else %}
-                                    ({{ entity.Speaker.Organisation }})
+                        {% if entity.Speaker %}
+                            <td id="{{ entity.Speaker.id }}">
+                                {{ entity.Speaker.Name }}
+                                {% if entity.Speaker.Organisation is not empty %}
+                                    {% if entity.Speaker.Website is not empty %}
+                                        (<a href="{{ entity.Speaker.Website }}">{{ entity.Speaker.Organisation }}</a>)
+                                    {%  else %}
+                                        ({{ entity.Speaker.Organisation }})
+                                    {% endif %}
                                 {% endif %}
-                            {% endif %}
-                        </td>
+                            </td>
+                        {% else %}
+                            <td></td>
+                        {% endif %}
 
                         {% set GAString = entity.Date|date('d-m-Y') ~ " - " ~ entity.Apm %}
 
