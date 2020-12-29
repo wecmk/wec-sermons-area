@@ -2,8 +2,3 @@
 # See the official DoctrineExtensions documentation for more details: https://github.com/Atlantic18/DoctrineExtensions/tree/master/doc/
 stof_doctrine_extensions:
     default_locale: en_GB
-
-    # Only used if you activated the Uploadable extension
-    uploadable:
-        # Default file path: This is one of the three ways you can configure the path for the Uploadable extension
-        default_file_path:       "%kernel.root_dir%/../web/uploads"

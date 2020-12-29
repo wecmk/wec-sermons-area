@@ -1,18 +1,23 @@
 {
-    "antishov/doctrine-extensions-bundle": {
-        "version": "1.4",
+    "api-platform/api-pack": {
+        "version": "v1.3.0"
+    },
+    "api-platform/core": {
+        "version": "2.5",
         "recipe": {
-            "repo": "github.com/symfony/recipes-contrib",
+            "repo": "github.com/symfony/recipes",
             "branch": "master",
-            "version": "1.4",
-            "ref": "6c1ceb662f8997085f739cd089bfbef67f245983"
+            "version": "2.5",
+            "ref": "a93061567140e386f107be75340ac2aee3f86cbf"
         },
         "files": [
-            "./config/packages/stof_doctrine_extensions.yaml"
+            "./config/packages/api_platform.yaml",
+            "./config/routes/api_platform.yaml",
+            "./src/Entity/.gitignore"
         ]
     },
     "behat/transliterator": {
-        "version": "v1.2.0"
+        "version": "v1.3.0"
     },
     "brick/math": {
         "version": "0.9.1"
@@ -104,6 +109,9 @@
     "elasticsearch/elasticsearch": {
         "version": "v6.1.0"
     },
+    "fig/link-util": {
+        "version": "1.1.1"
+    },
     "friendsofsymfony/elastica-bundle": {
         "version": "5.0",
         "recipe": {
@@ -123,7 +131,7 @@
         }
     },
     "gedmo/doctrine-extensions": {
-        "version": "v2.4.36"
+        "version": "v3.0.0"
     },
     "guzzlehttp/ringphp": {
         "version": "1.1.1"
@@ -211,6 +219,18 @@
     "monolog/monolog": {
         "version": "1.24.0"
     },
+    "nelmio/cors-bundle": {
+        "version": "1.5",
+        "recipe": {
+            "repo": "github.com/symfony/recipes",
+            "branch": "master",
+            "version": "1.5",
+            "ref": "6388de23860284db9acce0a7a5d9d13153bcb571"
+        },
+        "files": [
+            "./config/packages/nelmio_cors.yaml"
+        ]
+    },
     "nikic/php-parser": {
         "version": "v4.1.0"
     },
@@ -222,6 +242,15 @@
     },
     "php": {
         "version": "7.2"
+    },
+    "phpdocumentor/reflection-common": {
+        "version": "2.2.0"
+    },
+    "phpdocumentor/reflection-docblock": {
+        "version": "5.2.2"
+    },
+    "phpdocumentor/type-resolver": {
+        "version": "1.4.0"
     },
     "psr/cache": {
         "version": "1.0.1"
@@ -478,6 +507,9 @@
     "symfony/property-access": {
         "version": "v4.1.7"
     },
+    "symfony/property-info": {
+        "version": "v4.4.16"
+    },
     "symfony/routing": {
         "version": "4.0",
         "recipe": {
@@ -507,6 +539,12 @@
     },
     "symfony/security-http": {
         "version": "v4.2.1"
+    },
+    "symfony/serializer": {
+        "version": "v4.4.16"
+    },
+    "symfony/serializer-pack": {
+        "version": "v1.0.4"
     },
     "symfony/service-contracts": {
         "version": "v1.1.7"
@@ -594,6 +632,9 @@
     },
     "webimpress/safe-writer": {
         "version": "2.1.0"
+    },
+    "webmozart/assert": {
+        "version": "1.9.1"
     },
     "willdurand/jsonp-callback-validator": {
         "version": "v1.1.0"
