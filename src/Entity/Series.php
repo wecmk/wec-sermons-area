@@ -13,6 +13,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
 
 use Gedmo\SoftDeleteable\Traits\SoftDeleteableEntity;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
+use Ramsey\Uuid\UuidInterface;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\SeriesRepository")
@@ -29,7 +30,7 @@ class Series
     use TimestampableEntity;
 
     /**
-     * @var \Ramsey\Uuid\UuidInterface
+     * @var UuidInterface
      * @JMS\Type("uuid")
      *
      * @ORM\Id
@@ -37,7 +38,7 @@ class Series
      * @ORM\GeneratedValue(strategy="CUSTOM")
      * @ORM\CustomIdGenerator(class="Ramsey\Uuid\Doctrine\UuidGenerator")
      */
-    protected $id;
+    protected UuidInterface $id;
 
     /**
      * @ORM\Column(type="string", length=255)
@@ -71,7 +72,7 @@ class Series
         $this->setUpdatedAt(new \DateTime());
     }
 
-    public function getId(): ?\Ramsey\Uuid\Uuid
+    public function getId(): ?UuidInterface
     {
         return $this->id;
     }

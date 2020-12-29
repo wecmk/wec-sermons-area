@@ -11,6 +11,8 @@ use Gedmo\Mapping\Annotation as Gedmo;
 use JMS\Serializer\Annotation\Exclude;
 use Gedmo\SoftDeleteable\Traits\SoftDeleteableEntity;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
+use Ramsey\Uuid\UuidInterface;
+
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\EventRepository")
@@ -27,7 +29,7 @@ class Event implements CanBeDownloaded
     use TimestampableEntity;
 
     /**
-     * @var \Ramsey\Uuid\UuidInterface
+     * @var UuidInterface
      * @JMS\Type("uuid")
      *
      * @ORM\Id
@@ -35,7 +37,7 @@ class Event implements CanBeDownloaded
      * @ORM\GeneratedValue(strategy="CUSTOM")
      * @ORM\CustomIdGenerator(class="App\Doctrine\CustomUuidGenerator")
      */
-    protected $id;
+    protected UuidInterface $id;
 
     /**
      * @ORM\Column(type="date")
@@ -48,7 +50,7 @@ class Event implements CanBeDownloaded
     private $Apm;
 
     /**
-     * @ORM\ManyToMany(targetEntity="App\Entity\Series", inversedBy="Event")
+     * @ORM\ManyToMany(targetEntity="Series", inversedBy="Event")
      * @var Collection
      */
     private $Series;
@@ -76,7 +78,7 @@ class Event implements CanBeDownloaded
     /**
      * @ORM\Column(type="boolean")
      */
-    private $IsPublic = true;
+    private $IsPublic = false;
 
     /**
      * @ORM\Column(type="text")
@@ -90,6 +92,7 @@ class Event implements CanBeDownloaded
 
     /**
      * @ORM\Column(type="text")
+     * @JMS\Exclude
      */
     private $PrivateComments = "";
 
@@ -122,7 +125,7 @@ class Event implements CanBeDownloaded
         $this->eventUrls = new ArrayCollection();
     }
 
-    public function getId(): ?\Ramsey\Uuid\Uuid
+    public function getId(): ?UuidInterface
     {
         return $this->id;
     }
@@ -144,7 +147,7 @@ class Event implements CanBeDownloaded
         return $this->Apm;
     }
 
-    public function setId(\Ramsey\Uuid\UuidInterface $id)
+    public function setId(UuidInterface $id)
     {
         $this->id = $id;
     }
