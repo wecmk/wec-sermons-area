@@ -15,14 +15,18 @@ Supported
 
 Requires
 
-- PHP 7.2
-    - libsodium
-    - curl
-- MariaDB/MySQL
-- [Elasticsearch](https://www.elastic.co/downloads/elasticsearch) - It's free, 
-but you need to look for it
-- [Symfony CLI](https://symfony.com/download)
 - [Composer](https://getcomposer.org/)
+- [Elasticsearch](https://www.elastic.co/downloads/elasticsearch) - It's free,
+- MariaDB/MySQL
+- PHP 7.4
+  - curl
+  - ctype
+  - gettext
+  - libsodium
+  - mysql
+  - xml
+- [Symfony CLI](https://symfony.com/download)
+- [Yarn](https://yarnpkg.com/)
 
 For development
 
@@ -30,22 +34,24 @@ For development
 
 # Quick Start
 
-Start a web server
-```
-symfony serve
-```
+Start your MySQL/MariaDB Database (however it's configured for you)
 
-Start your Database (however it's configured for you)
+Run Migration (this creates your DB Schema)
 
-Run Migration (this creates your DB Schema
+Update .env.local
+
 ```
 php bin/console doctrine:migrations:migrate
 ```
-
 
 Run Fixtures (this loads some default values for the DB)
 Note that some fixtures contain sensitive information which is not contained 
 within the repository. Contact a repository admin if you need a copy.
 ```
 php bin/console doctrine:fixtures:load --group=dev
+```
+
+Start a web server
+```
+symfony serve
 ```
