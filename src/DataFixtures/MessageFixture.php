@@ -65,7 +65,6 @@ class MessageFixture extends Fixture implements \Doctrine\Bundle\FixturesBundle\
         $attachmentMetadata = new \App\Entity\AttachmentMetadata();
         $attachmentMetadata->setMimeType("audio/mpeg");
         $attachmentMetadata->setContentLength("200");
-        $attachmentMetadata->setFileLocation("asdf/345.mp3");
         $attachmentMetadata->setComplete(true);
         $attachmentMetadata->setHash("asdf");
         $attachmentMetadata->setIsPublic(true);
@@ -123,7 +122,6 @@ class MessageFixture extends Fixture implements \Doctrine\Bundle\FixturesBundle\
         $attachmentMetadata = new \App\Entity\AttachmentMetadata();
         $attachmentMetadata->setMimeType("audio/mpeg");
         $attachmentMetadata->setContentLength("250");
-        $attachmentMetadata->setFileLocation("asdf/15345.mp3");
         $attachmentMetadata->setComplete(true);
         $attachmentMetadata->setHash("2346afg");
         $attachmentMetadata->setIsPublic(true);
@@ -173,7 +171,6 @@ class MessageFixture extends Fixture implements \Doctrine\Bundle\FixturesBundle\
         $attachmentMetadata = new \App\Entity\AttachmentMetadata();
         $attachmentMetadata->setMimeType("application/pdf");
         $attachmentMetadata->setContentLength("200");
-        $attachmentMetadata->setFileLocation("asdf/345.pdf");
         $attachmentMetadata->setComplete(true);
         $attachmentMetadata->setHash("asdf");
         $attachmentMetadata->setIsPublic(true);

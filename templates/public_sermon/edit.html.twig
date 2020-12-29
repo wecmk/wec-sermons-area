@@ -1,0 +1,21 @@
+{% extends 'base.html.twig' %}
+
+{% set breadcrumbs = {
+    "members_area_home": "Home",
+    "sermons_home": "Sermons"
+} %}
+
+{% block title %}Edit Public Sermons{% endblock %}
+
+{% block content %}
+    <div class="container">
+
+        <h1>Edit PublicSermon</h1>
+
+        {{ include('public_sermon/_form.html.twig', {'button_label': 'Update'}) }}
+
+        <a href="{{ path('public_sermon_index') }}">back to list</a>
+
+        {{ include('public_sermon/_delete_form.html.twig') }}
+    </div>
+{% endblock %}

@@ -19,6 +19,11 @@ class SeriesRepository extends ServiceEntityRepository
         parent::__construct($registry, Series::class);
     }
 
+    public function findByIsPublic($isPublic)
+    {
+        return $this->findBy(["isPublic" => $isPublic],  ['Date']);
+    }
+
     // /**
     //  * @return Series[] Returns an array of Series objects
     //  */

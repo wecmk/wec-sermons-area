@@ -84,4 +84,53 @@ class EventRepository extends ServiceEntityRepository
 
         return $paginator;
     }
+
+    /**
+     * Get's last Sunday Services
+     *
+     * @param $dateString a date string in \DateTime format such as 'last sunday' or 'next sunday'. Time component is ignored
+     * @return int|mixed|string
+     */
+    public function servicesByDate($dateString)
+    {
+        $date = new \DateTime();
+        $date->modify($dateString);
+
+        return $this->createQueryBuilder('event')
+            ->leftJoin('event.Series', 'series')
+            ->Where('event.Date = :date')
+            ->setParameter('date', $date)
+            ->OrderBy('event.Date', 'ASC')
+            ->addOrderBy('event.Apm', 'ASC')
+            ->getQuery()
+            ->execute();
+    }
+
+    public function findAllPublicEvents()
+    {
+        return $this->createQueryBuilder('event')
+            ->leftJoin('event.Series', 'series')
+            ->where('series.isPublic = :isPublic')
+            ->orWhere('event.IsPublic = :isPublic')
+            ->setParameter('isPublic', true)
+            ->orderBy('series.Name', 'ASC')
+            ->addOrderBy('event.Date', 'DESC')
+            ->addOrderBy('event.Apm', 'DESC')
+            ->getQuery()
+            ->execute();
+    }
+
+    public function findBySeries(\App\Entity\Series $series)
+    {
+        return $this->createQueryBuilder('event')
+            ->leftJoin('event.Series', 'series')
+            ->where('series = :series')
+            ->setParameter('series', $series)
+            ->orderBy('series.Name', 'ASC')
+            ->addOrderBy('event.Date', 'DESC')
+            ->addOrderBy('event.Apm', 'DESC')
+            ->getQuery()
+            ->execute();
+    }
+
 }

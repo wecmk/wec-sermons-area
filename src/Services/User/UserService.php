@@ -45,7 +45,7 @@ class UserService
      */
     public function findBy($username)
     {
-        return $this->repository->findBy(['username' => $name]);
+        return $this->repository->findBy(['username' => $username]);
     }
     
     /**
@@ -86,5 +86,15 @@ class UserService
         $this->em->flush();
         
         # @todo #3 How do we validate a user was created?
+    }
+
+    public function promote($username, $role) {
+        /** @var User $user */
+        $user = $this->repository->findOneBy(['username' => $username]);
+        $roles = $user->getRoles();
+        $roles[] = $role;
+        $user->setRoles($roles);
+        $this->em->persist($user);
+        $this->em->flush();
     }
 }

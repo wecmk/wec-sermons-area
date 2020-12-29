@@ -8,6 +8,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
 
 use Gedmo\SoftDeleteable\Traits\SoftDeleteableEntity;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
+use JMS\Serializer\Annotation as Serializer;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\PublicSermonRepository")
@@ -37,6 +38,13 @@ class PublicSermon
      * @ORM\Column(type="string", length=255)
      */
     private $Speaker;
+
+    /**
+     * @ORM\OneToOne(targetEntity="App\Entity\Event", cascade={"persist"})
+     * @ORM\JoinColumn(nullable=false)
+     * @Serializer\Exclude()
+     */
+    private $Event;
 
     public function __construct()
     {
@@ -72,4 +80,17 @@ class PublicSermon
 
         return $this;
     }
+
+    public function getEvent(): ?Event
+    {
+        return $this->Event;
+    }
+
+    public function setEvent(Event $Event): self
+    {
+        $this->Event = $Event;
+
+        return $this;
+    }
+
 }

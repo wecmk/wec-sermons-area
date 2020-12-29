@@ -1,0 +1,12 @@
+<a class="btn btn-primary" style="margin-top: 5px;" href="{{ url }}"
+   {% if (analytics | default(false)) %}
+   onClick="
+       ga('send', {
+       'hitType': 'event',
+       'eventCategory': 'Virtual Church',
+       'eventAction': 'Join',
+       'eventLabel': '{{ eventLabel }}'
+       });
+       "
+   {% endif %}
+>{{ linkText }}</a>

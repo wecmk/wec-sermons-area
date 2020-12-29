@@ -141,6 +141,8 @@ class ApiV1SermonsRestController extends AbstractFOSRestController
             }
         }
 
+        $event->setIsPublic(true);
+
         return $this->json($eventService->add($event));
     }
 

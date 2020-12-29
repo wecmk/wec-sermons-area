@@ -1,0 +1,46 @@
+{% extends 'base.html.twig' %}
+
+{% set breadcrumbs = {
+    "members_area_home": "Home",
+    "sermons_home": "Sermons"
+} %}
+
+{% block title %}Public Sermons List{% endblock %}
+
+{% block content %}
+    <h1>PublicSermon index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Title</th>
+                <th>Speaker</th>
+                <th>DeletedAt</th>
+                <th>CreatedAt</th>
+                <th>UpdatedAt</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for public_sermon in public_sermons %}
+            <tr>
+                <td>{{ public_sermon.id }}</td>
+                <td>{{ public_sermon.Title }}</td>
+                <td>{{ public_sermon.Speaker }}</td>
+                <td>{{ public_sermon.deletedAt ? public_sermon.deletedAt|date('Y-m-d H:i:s') : '' }}</td>
+                <td>{{ public_sermon.createdAt ? public_sermon.createdAt|date('Y-m-d H:i:s') : '' }}</td>
+                <td>{{ public_sermon.updatedAt ? public_sermon.updatedAt|date('Y-m-d H:i:s') : '' }}</td>
+                <td>
+                    <a href="{{ path('public_sermon_show', {'id': public_sermon.id}) }}">show</a>
+                    <a href="{{ path('public_sermon_edit', {'id': public_sermon.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="7">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

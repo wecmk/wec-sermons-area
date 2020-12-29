@@ -58,11 +58,16 @@ class Series
     private $Complete;
 
     /**
-     * @ORM\ManyToMany(targetEntity="App\Entity\Event", mappedBy="Series")
+     * @ORM\ManyToMany(targetEntity="Event", mappedBy="Series")
      * @OrderBy({"Date" = "ASC", "Apm" = "ASC"})
      * @Exclude
      */
     private $event;
+
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $isPublic = false;
 
     public function __construct()
     {
@@ -137,6 +142,18 @@ class Series
     public function setDescription(string $Description): self
     {
         $this->Description = $Description;
+
+        return $this;
+    }
+
+    public function getIsPublic(): ?bool
+    {
+        return $this->isPublic;
+    }
+
+    public function setIsPublic(bool $isPublic): self
+    {
+        $this->isPublic = $isPublic;
 
         return $this;
     }

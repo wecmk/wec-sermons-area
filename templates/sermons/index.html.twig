@@ -79,7 +79,10 @@
             </tfoot>
 
             <tbody>
-                {% for entity in results %}
+                {% if liveSermon is empty %}
+                    {% set liveSermon = [] %}
+                {% endif %}
+                {% for entity in liveSermon | merge(results) %}
                     <tr id="{{ entity.Id }}">
                         <td>{% if entity.Date %}{{ entity.Date|date('d-m-Y') }}{% endif %}</td>
                         <td>{{ entity.Apm }}</td>
@@ -95,7 +98,8 @@
                             {% endif %}
                         </td>
                         <td>{{ entity.Title }}</td>
-                        <td id="{{ entity.Speaker.id }}">            
+
+                        <td id="{{ entity.Speaker.id }}">
                             {{ entity.Speaker.Name }}
                             {% if entity.Speaker.Organisation is not empty %}                                
                                 {% if entity.Speaker.Website is not empty %}
@@ -105,14 +109,15 @@
                                 {% endif %}
                             {% endif %}
                         </td>
+
                         {% set GAString = entity.Date|date('d-m-Y') ~ " - " ~ entity.Apm %}
 
                         <td>
-                            {% for attachmentMetadata in entity.attachmentMetadata %}                                
+                            {% for attachmentMetadata in entity.attachmentMetadata %}
                                 <div>
                                     {% if attachmentMetadata.type.canBePublic %}
                                         {% if attachmentMetadata.type.type == "sermon-recording" %}
-                                            <a class="btn btn-primary" id="{{ attachmentMetadata.id }}"
+                                            <a class="btn btn-primary" style="margin-top: 5px;" id="{{ attachmentMetadata.id }}"
                                                href="{{ path('attachment_index', {'id': attachmentMetadata.id, 'force-dl': "true" }) }}" onClick="
                                                        ga('send', {
                                                            'hitType': 'event', // Required.
@@ -121,7 +126,7 @@
                                                            'eventLabel': '{{ GAString }}'
                                                        });"                                           
                                                >Download</a>&nbsp;
-                                            <a class="btn btn-primary" id="{{ attachmentMetadata.id }}"
+                                            <a class="btn btn-primary" style="margin-top: 5px;" id="{{ attachmentMetadata.id }}"
                                                href="{{ path('attachment_index', {'id': attachmentMetadata.id, 'force-dl': "false" }) }}" onClick="
                                                        ga('send', {
                                                            'hitType': 'event', // Required.
@@ -131,7 +136,7 @@
                                                        });
                                                ">Stream</a>
                                         {% else %}
-                                            <a class="btn btn-primary" id="{{ attachmentMetadata.id }}"
+                                            <a class="btn btn-primary" style="margin-top: 5px;" id="{{ attachmentMetadata.id }}"
                                                href="{{ path('attachment_index', {'id': attachmentMetadata.id, 'force-dl': "false" }) }}" onClick="
                                                        ga('send', {
                                                            'hitType': 'event', // Required.
@@ -144,6 +149,10 @@
                                     {%  endif %}
                                 </div>
                             {% endfor %}
+
+                            {% if entity.id == "3beb4e09-8c06-47dd-be47-e06d28dcca7a" %}
+                                {{ include('components/button-item-conditional-show.html.twig', {'url': 'https://www.wecmk.org/covid-online- /', 'eventLabel': 'Sunday Services', 'linkText': 'Watch Now' }) }}
+                            {% endif %}
 
                             {% for url in entity.eventUrls %}
                                 {% set label = entity.Date|date('d-m-Y') ~ "-" ~ entity.Apm %}
@@ -159,7 +168,7 @@
                     </tr>
                     {% else %}
                         <tr colspan="7">
-                            Sorry, there is a system error which prevents us from dislaying the latest sermons. We're investigating now.
+                            Sorry, there is a system error which prevents us from displaying the latest sermons. We're investigating now.
                         </tr>
                 {% endfor %}
             </tbody>
