@@ -32,10 +32,10 @@ class ApiV2PublicSermonsController extends AbstractController
 
         $view->setData($response)->setStatusCode(200);
         return $view;
-
     }
 
-    private function getServices($search) {
+    private function getServices($search)
+    {
         $sermonsRepository = $this->getDoctrine()->getRepository(Event::class);
         $lastSundayServices = $sermonsRepository->servicesByDate($search);
 
@@ -63,12 +63,10 @@ class ApiV2PublicSermonsController extends AbstractController
 
         $publicEvents = [];
 
-        foreach ($publicSeries as $series)
-        {
+        foreach ($publicSeries as $series) {
             $events = $sermonsRepository->findBySeries($series);
 
             foreach ($events as $event) {
-
                 $attachmentMetadata = $event->getAttachmentMetadata()->filter(function (AttachmentMetadata $element) {
                     return $element->getType()->getType() == 'sermon-recording';
                 })->get(0);
@@ -128,5 +126,4 @@ class ApiV2PublicSermonsController extends AbstractController
         }
         return $response;
     }
-
 }

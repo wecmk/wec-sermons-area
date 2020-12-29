@@ -88,7 +88,8 @@ class UserService
         # @todo #3 How do we validate a user was created?
     }
 
-    public function promote($username, $role) {
+    public function promote($username, $role)
+    {
         /** @var User $user */
         $user = $this->repository->findOneBy(['username' => $username]);
         $roles = $user->getRoles();

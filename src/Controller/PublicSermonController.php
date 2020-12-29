@@ -49,9 +49,10 @@ class PublicSermonController extends AbstractController
 
         $event = $event->getEvent();
         $attachmentList = $event->getAttachmentMetadata()->filter(
-            function(AttachmentMetadata $attachmentMetadata) {
+            function (AttachmentMetadata $attachmentMetadata) {
                 return $attachmentMetadata->getType()->getType() == "sermon-recording";
-            });
+            }
+        );
         if (count($attachmentList) > 0) {
             /** @var $attachment AttachmentMetadata */
             $attachment = $attachmentList[0];
@@ -68,9 +69,6 @@ class PublicSermonController extends AbstractController
             }
             return $response;
         }
-
-
-
     }
 
     /**

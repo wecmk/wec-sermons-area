@@ -21,7 +21,7 @@ class SeriesRepository extends ServiceEntityRepository
 
     public function findByIsPublic($isPublic)
     {
-        return $this->findBy(["isPublic" => $isPublic],  ['Date']);
+        return $this->findBy(["isPublic" => $isPublic], ['Date']);
     }
 
     // /**

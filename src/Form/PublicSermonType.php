@@ -17,7 +17,10 @@ class PublicSermonType extends AbstractType
         $builder
             ->add('Title')
             ->add('Speaker')
-            ->add('Event', EntityType::class, array(
+            ->add(
+                'Event',
+                EntityType::class,
+                array(
                 'class' => Event::class,
                 'query_builder' => function (EventRepository $er) use ($options) {
                     return $er->createQueryBuilder('u')

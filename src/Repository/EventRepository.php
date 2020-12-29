@@ -132,5 +132,4 @@ class EventRepository extends ServiceEntityRepository
             ->getQuery()
             ->execute();
     }
-
 }

@@ -92,5 +92,4 @@ class PublicSermon
 
         return $this;
     }
-
 }

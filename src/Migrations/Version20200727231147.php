@@ -24,7 +24,6 @@ final class Version20200727231147 extends AbstractMigration
 
         $this->addSql('CREATE TABLE event_url (id INT AUTO_INCREMENT NOT NULL, event_id CHAR(36) NOT NULL COMMENT \'(DC2Type:uuid)\', title VARCHAR(255) NOT NULL, url VARCHAR(255) NOT NULL, INDEX IDX_E5B9807D71F7E88B (event_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
         $this->addSql('ALTER TABLE event_url ADD CONSTRAINT FK_E5B9807D71F7E88B FOREIGN KEY (event_id) REFERENCES event (id)');
-
     }
 
     public function down(Schema $schema) : void
