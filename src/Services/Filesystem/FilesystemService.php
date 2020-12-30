@@ -9,7 +9,7 @@ use App\Entity\UploadedContent;
 use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\ORM\EntityManagerInterface;
 use Psr\Log\LoggerInterface;
-use Ramsey\Uuid\Uuid;
+use Ramsey\Uuid\UuidInterface;
 use Symfony\Component\DependencyInjection\ParameterBag\ContainerBagInterface;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
@@ -99,12 +99,12 @@ class FilesystemService
 
     /**
      * Returns an array of matching items
-     * @param Uuid $id
+     * @param UuidInterface $id
      * @param UploadedContent $uploadedContent
      *
      * @return false|int
      */
-    public function appendContentToFile(Uuid $id, UploadedContent $uploadedContent)
+    public function appendContentToFile(UuidInterface $id, UploadedContent $uploadedContent)
     {
         /** @var AttachmentMetadata $fileMetadata */
         $fileMetadata = $this->getFileMetadata($id);
@@ -119,10 +119,10 @@ class FilesystemService
 
     /**
      * Sets the metadata of the file to complete, if the hash matches
-     * @param Uuid $id
+     * @param UuidInterface $id
      * @return AttachmentMetadata check attachmentMetadata->getComplete() to validate if upload was successful
      */
-    public function completeAndValidateUpload(Uuid $id)
+    public function completeAndValidateUpload(UuidInterface $id)
     {
         $fileMetadata = $this->getFileMetadata($id);
         $isValid = $this->hashIsValidFromAttachmentMetadata($fileMetadata);
@@ -134,7 +134,7 @@ class FilesystemService
         return $fileMetadata;
     }
 
-    public function hashIsValid(Uuid $id)
+    public function hashIsValid(UuidInterface $id)
     {
         $fileMetadata = $this->getFileMetadata($id);
         return $this->hashIsValidFromAttachmentMetadata($fileMetadata);
@@ -150,13 +150,13 @@ class FilesystemService
     }
 
     /**
-     * @param Uuid $uuid
+     * @param UuidInterface $uuid
      *
      * @return AttachmentMetadata
      *
      * @throws FileNotFoundException if file metadata does not exist
      */
-    public function getFileMetadata(Uuid $uuid): AttachmentMetadata
+    public function getFileMetadata(UuidInterface $uuid): AttachmentMetadata
     {
         $result = $this->em->getRepository(AttachmentMetadata::class)->find($uuid);
         if (empty($result)) {
@@ -171,7 +171,7 @@ class FilesystemService
     }
 
     /**
-     * @param Uuid                $uuid               The Uuid of the file to serve
+     * @param UuidInterface       $uuid               The Uuid of the file to serve
      * @param int                 $status             The response status code
      * @param array               $headers            An array of response headers
      * @param bool                $public             Files are public by default
@@ -182,7 +182,7 @@ class FilesystemService
      *
      * @return BinaryFileResponse
      */
-    public function generateBinaryFileResponse(Uuid $uuid, int $status = 200, array $headers = [], bool $public = true, string $contentDisposition = null, bool $autoEtag = false, bool $autoLastModified = true)
+    public function generateBinaryFileResponse(UuidInterface $uuid, int $status = 200, array $headers = [], bool $public = true, string $contentDisposition = null, bool $autoEtag = false, bool $autoLastModified = true)
     {
         $fileMetadata = $this->getFileMetadata($uuid);
         if ($fileMetadata->getIsPublic()) {
