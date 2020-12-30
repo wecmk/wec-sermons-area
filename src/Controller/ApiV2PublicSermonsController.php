@@ -36,7 +36,6 @@ class ApiV2PublicSermonsController extends AbstractController
      *     )
      * )
      * @OA\Tag(name="v2")
-     * @Security(name="Bearer")
      */
     public function youTubeSermons(): View
     {
@@ -69,9 +68,20 @@ class ApiV2PublicSermonsController extends AbstractController
 
 
     /**
-     * @Route("/api/v2/publicsermons/all", name="api_v2_public_sermons")
+     * Lists all sermons which are accessible to the public
+     *
+     * @Route("/api/v2/publicsermons", name="api_v2_public_sermons", methods={"GET"})
+     * @OA\Response(
+     *     response=200,
+     *     description="List all sermons available to the public",
+     *     @OA\JsonContent(
+     *        type="array",
+     *        @OA\Items(ref=@Model(type="array", groups={"full"}))
+     *     )
+     * )
+     * @OA\Tag(name="v2")
      */
-    public function all()
+    public function all(): View
     {
         $sermonsRepository = $this->getDoctrine()->getRepository(Event::class);
 
@@ -113,18 +123,44 @@ class ApiV2PublicSermonsController extends AbstractController
     }
 
     /**
-     *
      * Optional GET parameter force-dl=true (default to force the download or
      * false to stream
      *
-     * @Route("/public/sermon/download/{id}", name="public_sermon_download_v2")
-     * @param Request $request
-     * @param LoggerInterface $logger
-     * @param FilesystemService $filesystemService
-     * @param AttachmentMetadata $attachment
-     * @return BinaryFileResponse
+     * @Route("/api/v2/publicsermon/{id}/download", name="public_sermon_download_v2", methods={"GET"})
+     * @OA\Parameter(
+     *    description="ID of event",
+     *    in="path",
+     *    name="id",
+     *    required=true,
+     *    example="72925096-6ae2-42b3-929f-16b4910478d9",
+     *    @OA\Schema(
+     *       type="string",
+     *       format="string"
+     *    )
+     * )
+     * @OA\Parameter(
+     *    description="Force the download of the attachment (default: false, streams in browser)",
+     *    in="query",
+     *    name="force-dl",
+     *    required=false,
+     *    example="false",
+     *    @OA\Schema(
+     *       type="boolean",
+     *       format="string"
+     *    )
+     * )
+     * @OA\Response(
+     *     response=200,
+     *     description="List all sermons available to the public",
+     *     content={
+     *             @OA\MediaType(
+     *                 mediaType="audio/mpeg"
+     *             )
+     *     }
+     * )
+     * @OA\Tag(name="v2")
      */
-    public function index(Request $request, LoggerInterface $logger, FilesystemService $filesystemService, AttachmentMetadata $attachment)
+    public function download(Request $request, FilesystemService $filesystemService, AttachmentMetadata $attachment): BinaryFileResponse
     {
         $forceDownload = $request->query->get("force-dl", "true") == "true";
         $deposition = ($forceDownload) ? ResponseHeaderBag::DISPOSITION_ATTACHMENT : ResponseHeaderBag::DISPOSITION_INLINE;
