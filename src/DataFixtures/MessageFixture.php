@@ -2,9 +2,12 @@
 
 namespace App\DataFixtures;
 
+use App\Entity\AttachmentMetadata;
+use App\Entity\Event;
+use App\Entity\Series;
+use App\Entity\Speaker;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
-use App\Repository\AttachmentMetadataRepository;
 
 class MessageFixture extends Fixture implements \Doctrine\Bundle\FixturesBundle\FixtureGroupInterface
 {
@@ -18,37 +21,37 @@ class MessageFixture extends Fixture implements \Doctrine\Bundle\FixturesBundle\
     
     public function load(ObjectManager $manager)
     {
-        $seriesColossians = new \App\Entity\Series();
+        $seriesColossians = new Series();
         $seriesColossians->setName("Colossians");
         $manager->persist($seriesColossians);
         
-        $seriesVisitingSpeaker = new \App\Entity\Series();
+        $seriesVisitingSpeaker = new Series();
         $seriesVisitingSpeaker->setName("Visiting Speaker");
         $manager->persist($seriesVisitingSpeaker);
         
-        $seriesUncategorised = new \App\Entity\Series();
+        $seriesUncategorised = new Series();
         $seriesUncategorised->setName("Uncategorised");
         $manager->persist($seriesUncategorised);
         
-        $seriesHebrews = new \App\Entity\Series();
+        $seriesHebrews = new Series();
         $seriesHebrews->setName("Hebrews");
         $manager->persist($seriesHebrews);
        
-        $speakerAllan = new \App\Entity\Speaker();
+        $speakerAllan = new Speaker();
         $speakerAllan->setName("Allan Huxtable");
         $manager->persist($speakerAllan);
         
-        $SpeakerRoger = new \App\Entity\Speaker();
+        $SpeakerRoger = new Speaker();
         $SpeakerRoger->setName("Roger March");
         $manager->persist($SpeakerRoger);
         
-        $speakerVisitorWithLink = new \App\Entity\Speaker();
+        $speakerVisitorWithLink = new Speaker();
         $speakerVisitorWithLink->setName("Visiting Speaker w link");
         $speakerVisitorWithLink->setOrganisation("Organisation");
         $speakerVisitorWithLink->setWebsite("https://www.wecmk.org");
         $manager->persist($speakerVisitorWithLink);
         
-        $sermon = new \App\Entity\Event();
+        $sermon = new Event();
         $sermon->setDate(new \DateTime());
         $sermon->setApm("AM");
         $sermon->addSeries($seriesColossians);
@@ -62,7 +65,7 @@ class MessageFixture extends Fixture implements \Doctrine\Bundle\FixturesBundle\
         $sermon->setPublicComments("");
         $sermon->setPrivateComments("");
         
-        $attachmentMetadata = new \App\Entity\AttachmentMetadata();
+        $attachmentMetadata = new AttachmentMetadata();
         $attachmentMetadata->setMimeType("audio/mpeg");
         $attachmentMetadata->setContentLength("200");
         $attachmentMetadata->setComplete(true);
@@ -75,7 +78,7 @@ class MessageFixture extends Fixture implements \Doctrine\Bundle\FixturesBundle\
         $sermon->addAttachmentMetadata($attachmentMetadata);
         $manager->persist($sermon);
 
-        $sermon = new \App\Entity\Event();
+        $sermon = new Event();
         $sermon->setDate(new \DateTime());
         $sermon->setApm("PM");
         $sermon->addSeries($seriesHebrews);
@@ -90,7 +93,7 @@ class MessageFixture extends Fixture implements \Doctrine\Bundle\FixturesBundle\
         $sermon->setPrivateComments("");
         $manager->persist($sermon);
 
-        $sermon = new \App\Entity\Event();
+        $sermon = new Event();
         $sermon->setDate(new \DateTime());
         $sermon->setApm("AM");
         $sermon->addSeries($seriesUncategorised);
@@ -105,7 +108,7 @@ class MessageFixture extends Fixture implements \Doctrine\Bundle\FixturesBundle\
         $sermon->setPrivateComments("");
         $manager->persist($sermon);
        
-        $sermon = new \App\Entity\Event();
+        $sermon = new Event();
         $sermon->setDate(\DateTime::createFromFormat('Y-m-d', "2016-10-23"));
         $sermon->setApm("THU");
         $sermon->addSeries($seriesVisitingSpeaker);
@@ -119,7 +122,7 @@ class MessageFixture extends Fixture implements \Doctrine\Bundle\FixturesBundle\
         $sermon->setPublicComments("");
         $sermon->setPrivateComments("");
         
-        $attachmentMetadata = new \App\Entity\AttachmentMetadata();
+        $attachmentMetadata = new AttachmentMetadata();
         $attachmentMetadata->setMimeType("audio/mpeg");
         $attachmentMetadata->setContentLength("250");
         $attachmentMetadata->setComplete(true);
@@ -132,11 +135,11 @@ class MessageFixture extends Fixture implements \Doctrine\Bundle\FixturesBundle\
         $sermon->addAttachmentMetadata($attachmentMetadata);
         $manager->persist($sermon);
         
-        $sermon = new \App\Entity\Event();
+        $sermon = new Event();
         $sermon->setDate(\DateTime::createFromFormat('d-m-Y', "26-05-2013"));
         $sermon->setApm("AM");
         
-        $seriesBaptisms = new \App\Entity\Series();
+        $seriesBaptisms = new Series();
         $seriesBaptisms->setName("Baptisms");
         $manager->persist($seriesBaptisms);
         
@@ -154,7 +157,7 @@ class MessageFixture extends Fixture implements \Doctrine\Bundle\FixturesBundle\
         
         $manager->persist($sermon);
         
-        $sermon = new \App\Entity\Event();
+        $sermon = new Event();
         $sermon->setDate(\DateTime::createFromFormat('d-m-Y', "16-01-2005"));
         $sermon->setApm("AM");
         $sermon->addSeries($seriesColossians);
@@ -168,7 +171,7 @@ class MessageFixture extends Fixture implements \Doctrine\Bundle\FixturesBundle\
         $sermon->setPublicComments("");
         $sermon->setPrivateComments("");
         
-        $attachmentMetadata = new \App\Entity\AttachmentMetadata();
+        $attachmentMetadata = new AttachmentMetadata();
         $attachmentMetadata->setMimeType("application/pdf");
         $attachmentMetadata->setContentLength("200");
         $attachmentMetadata->setComplete(true);

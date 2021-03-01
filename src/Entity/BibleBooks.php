@@ -2,29 +2,35 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Core\Annotation\ApiResource;
+use App\Repository\BibleBooksRepository;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Entity(repositoryClass="App\Repository\BibleBooksRepository")
+ * @ApiResource(
+ *     collectionOperations={"get"},
+ *     itemOperations={"get"}
+ *     )
+ * @ORM\Entity(repositoryClass=BibleBooksRepository::class)
  */
 class BibleBooks
 {
     /**
-     * @ORM\Id()
-     * @ORM\GeneratedValue()
+     * @ORM\Id
+     * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
      */
-    private $id;
+    private ?int $id = null;
 
     /**
-     * @ORM\Column(type="string", length=20)
+     * @ORM\Column(type="string", length=16)
      */
-    private $book;
+    private ?string $book = null;
 
     /**
      * @ORM\Column(type="integer")
      */
-    private $sort;
+    private ?int $sort = null;
 
     public function getId(): ?int
     {

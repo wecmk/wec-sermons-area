@@ -2,27 +2,18 @@
 
 namespace App\Entity;
 
+use App\Repository\UserRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\UserInterface;
-use Gedmo\SoftDeleteable\Traits\SoftDeleteableEntity;
-use Gedmo\Timestampable\Traits\TimestampableEntity;
 
 /**
- * @ORM\Entity(repositoryClass="App\Repository\UserRepository")
+ * @ORM\Entity(repositoryClass=UserRepository::class)
  */
 class User implements UserInterface
 {
-
     /**
-     * Hook SoftDeleteable behavior
-     * updates deletedAt field
-     */
-    use SoftDeleteableEntity;
-    use TimestampableEntity;
-
-    /**
-     * @ORM\Id()
-     * @ORM\GeneratedValue()
+     * @ORM\Id
+     * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
      */
     private $id;
@@ -33,9 +24,9 @@ class User implements UserInterface
     private $username;
 
     /**
-     * @ORM\Column(type="array")
+     * @ORM\Column(type="json")
      */
-    private $roles = ['ROLE_USER'];
+    private $roles = [];
 
     /**
      * @var string The hashed password
@@ -44,28 +35,9 @@ class User implements UserInterface
     private $password;
 
     /**
-     * @ORM\Column(type="string", length=30)
+     * @ORM\Column(type="string", length=255)
      */
     private $email;
-
-    /**
-     * @var string|null
-     */
-    protected $plainPassword;
-
-    /**
-     * @var string|null
-     *
-     * @ORM\Column(type="string", length=255, nullable=true)
-     */
-    protected $passwordRequestToken;
-
-    public function __construct()
-    {
-        $this->setCreatedAt(new \DateTime());
-        $this->setUpdatedAt(new \DateTime());
-    }
-
 
     public function getId(): ?int
     {
@@ -149,44 +121,6 @@ class User implements UserInterface
     {
         $this->email = $email;
 
-        return $this;
-    }
-
-    /**
-     * @return null|string
-     */
-    public function getPlainPassword(): ?string
-    {
-        return $this->plainPassword;
-    }
-
-    /**
-     * @param null|string $plainPassword
-     *
-     * @return User
-     */
-    public function setPlainPassword(?string $plainPassword): User
-    {
-        $this->plainPassword = $plainPassword;
-        return $this;
-    }
-
-    /**
-     * @return null|string
-     */
-    public function getPasswordRequestToken(): ?string
-    {
-        return $this->passwordRequestToken;
-    }
-
-    /**
-     * @param null|string $passwordRequestToken
-     *
-     * @return User
-     */
-    public function setPasswordRequestToken(?string $passwordRequestToken): User
-    {
-        $this->passwordRequestToken = $passwordRequestToken;
         return $this;
     }
 }

@@ -5,8 +5,8 @@ namespace App\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
-use App\Entity\QuestionSeries;
-use App\Entity\QuestionQA;
+use App\Entity\QuestionsAndAnswersSeries;
+use App\Entity\QuestionsAndAnswers;
 use App\Form\PublishQuestionType;
 
 /**
@@ -22,7 +22,7 @@ class QuestionsController extends AbstractController
     {
         $em = $this->getDoctrine()->getManager();
 
-        $entities = $em->getRepository(QuestionSeries::class)->findAll();
+        $entities = $em->getRepository(QuestionsAndAnswersSeries::class)->findAll();
 
         return $this->render('questions/index.html.twig', [
                     'entities' => $entities,
@@ -37,17 +37,17 @@ class QuestionsController extends AbstractController
     public function showAction($id)
     {
         $em = $this->getDoctrine()->getManager();
-        $questionSeries = $em->getRepository(QuestionSeries::class)->find($id);
+        $questionSeries = $em->getRepository(QuestionsAndAnswersSeries::class)->find($id);
 
         if (!$questionSeries) {
             throw $this->createNotFoundException('Unable to find QuestionSeries entity.');
         }
 
-        $questions = $this->getDoctrine()->getRepository(QuestionQA::class)
+        $questions = $this->getDoctrine()->getRepository(QuestionsAndAnswers::class)
                 ->createQueryBuilder('es')
-                ->where('es.questionSeries = :id')
+                ->where('es.QuestionsAndAnswersSeries = :id')
                 ->setParameter('id', $id)
-                ->orderBy('es.Number', 'ASC')
+                ->orderBy('es.number', 'ASC')
                 ->getQuery()
                 ->getResult();
 
@@ -67,13 +67,13 @@ class QuestionsController extends AbstractController
         $em = $this->getDoctrine()->getManager();
 
         /* @var $entity QuestionSeries */
-        $entity = $em->getRepository(QuestionSeries::class)->find($id);
+        $entity = $em->getRepository(QuestionsAndAnswersSeries::class)->find($id);
 
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find QuestionSeries entity.');
         }
 
-        foreach ($em->getRepository(QuestionSeries::class)->findAll() as $obj) {
+        foreach ($em->getRepository(QuestionsAndAnswersSeries::class)->findAll() as $obj) {
             if ($entity->getId() != $obj->getId()) {
                 $obj->setCurrent(false);
             } else {
@@ -94,8 +94,7 @@ class QuestionsController extends AbstractController
     {
         $em = $this->getDoctrine()->getManager();
 
-        /* @var $entity QuestionQA */
-        $entity = $em->getRepository(QuestionQA::class)->find($id);
+        $entity = $em->getRepository(QuestionsAndAnswers::class)->find($id);
         $publishDate = $request->request->get('publishdate');
 
         if (!$entity) {
@@ -109,7 +108,7 @@ class QuestionsController extends AbstractController
         $em->persist($entity);
         $em->flush();
 
-        return $this->redirect($this->generateUrl('questions_list_by_id', array('id' => $entity->getQuestionSeries()->getId())));
+        return $this->redirect($this->generateUrl('questions_list_by_id', array('id' => $entity->getQuestionsAndAnswersSeries()->getId())));
     }
 
     /**
@@ -144,8 +143,7 @@ class QuestionsController extends AbstractController
     {
         $em = $this->getDoctrine()->getManager();
 
-        /** @var QuestionQA $entity */
-        $entity = $em->getRepository(QuestionQA::class)->find($id);
+        $entity = $em->getRepository(QuestionsAndAnswers::class)->find($id);
 
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find Question entity.');
@@ -159,8 +157,8 @@ class QuestionsController extends AbstractController
                 $em->flush();
 
                 $startDate = $entity->getPublishDate();
-                foreach ($em->getRepository(QuestionQA::class)->findBy(
-                    array('questionSeries' => $entity->getQuestionSeries()),
+                foreach ($em->getRepository(QuestionsAndAnswers::class)->findBy(
+                    array('questionsAndAnswersSeries' => $entity->getQuestionsAndAnswersSeries()),
                     array('id' => 'ASC')
                 )
                         as $question) {

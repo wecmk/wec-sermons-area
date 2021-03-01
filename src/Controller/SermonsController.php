@@ -25,9 +25,9 @@ class SermonsController extends AbstractController
      * @Route("/", name="home")
      * @param Request $request
      * @param EventSearchService $search
-     * @return Response
+     * @return Responsen
      */
-    public function indexAction(Request $request, EventSearchService $search, IndexEventSearchService $indexService)
+    public function indexAction(Request $request, EventSearchService $search)
     {
         $page = $request->query->get('page', 1);
         $limit = 10;

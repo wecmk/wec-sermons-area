@@ -2,49 +2,45 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Core\Annotation\ApiResource;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-use Doctrine\ORM\Mapping\OrderBy;
-use JMS\Serializer\Annotation as JMS;
-use JMS\Serializer\Annotation\Exclude;
+use Doctrine\ORM\Id\UuidGenerator;
 
-use Gedmo\Mapping\Annotation as Gedmo;
-
-use Gedmo\SoftDeleteable\Traits\SoftDeleteableEntity;
-use Gedmo\Timestampable\Traits\TimestampableEntity;
+use Knp\DoctrineBehaviors\Contract\Entity\SoftDeletableInterface;
+use Knp\DoctrineBehaviors\Model\SoftDeletable\SoftDeletableTrait;
+use Knp\DoctrineBehaviors\Contract\Entity\TimestampableInterface;
+use Knp\DoctrineBehaviors\Model\Timestampable\TimestampableTrait;
 use Ramsey\Uuid\UuidInterface;
 
 /**
- * @ORM\Entity(repositoryClass="App\Repository\SeriesRepository")
- * @Gedmo\Loggable
+ * @ApiResource()
+ * @ORM\Entity(repositoryClass=SeriesRepository::class)
  */
-class Series
+class Series implements TimestampableInterface, SoftDeletableInterface
 {
-
+    public ArrayCollection $event;
     /**
      * Hook SoftDeleteable behavior
      * updates deletedAt field
      */
-    use SoftDeleteableEntity;
-    use TimestampableEntity;
+    use SoftDeletableTrait;
+    use TimestampableTrait;
 
     /**
-     * @var UuidInterface
-     * @JMS\Type("uuid")
      *
      * @ORM\Id
      * @ORM\Column(type="uuid", unique=true)
      * @ORM\GeneratedValue(strategy="CUSTOM")
-     * @ORM\CustomIdGenerator(class="Ramsey\Uuid\Doctrine\UuidGenerator")
+     * @ORM\CustomIdGenerator(class=UuidGenerator::class)
      */
     protected UuidInterface $id;
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Gedmo\Versioned
      */
-    private $Name;
+    private ?string $Name = null;
 
     /**
      * @ORM\Column(type="text")
@@ -53,21 +49,18 @@ class Series
 
     /**
      * @ORM\Column(type="boolean")
-     * @Gedmo\Versioned
      */
-    private $Complete;
-
-    /**
-     * @ORM\ManyToMany(targetEntity="Event", mappedBy="Series")
-     * @OrderBy({"Date" = "ASC", "Apm" = "ASC"})
-     * @Exclude
-     */
-    private $event;
+    private ?bool $Complete = null;
 
     /**
      * @ORM\Column(type="boolean")
      */
-    private $isPublic = false;
+    private ?bool $isPublic = false;
+
+    /**
+     * @ORM\ManyToMany(targetEntity=Event::class, mappedBy="series")
+     */
+    private Collection $events;
 
     public function __construct()
     {
@@ -75,6 +68,7 @@ class Series
         $this->event = new ArrayCollection();
         $this->setCreatedAt(new \DateTime());
         $this->setUpdatedAt(new \DateTime());
+        $this->events = new ArrayCollection();
     }
 
     public function getId(): ?UuidInterface
@@ -106,34 +100,6 @@ class Series
         return $this;
     }
 
-    /**
-     * @return Collection|Event[]
-     */
-    public function getEvents(): Collection
-    {
-        return $this->event;
-    }
-
-    public function addEvent(Event $sermon): self
-    {
-        if (!$this->event->contains($sermon)) {
-            $this->event[] = $sermon;
-            $sermon->addSeries($this);
-        }
-
-        return $this;
-    }
-
-    public function removeEvent(Event $sermon): self
-    {
-        if ($this->event->contains($sermon)) {
-            $this->event->removeElement($sermon);
-            $sermon->removeSeries($this);
-        }
-
-        return $this;
-    }
-
     public function getDescription(): ?string
     {
         return $this->Description;
@@ -154,6 +120,33 @@ class Series
     public function setIsPublic(bool $isPublic): self
     {
         $this->isPublic = $isPublic;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Event[]
+     */
+    public function getEvents(): Collection
+    {
+        return $this->events;
+    }
+
+    public function addEvent(Event $event): self
+    {
+        if (!$this->events->contains($event)) {
+            $this->events[] = $event;
+            $event->addSeries($this);
+        }
+
+        return $this;
+    }
+
+    public function removeEvent(Event $event): self
+    {
+        if ($this->events->removeElement($event)) {
+            $event->removeSeries($this);
+        }
 
         return $this;
     }

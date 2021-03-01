@@ -3,8 +3,5 @@
 return array (
   'APP_SECRET' => NULL,
   'DATABASE_URL' => NULL,
-  'DEFAULT_FROM_ADDRESS' => NULL,
-  'DEFAULT_TO_ADDRESS' => NULL,
-  'INDEX_URL' => NULL,
-  'MAILER_URL' => NULL,
+  'MAILER_DSN' => NULL,
 );

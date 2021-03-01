@@ -2,25 +2,23 @@
 
 namespace App\Services\Event;
 
+use App\Repository\EventRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use Psr\Log\LoggerInterface;
 use App\Entity\Event;
 
 /*
- * @author Samuel Pearce <samuel.pearce@open.ac.uk>
+ * @author Samuel Pearce <samuelcpearce@gmail.com>
  */
 class EventService
 {
-    /* @var $logger LoggerInterface */
+    private LoggerInterface $logger;
 
-    private $logger;
-
-    /* @var $repository \Doctrine\Common\Persistence\ObjectManager */
-    private $repository;
+    private EventRepository $repository;
     
-    /** @var \Doctrine\ORM\EntityManagerInterface $em */
-    private $em;
+    private EntityManagerInterface $em;
 
-    public function __construct(LoggerInterface $logger, \Doctrine\ORM\EntityManagerInterface $em)
+    public function __construct(LoggerInterface $logger, EntityManagerInterface $em)
     {
         $this->logger = $logger;
         $this->em = $em;
@@ -45,7 +43,7 @@ class EventService
      * @param Event $sermon
      * @return Event The managed persisted object
      */
-    public function add(Event $sermon)
+    public function add(Event $sermon): Event
     {
         $this->em->persist($sermon);
         $this->em->flush();
@@ -57,7 +55,7 @@ class EventService
      * @param type $id
      * @return Event
      */
-    public function getById($id)
+    public function getById($id): Event
     {
         return $this->repository->find($id);
     }

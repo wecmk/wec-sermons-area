@@ -5,7 +5,7 @@ namespace App\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Entity(repositoryClass="App\Repository\EventUrlRepository")
+ * @ORM\Entity(repositoryClass=EventUrlRepository::class)
  */
 class EventUrl
 {
@@ -14,23 +14,23 @@ class EventUrl
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
      */
-    private $id;
+    private ?int $id = null;
 
     /**
      * @ORM\Column(type="string", length=255)
      */
-    private $title;
+    private ?string $title = null;
 
     /**
      * @ORM\Column(type="string", length=255)
      */
-    private $url;
+    private ?string $url = null;
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Event", inversedBy="eventUrls")
      * @ORM\JoinColumn(nullable=false)
      */
-    private $Event;
+    private ?\App\Entity\Event $Event = null;
 
     public function getId(): ?int
     {

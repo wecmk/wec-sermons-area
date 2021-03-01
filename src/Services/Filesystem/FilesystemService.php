@@ -9,8 +9,7 @@ use App\Entity\UploadedContent;
 use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\ORM\EntityManagerInterface;
 use Psr\Log\LoggerInterface;
-use Ramsey\Uuid\UuidInterface;
-use Symfony\Component\DependencyInjection\ParameterBag\ContainerBagInterface;
+use Ramsey\Uuid\Uuid;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
@@ -38,23 +37,17 @@ class FilesystemService
     private $fileRootPath;
 
     /**
-     * @var ContainerBagInterface
-     */
-    private $params;
-
-    /**
      * @var WecFilesystem
      */
     private $filesystem;
 
-    public function __construct(LoggerInterface $logger, EntityManagerInterface $em, WecFilesystem $filesystem, ContainerBagInterface $params)
+    public function __construct(LoggerInterface $logger, EntityManagerInterface $em, WecFilesystem $filesystem, $fileRootPath)
     {
         $this->logger = $logger;
         $this->em = $em;
         $this->repository = $em->getRepository(AttachmentMetadata::class);
-        $this->params = $params;
         $this->filesystem = $filesystem;
-        $this->fileRootPath = $params->get($this->paramRootPath);
+        $this->fileRootPath = $fileRootPath;
     }
 
     /**
@@ -99,12 +92,12 @@ class FilesystemService
 
     /**
      * Returns an array of matching items
-     * @param UuidInterface $id
+     * @param Uuid $id
      * @param UploadedContent $uploadedContent
      *
      * @return false|int
      */
-    public function appendContentToFile(UuidInterface $id, UploadedContent $uploadedContent)
+    public function appendContentToFile(Uuid $id, UploadedContent $uploadedContent)
     {
         /** @var AttachmentMetadata $fileMetadata */
         $fileMetadata = $this->getFileMetadata($id);
@@ -119,10 +112,10 @@ class FilesystemService
 
     /**
      * Sets the metadata of the file to complete, if the hash matches
-     * @param UuidInterface $id
+     * @param Uuid $id
      * @return AttachmentMetadata check attachmentMetadata->getComplete() to validate if upload was successful
      */
-    public function completeAndValidateUpload(UuidInterface $id)
+    public function completeAndValidateUpload(Uuid $id)
     {
         $fileMetadata = $this->getFileMetadata($id);
         $isValid = $this->hashIsValidFromAttachmentMetadata($fileMetadata);
@@ -134,7 +127,7 @@ class FilesystemService
         return $fileMetadata;
     }
 
-    public function hashIsValid(UuidInterface $id)
+    public function hashIsValid(Uuid $id)
     {
         $fileMetadata = $this->getFileMetadata($id);
         return $this->hashIsValidFromAttachmentMetadata($fileMetadata);
@@ -150,13 +143,13 @@ class FilesystemService
     }
 
     /**
-     * @param UuidInterface $uuid
+     * @param Uuid $uuid
      *
      * @return AttachmentMetadata
      *
      * @throws FileNotFoundException if file metadata does not exist
      */
-    public function getFileMetadata(UuidInterface $uuid): AttachmentMetadata
+    public function getFileMetadata(Uuid $uuid): AttachmentMetadata
     {
         $result = $this->em->getRepository(AttachmentMetadata::class)->find($uuid);
         if (empty($result)) {
@@ -171,7 +164,7 @@ class FilesystemService
     }
 
     /**
-     * @param UuidInterface       $uuid               The Uuid of the file to serve
+     * @param Uuid                $uuid               The Uuid of the file to serve
      * @param int                 $status             The response status code
      * @param array               $headers            An array of response headers
      * @param bool                $public             Files are public by default
@@ -182,7 +175,7 @@ class FilesystemService
      *
      * @return BinaryFileResponse
      */
-    public function generateBinaryFileResponse(UuidInterface $uuid, int $status = 200, array $headers = [], bool $public = true, string $contentDisposition = null, bool $autoEtag = false, bool $autoLastModified = true)
+    public function generateBinaryFileResponse(Uuid $uuid, int $status = 200, array $headers = [], bool $public = true, string $contentDisposition = null, bool $autoEtag = false, bool $autoLastModified = true)
     {
         $fileMetadata = $this->getFileMetadata($uuid);
         if ($fileMetadata->getIsPublic()) {

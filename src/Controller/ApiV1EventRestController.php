@@ -2,16 +2,13 @@
 
 namespace App\Controller;
 
-use App\Entity\AttachmentMetadata;
 use App\Entity\Event;
 use App\Services\Attachment\AttachmentService;
-use Doctrine\Common\Collections\Collection;
 use JMS\Serializer\SerializerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Method;
 use Symfony\Component\Routing\Annotation\Route;
-use FOS\RestBundle\Controller\AbstractFOSRestController;
 use Wec\MediaBundle\Entity\Series;
 
 /**
@@ -19,7 +16,7 @@ use Wec\MediaBundle\Entity\Series;
  *
  * @Route("/api/v1/events", name="api_v1_events_")
  */
-class ApiV1EventRestController extends AbstractFOSRestController
+class ApiV1EventRestController
 {
 
     /**

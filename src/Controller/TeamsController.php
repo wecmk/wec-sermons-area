@@ -2,7 +2,6 @@
 
 namespace App\Controller;
 
-use App\Entity\Teams;
 use App\Form\TeamsType;
 use App\Repository\TeamsRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;

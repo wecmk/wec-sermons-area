@@ -2,10 +2,13 @@
 
 namespace App\Entity;
 
+use App\Repository\AttachmentMetadataTypeRepository;
+use ApiPlatform\Core\Annotation\ApiResource;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Entity(repositoryClass="App\Repository\AttachmentMetadataTypeRepository")
+ * @ApiResource()
+ * @ORM\Entity(repositoryClass=AttachmentMetadataTypeRepository::class)
  */
 class AttachmentMetadataType
 {
@@ -14,27 +17,26 @@ class AttachmentMetadataType
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
      */
-    private $id;
+    private ?int $id = null;
     
     /**
      * @ORM\Column(type="string", length=30)
      */
-    private $type;
+    private ?string $type = null;
     
     /**
      * @ORM\Column(type="string", length=20)
      */
-    private $name;
+    private ?string $name = null;
 
     /**
      * @ORM\Column(type="string", length=255)
      */
-    private $description;
+    private ?string $description = null;
 
     /**
-     * @ORM\Column(type="boolean", options={"default":true}))
-     */
-    private $canBePublic;
+     * @ORM\Column(type="boolean", options={"default":true}) */
+    private ?bool $canBePublic = null;
 
     public function __construct($type, $name, $description, $canBePublic = true)
     {

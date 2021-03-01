@@ -8,7 +8,6 @@ use App\Entity\Event;
 use App\Entity\Series;
 use App\Services\Filesystem\FilesystemService;
 use FOS\RestBundle\View\View;
-use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -17,9 +16,6 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use AppBundle\Entity\User;
 use AppBundle\Entity\Reward;
-use Nelmio\ApiDocBundle\Annotation\Model;
-use Nelmio\ApiDocBundle\Annotation\Security;
-use OpenApi\Annotations as OA;
 
 class ApiV2PublicSermonsController extends AbstractController
 {
@@ -27,15 +23,6 @@ class ApiV2PublicSermonsController extends AbstractController
      * Lists links to last weeks sermons on YouTube and next weeks (if available)
      *
      * @Route("/api/v2/publicsermons/youtube", name="api_v2_public_sermons_youtube", methods={"GET"})
-     * @OA\Response(
-     *     response=200,
-     *     description="Returns an array of dates (YYYY-MM-DD) and another key-value pairs of [AM|PM] => Link",
-     *     @OA\JsonContent(
-     *        type="array",
-     *        @OA\Items(ref=@Model(type="array", groups={"full"}))
-     *     )
-     * )
-     * @OA\Tag(name="v2")
      */
     public function youTubeSermons(): View
     {
@@ -71,15 +58,6 @@ class ApiV2PublicSermonsController extends AbstractController
      * Lists all sermons which are accessible to the public
      *
      * @Route("/api/v2/publicsermons", name="api_v2_public_sermons", methods={"GET"})
-     * @OA\Response(
-     *     response=200,
-     *     description="List all sermons available to the public",
-     *     @OA\JsonContent(
-     *        type="array",
-     *        @OA\Items(ref=@Model(type="array", groups={"full"}))
-     *     )
-     * )
-     * @OA\Tag(name="v2")
      */
     public function all(): View
     {
@@ -127,38 +105,6 @@ class ApiV2PublicSermonsController extends AbstractController
      * false to stream
      *
      * @Route("/api/v2/publicsermon/{id}/download", name="public_sermon_download_v2", methods={"GET"})
-     * @OA\Parameter(
-     *    description="ID of event",
-     *    in="path",
-     *    name="id",
-     *    required=true,
-     *    example="72925096-6ae2-42b3-929f-16b4910478d9",
-     *    @OA\Schema(
-     *       type="string",
-     *       format="string"
-     *    )
-     * )
-     * @OA\Parameter(
-     *    description="Force the download of the attachment (default: false, streams in browser)",
-     *    in="query",
-     *    name="force-dl",
-     *    required=false,
-     *    example="false",
-     *    @OA\Schema(
-     *       type="boolean",
-     *       format="string"
-     *    )
-     * )
-     * @OA\Response(
-     *     response=200,
-     *     description="List all sermons available to the public",
-     *     content={
-     *             @OA\MediaType(
-     *                 mediaType="audio/mpeg"
-     *             )
-     *     }
-     * )
-     * @OA\Tag(name="v2")
      */
     public function download(Request $request, FilesystemService $filesystemService, AttachmentMetadata $attachment): BinaryFileResponse
     {

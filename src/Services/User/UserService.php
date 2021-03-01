@@ -74,13 +74,12 @@ class UserService
         $user = new User();
         $user->setUsername($username);
         $user->setEmail($email);
-        $user->setPlainPassword($unhashedPassword);
         if (!in_array("ROLE_USER", $roles)) {
             $roles[] = 'ROLE_USER';
         }
         $user->setRoles($roles);
         
-        $password = $this->encoder->encodePassword($user, $user->getPlainPassword());
+        $password = $this->encoder->encodePassword($user, $unhashedPassword);
         $user->setPassword($password);
         $this->em->persist($user);
         $this->em->flush();

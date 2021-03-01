@@ -2,84 +2,77 @@
 
 namespace App\Entity;
 
+use App\Repository\AttachmentMetadataRepository;
+use ApiPlatform\Core\Annotation\ApiResource;
 use Doctrine\ORM\Mapping as ORM;
-use Ramsey\Uuid\Uuid;
 use Ramsey\Uuid\UuidInterface;
-use Gedmo\Timestampable\Traits\TimestampableEntity;
-use JMS\Serializer\Annotation as JMS;
+use Knp\DoctrineBehaviors\Contract\Entity\TimestampableInterface;
+use Knp\DoctrineBehaviors\Model\Timestampable\TimestampableTrait;
+use Doctrine\ORM\Id\UuidGenerator;
 
 /**
- * @ORM\Entity(repositoryClass="App\Repository\AttachmentMetadataRepository")
+ * @ORM\Entity(repositoryClass=AttachmentMetadataRepository::class)
+ * @ApiResource()
  */
-class AttachmentMetadata
+class AttachmentMetadata implements TimestampableInterface
 {
-    use TimestampableEntity;
-    
+    use TimestampableTrait;
+
     /**
-     * @var \Ramsey\Uuid\UuidInterface
-     * @JMS\Type("uuid")
-     *
      * @ORM\Id
      * @ORM\Column(type="uuid", unique=true)
      * @ORM\GeneratedValue(strategy="CUSTOM")
-     * @ORM\CustomIdGenerator(class="Ramsey\Uuid\Doctrine\UuidGenerator")
+     * @ORM\CustomIdGenerator(class=UuidGenerator::class)
      */
-    private $id;
+    protected ?UuidInterface $id;
 
     /**
      * @ORM\Column(type="string", length=255)
      */
-    private $mimeType;
+    private ?string $mimeType = null;
 
     /**
      * @ORM\Column(type="string", length=10)
      */
-    private $extension;
+    private ?string $extension = null;
 
     /**
      * @ORM\Column(type="string", length=255)
      */
-    private $contentLength;
-
-    /**
-     * @ORM\Column(type="string", length=50, nullable=true))
-     */
-    private $fileLocation;
+    private ?string $contentLength = null;
 
     /**
      * @ORM\Column(type="boolean")
      */
-    private $complete = false;
+    private ?bool $complete = false;
 
     /**
      * @ORM\Column(type="string", length=128)
      */
-    private $hash = "";
+    private string $hash = "";
 
     /**
      * @ORM\Column(type="string", length=10)
      */
-    private $hashAlgo = "sha512";
+    private ?string $hashAlgo = "sha512";
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Event", inversedBy="attachmentMetadata")
-     * @JMS\Exclude()
      */
-    private $event;
+    private ?Event $event = null;
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\AttachmentMetadataType", cascade={"persist"})
      */
-    private $type;
+    private ?AttachmentMetadataType $type = null;
 
     /**
      * @ORM\Column(type="boolean")
      */
-    private $isPublic = false;
+    private bool $isPublic = false;
 
     public function __construct()
     {
-        $this->id = Uuid::uuid4();
         $this->setCreatedAt(new \DateTime());
         $this->setUpdatedAt(new \DateTime());
     }

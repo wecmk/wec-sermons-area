@@ -2,34 +2,37 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Core\Annotation\ApiResource;
 use Doctrine\ORM\Mapping as ORM;
+use App\Repository\SpeakerRepository;
 
 /**
- * @ORM\Entity(repositoryClass="App\Repository\TeamsRepository")
+ * @ApiResource()
+ * @ORM\Entity(repositoryClass=SpeakerRepository::class)
  */
 class Teams
 {
     /**
-     * @ORM\Id()
-     * @ORM\GeneratedValue()
+     * @ORM\Id
+     * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
      */
-    private $id;
+    private ?int $id = null;
 
     /**
      * @ORM\Column(type="string", length=20)
      */
-    private $name;
+    private string $name;
 
     /**
      * @ORM\Column(type="string", length=255)
      */
-    private $link;
+    private string $link;
 
     /**
      * @ORM\Column(type="text")
      */
-    private $imageAsBase64;
+    private string $imageAsBase64;
 
     public function getId(): ?int
     {

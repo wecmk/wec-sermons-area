@@ -1,224 +1,197 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Entity;
 
+use ApiPlatform\Core\Annotation\ApiResource;
+use App\Repository\EventRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-use JMS\Serializer\Annotation as JMS;
-use JMS\Serializer\Annotation\SerializedName;
-use Gedmo\Mapping\Annotation as Gedmo;
-use JMS\Serializer\Annotation\Exclude;
-use Gedmo\SoftDeleteable\Traits\SoftDeleteableEntity;
-use Gedmo\Timestampable\Traits\TimestampableEntity;
-use Ramsey\Uuid\Doctrine\UuidGenerator;
-use Ramsey\Uuid\Uuid;
+use Knp\DoctrineBehaviors\Contract\Entity\SoftDeletableInterface;
+use Knp\DoctrineBehaviors\Model\SoftDeletable\SoftDeletableTrait;
+use Knp\DoctrineBehaviors\Contract\Entity\TimestampableInterface;
+use Knp\DoctrineBehaviors\Model\Timestampable\TimestampableTrait;
 use Ramsey\Uuid\UuidInterface;
+use Doctrine\ORM\Id\UuidGenerator;
 
 /**
- * @ORM\Entity(repositoryClass="App\Repository\EventRepository")
- * @Gedmo\Loggable
+ * @ApiResource()
+ * @ORM\Entity(repositoryClass=EventRepository::class)
  */
-class Event implements CanBeDownloaded
+class Event implements TimestampableInterface, SoftDeletableInterface
 {
 
     /**
      * Hook SoftDeleteable behavior
      * updates deletedAt field
      */
-    use SoftDeleteableEntity;
-    use TimestampableEntity;
+    use SoftDeletableTrait;
+    use TimestampableTrait;
 
     /**
-     * @var UuidInterface
-     * @JMS\Type("uuid")
      *
      * @ORM\Id
      * @ORM\Column(type="uuid", unique=true)
      * @ORM\GeneratedValue(strategy="CUSTOM")
-     * @ORM\CustomIdGenerator(class="App\Doctrine\CustomUuidGenerator")
+     * @ORM\CustomIdGenerator(class=UuidGenerator::class)
      */
     protected UuidInterface $id;
 
     /**
      * @ORM\Column(type="date")
      */
-    private $Date;
+    private ?\DateTimeInterface $date = null;
 
     /**
      * @ORM\Column(type="string", length=3)
      */
-    private $Apm;
-
-    /**
-     * @ORM\ManyToMany(targetEntity="Series", inversedBy="Event")
-     * @var Collection
-     */
-    private $Series;
+    private ?string $apm = null;
 
     /**
      * @ORM\Column(type="string", length=255)
      */
-    private $Reading;
+    private ?string $reading = null;
 
     /**
      * @ORM\Column(type="string", length=255)
      */
-    private $SecondReading;
+    private ?string $secondReading = null;
 
     /**
      * @ORM\Column(type="string", length=255)
      */
-    private $Title;
+    private ?string $title = null;
 
     /**
      * @ORM\Column(type="boolean")
      */
-    private $corrupt = false;
+    private ?bool $corrupt = false;
 
     /**
      * @ORM\Column(type="boolean")
      */
-    private $IsPublic = false;
+    private ?bool $isPublic = false;
 
     /**
      * @ORM\Column(type="text")
      */
-    private $Tags = "";
+    private ?string $tags = "";
 
     /**
      * @ORM\Column(type="text")
      */
-    private $PublicComments = "";
+    private ?string $publicComments = "";
 
     /**
      * @ORM\Column(type="text")
-     * @JMS\Exclude
      */
-    private $PrivateComments = "";
+    private ?string $privateComments = "";
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\Speaker", inversedBy="event")
+     * @ORM\OneToMany(targetEntity=AttachmentMetadata::class, mappedBy="event", orphanRemoval=true, cascade={"persist"})
      */
-    private $Speaker;
-
-    /**
-     * @ORM\OneToMany(targetEntity="App\Entity\AttachmentMetadata", mappedBy="event", orphanRemoval=true, cascade={"persist"})
-     */
-    private $attachmentMetadata;
+    private Collection $attachmentMetadata;
 
     /**
      * @ORM\Column(type="string", length=10, nullable=true)
      */
-    private $legacyId;
+    private ?string $legacyId = null;
 
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\EventUrl", mappedBy="Event", orphanRemoval=true, cascade={"persist"})
      */
-    private $eventUrls;
+    private Collection $eventUrls;
+
+    /**
+     * @ORM\ManyToOne(targetEntity=Speaker::class, inversedBy="events", cascade={"persist"})
+     */
+    private ?\App\Entity\Speaker $Speaker = null;
+
+    /**
+     * @ORM\ManyToMany(targetEntity=Series::class, inversedBy="events")
+     */
+    private Collection $series;
 
     public function __construct()
     {
-        $this->id = Uuid::uuid4();
-        $this->Series = new ArrayCollection();
         $this->setCreatedAt(new \DateTime());
         $this->setUpdatedAt(new \DateTime());
         $this->attachmentMetadata = new ArrayCollection();
         $this->eventUrls = new ArrayCollection();
+        $this->series = new ArrayCollection();
     }
+
 
     public function getId(): ?UuidInterface
     {
         return $this->id;
     }
 
-    public function getDate(): ?\DateTimeInterface
+    public function setId(UuidInterface $id): Event
     {
-        return $this->Date;
+        $this->id = $id;
+
+        return $this;
     }
 
-    public function setDate(\DateTimeInterface $Date): self
+    public function getDate(): ?\DateTimeInterface
     {
-        $this->Date = $Date;
+        return $this->date;
+    }
+
+    public function setDate(\DateTimeInterface $date): self
+    {
+        $this->date = $date;
 
         return $this;
     }
 
     public function getApm(): ?string
     {
-        return $this->Apm;
+        return $this->apm;
     }
 
-    public function setId(UuidInterface $id)
+    public function setApm($apm): self
     {
-        $this->id = $id;
-    }
-
-    public function setApm($Apm): self
-    {
-        $this->Apm = $Apm;
-
-        return $this;
-    }
-
-    /**
-     * @return Collection
-     */
-    public function getSeries(): Collection
-    {
-        return $this->Series;
-    }
-
-    public function addSeries(Series $series): self
-    {
-        if (!$this->Series->contains($series)) {
-            $this->Series[] = $series;
-        }
-
-        return $this;
-    }
-
-    public function removeSeries(Series $series): self
-    {
-        if ($this->Series->contains($series)) {
-            $this->Series->removeElement($series);
-        }
+        $this->apm = $apm;
 
         return $this;
     }
 
     public function getReading(): ?string
     {
-        return $this->Reading;
+        return $this->reading;
     }
 
-    public function setReading(string $Reading): self
+    public function setReading(string $reading): self
     {
-        $this->Reading = $Reading;
+        $this->reading = $reading;
 
         return $this;
     }
 
     public function getSecondReading(): ?string
     {
-        return $this->SecondReading;
+        return $this->secondReading;
     }
 
-    public function setSecondReading(string $SecondReading): self
+    public function setSecondReading(string $secondReading): self
     {
-        $this->SecondReading = $SecondReading;
+        $this->secondReading = $secondReading;
 
         return $this;
     }
 
     public function getTitle(): ?string
     {
-        return $this->Title;
+        return $this->title;
     }
 
-    public function setTitle(string $Title): self
+    public function setTitle(string $title): self
     {
-        $this->Title = $Title;
+        $this->title = $title;
 
         return $this;
     }
@@ -237,60 +210,48 @@ class Event implements CanBeDownloaded
 
     public function getIsPublic(): ?bool
     {
-        return $this->IsPublic;
+        return $this->isPublic;
     }
 
-    public function setIsPublic(bool $IsPublic): self
+    public function setIsPublic(bool $isPublic): self
     {
-        $this->IsPublic = $IsPublic;
+        $this->isPublic = $isPublic;
 
         return $this;
     }
 
     public function getTags(): ?string
     {
-        return $this->Tags;
+        return $this->tags;
     }
 
-    public function setTags(string $Tags): self
+    public function setTags(string $tags): self
     {
-        $this->Tags = $Tags;
+        $this->tags = $tags;
 
         return $this;
     }
 
     public function getPublicComments(): ?string
     {
-        return $this->PublicComments;
+        return $this->publicComments;
     }
 
-    public function setPublicComments(string $PublicComments): self
+    public function setPublicComments(string $publicComments): self
     {
-        $this->PublicComments = $PublicComments;
+        $this->publicComments = $publicComments;
 
         return $this;
     }
 
     public function getPrivateComments(): ?string
     {
-        return $this->PrivateComments;
+        return $this->privateComments;
     }
 
-    public function setPrivateComments(string $PrivateComments): self
+    public function setPrivateComments(string $privateComments): self
     {
-        $this->PrivateComments = $PrivateComments;
-
-        return $this;
-    }
-
-    public function getSpeaker(): ?Speaker
-    {
-        return $this->Speaker;
-    }
-
-    public function setSpeaker(?Speaker $speaker): self
-    {
-        $this->Speaker = $speaker;
+        $this->privateComments = $privateComments;
 
         return $this;
     }
@@ -338,7 +299,7 @@ class Event implements CanBeDownloaded
         return $this;
     }
 
-    public function getFilename($extension)
+    public function filename($extension)
     {
         return $this->getDate()->format("Y-m-d")
                 . $this->formatFileNamePart($this->getApm())
@@ -350,7 +311,7 @@ class Event implements CanBeDownloaded
 
     private function formatFileNamePart($stringPart)
     {
-        return (!empty($stringPart)) ? " - " . $stringPart : "";
+        return (empty($stringPart)) ? "" : " - " . $stringPart;
     }
 
     /**
@@ -380,6 +341,42 @@ class Event implements CanBeDownloaded
                 $eventUrl->setEvent(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getSpeaker(): ?Speaker
+    {
+        return $this->Speaker;
+    }
+
+    public function setSpeaker(?Speaker $Speaker): self
+    {
+        $this->Speaker = $Speaker;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Series[]
+     */
+    public function getSeries(): Collection
+    {
+        return $this->series;
+    }
+
+    public function addSeries(Series $series): self
+    {
+        if (!$this->series->contains($series)) {
+            $this->series[] = $series;
+        }
+
+        return $this;
+    }
+
+    public function removeSeries(Series $series): self
+    {
+        $this->series->removeElement($series);
 
         return $this;
     }

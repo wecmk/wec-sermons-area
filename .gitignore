@@ -1,5 +1,4 @@
 # Do not commit these fixtures
-QuestionFixture.php
 UsersFixture.php
 
 
@@ -347,3 +346,8 @@ $RECYCLE.BIN/
 .php_cs.cache
 prod.decrypt.private.php
 TeamsFixture.php
+public/media/
+
+###> lexik/jwt-authentication-bundle ###
+/config/jwt/*.pem
+###< lexik/jwt-authentication-bundle ###

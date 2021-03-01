@@ -4,7 +4,7 @@ namespace App\Repository;
 
 use App\Entity\Event;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
-use Doctrine\Common\Persistence\ManagerRegistry;
+use Doctrine\Persistence\ManagerRegistry;
 use Doctrine\ORM\Query;
 use Doctrine\ORM\Tools\Pagination\Paginator;
 
@@ -32,8 +32,8 @@ class EventRepository extends ServiceEntityRepository
     {
         // Create our query
         $query = $this->createQueryBuilder('s')
-            ->orderBy('s.Date', 'DESC')
-            ->addOrderBy('s.Apm', 'DESC')
+            ->orderBy('s.date', 'DESC')
+            ->addOrderBy('s.apm', 'DESC')
             ->getQuery();
 
         // No need to manually get get the result ($query->getResult())
@@ -50,8 +50,8 @@ class EventRepository extends ServiceEntityRepository
         /** @var $query Query */
         $query = $this->createQueryBuilder('s')
             ->select('count(s.id)')
-            ->orderBy('s.Date', 'DESC')
-            ->addOrderBy('s.Apm', 'DESC')
+            ->orderBy('s.date', 'DESC')
+            ->addOrderBy('s.apm', 'DESC')
             ->getQuery();
 
         return $query->getSingleScalarResult();
@@ -97,11 +97,11 @@ class EventRepository extends ServiceEntityRepository
         $date->modify($dateString);
 
         return $this->createQueryBuilder('event')
-            ->leftJoin('event.Series', 'series')
-            ->Where('event.Date = :date')
+            ->leftJoin('event.series', 'series')
+            ->Where('event.date = :date')
             ->setParameter('date', $date)
-            ->OrderBy('event.Date', 'ASC')
-            ->addOrderBy('event.Apm', 'ASC')
+            ->OrderBy('event.date', 'ASC')
+            ->addOrderBy('event.apm', 'ASC')
             ->getQuery()
             ->execute();
     }
@@ -109,13 +109,13 @@ class EventRepository extends ServiceEntityRepository
     public function findAllPublicEvents()
     {
         return $this->createQueryBuilder('event')
-            ->leftJoin('event.Series', 'series')
+            ->leftJoin('event.series', 'series')
             ->where('series.isPublic = :isPublic')
             ->orWhere('event.IsPublic = :isPublic')
             ->setParameter('isPublic', true)
             ->orderBy('series.Name', 'ASC')
-            ->addOrderBy('event.Date', 'DESC')
-            ->addOrderBy('event.Apm', 'DESC')
+            ->addOrderBy('event.date', 'DESC')
+            ->addOrderBy('event.apm', 'DESC')
             ->getQuery()
             ->execute();
     }
@@ -123,12 +123,12 @@ class EventRepository extends ServiceEntityRepository
     public function findBySeries(\App\Entity\Series $series)
     {
         return $this->createQueryBuilder('event')
-            ->leftJoin('event.Series', 'series')
+            ->leftJoin('event.series', 'series')
             ->where('series = :series')
             ->setParameter('series', $series)
             ->orderBy('series.Name', 'ASC')
-            ->addOrderBy('event.Date', 'DESC')
-            ->addOrderBy('event.Apm', 'DESC')
+            ->addOrderBy('event.date', 'DESC')
+            ->addOrderBy('event.apm', 'DESC')
             ->getQuery()
             ->execute();
     }

@@ -5,7 +5,6 @@ namespace App\Controller;
 use App\Entity\EventUrl;
 use Symfony\Component\Routing\Annotation\Method;
 use Symfony\Component\Routing\Annotation\Route;
-use FOS\RestBundle\Controller\AbstractFOSRestController;
 use Symfony\Component\HttpFoundation\Request;
 use FOS\RestBundle\View\View;
 use FOS\RestBundle\Request\ParamFetcher;
@@ -20,7 +19,7 @@ use App\Entity\Series;
  * @Route("/api/v1/sermons", name="api_v1_sermons_")
 
  */
-class ApiV1SermonsRestController extends AbstractFOSRestController
+class ApiV1SermonsRestController
 {
 
     /**

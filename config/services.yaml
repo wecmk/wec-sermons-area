@@ -4,51 +4,39 @@
 # Put parameters here that don't need to change on each machine where the app is deployed
 # https://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
 parameters:
-    locale: 'en'
 
 services:
     # default configuration for services in *this* file
     _defaults:
         autowire: true      # Automatically injects dependencies in your services.
         autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
-        public: false       # Allows optimizing the container by removing unused services; this also means
-                            # fetching services directly from the container via $container->get() won't work.
-                            # The best practice is to be explicit about your dependencies anyway.
         bind:
-            $filesystemBasePath: '%fileRootPath%'
+            $filesystemBasePath: '%kernel.project_dir%/../media'
+            $fileRootPath: '%kernel.project_dir%/../media'
+            $projectDir: '%kernel.project_dir%'
+            $mail_from_address: '%env(resolve:DEFAULT_FROM_ADDRESS)%'
+            $mail_to_address: '%env(resolve:DEFAULT_TO_ADDRESS)%'
 
     # makes classes in src/ available to be used as services
     # this creates a service per class whose id is the fully-qualified class name
     App\:
-        resource: '../src/*'
-        exclude: '../src/{DependencyInjection,Entity,Migrations,Tests,Kernel.php,Application}'
+        resource: '../src/'
+        exclude:
+            - '../src/DependencyInjection/'
+            - '../src/Entity/'
+            - '../src/Kernel.php'
+            - '../src/Tests/'
 
     # controllers are imported separately to make sure services can be injected
     # as action arguments even if you don't extend any base controller class
     App\Controller\:
-        resource: '../src/Controller'
+        resource: '../src/Controller/'
         tags: ['controller.service_arguments']
 
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
 
-    App\Services\Event\IndexEventSearchService:
-        arguments:
-            # the '@' symbol is important: that's what tells the container
-            # you want to pass the *service* whose id is 'monolog.logger.request',
-            # and not just the *string* 'monolog.logger.request'
-            $logger: '@monolog.logger.request'
-            $index: '@fos_elastica.finder.app.event'
-            $em: '@doctrine.orm.default_entity_manager'            
-    
-    App\Service\Event\DbEventSearchService: ~
-    App\Service\Event\EventSearchService: '@App\Service\Event\DbEventSearchService'
-
-    App\EventListener\AttachmentMetadataDeletedNotifier:
-        tags:
-            -
-                name: 'doctrine.orm.entity_listener'
-                event: 'preRemove'
-                entity: 'App\Entity\AttachmentMetadata'
-                lazy: true
-
+    App\Swagger\SwaggerDecorator:
+        decorates: 'api_platform.swagger.normalizer.documentation'
+        arguments: ['@App\Swagger\SwaggerDecorator.inner']
+        autoconfigure: false

@@ -10,14 +10,13 @@ use Ramsey\Uuid\Uuid;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
-use FOS\RestBundle\Controller\AbstractFOSRestController;
 
 /**
  * Download controller.
  *
  * @Route("/api/v1/eventattachment", name="api_v1_eventattachment_")
  */
-class ApiV1EventAttachmentController extends AbstractFOSRestController
+class ApiV1EventAttachmentController
 {
 
     /**

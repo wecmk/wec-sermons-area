@@ -2,106 +2,103 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Core\Annotation\ApiResource;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-use JMS\Serializer\Annotation as JMS;
-use JMS\Serializer\Annotation\Exclude;
-
-use Gedmo\Mapping\Annotation as Gedmo;
-
-use Gedmo\SoftDeleteable\Traits\SoftDeleteableEntity;
-use Gedmo\Timestampable\Traits\TimestampableEntity;
-use Ramsey\Uuid\UuidInterface;
+use Doctrine\ORM\Id\UuidGenerator;
+use Knp\DoctrineBehaviors\Contract\Entity\SoftDeletableInterface;
+use Knp\DoctrineBehaviors\Contract\Entity\TimestampableInterface;
+use Knp\DoctrineBehaviors\Model\SoftDeletable\SoftDeletableTrait;
+use Knp\DoctrineBehaviors\Model\Timestampable\TimestampableTrait;
+use App\Repository\SpeakerRepository;
 
 /**
- * @ORM\Entity(repositoryClass="App\Repository\SpeakerRepository")
+ * @ApiResource()
+ * @ORM\Entity(repositoryClass=SpeakerRepository::class)
  */
-class Speaker
+class Speaker implements TimestampableInterface, SoftDeletableInterface
 {
+    public \Doctrine\Common\Collections\ArrayCollection $event;
     /**
      * Hook SoftDeleteable behavior
      * updates deletedAt field
      */
-    use SoftDeleteableEntity;
-    use TimestampableEntity;
+    use SoftDeletableTrait;
+    use TimestampableTrait;
     
     /**
-     * @var UuidInterface
-     * @JMS\Type("uuid")
      *
      * @ORM\Id
-     * @ORM\Column(type="uuid", unique=true)
+     * @ORM\Column(type="guid", unique=true)
      * @ORM\GeneratedValue(strategy="CUSTOM")
-     * @ORM\CustomIdGenerator(class="Ramsey\Uuid\Doctrine\UuidGenerator")
+     * @ORM\CustomIdGenerator(class=UuidGenerator::class)
      */
-    protected UuidInterface $id;
+    protected string $id;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string", unique=true, length=255)
      */
-    private $Name;
-
-    /**
-     * @ORM\Column(type="string", length=255, nullable=true)
-     */
-    private $Organisation;
+    private ?string $name;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
-    private $Website;
+    private ?string $organisation = null;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Event", mappedBy="Speaker")
-     * @Exclude
+     * @ORM\Column(type="string", length=255, nullable=true)
      */
-    private $Event;
+    private ?string $website = null;
+
+    /**
+     * @ORM\OneToMany(targetEntity=Event::class, mappedBy="Speaker")
+     */
+    private \Doctrine\Common\Collections\Collection $events;
 
     public function __construct()
     {
-        $this->Event = new ArrayCollection();
-        $this->setCreatedAt(new \DateTime());
-        $this->setUpdatedAt(new \DateTime());
+        $this->event = new ArrayCollection();
+        $this->events = new ArrayCollection();
     }
 
-    public function getId(): ?UuidInterface
+    public function getId(): string
     {
         return $this->id;
     }
 
     public function getName(): ?string
     {
-        return $this->Name;
+        return $this->name;
     }
 
-    public function setName(string $Name): self
+    public function setName(string $name): self
     {
-        $this->Name = $Name;
+        $this->name = $name;
 
         return $this;
     }
 
     public function getOrganisation(): ?string
     {
-        return $this->Organisation;
+        return $this->organisation;
     }
 
-    public function setOrganisation(string $Organisation): self
+    public function setOrganisation(?string $organisation): self
     {
-        $this->Organisation = $Organisation;
+        $this->organisation = $organisation;
 
         return $this;
     }
 
     public function getWebsite(): ?string
     {
-        return $this->Website;
+        return $this->website;
     }
 
-    public function setWebsite(string $Website): self
+    public function setWebsite(?string $website): self
     {
-        $this->Website = $Website;
+        $this->website = $website;
 
         return $this;
     }
@@ -109,29 +106,26 @@ class Speaker
     /**
      * @return Collection|Event[]
      */
-    public function getEvent(): Collection
+    public function getEvents(): Collection
     {
-        return $this->Event;
+        return $this->events;
     }
 
     public function addEvent(Event $event): self
     {
-        if (!$this->Event->contains($event)) {
-            $this->Event[] = $event;
+        if (!$this->events->contains($event)) {
+            $this->events[] = $event;
             $event->setSpeaker($this);
         }
 
         return $this;
     }
 
-    public function removeSermon(Event $sermon): self
+    public function removeEvent(Event $event): self
     {
-        if ($this->Event->contains($sermon)) {
-            $this->Event->removeElement($sermon);
-            // set the owning side to null (unless already changed)
-            if ($sermon->getSpeaker() === $this) {
-                $sermon->setSpeaker(null);
-            }
+        // set the owning side to null (unless already changed)
+        if ($this->events->removeElement($event) && $event->getSpeaker() === $this) {
+            $event->setSpeaker(null);
         }
 
         return $this;
