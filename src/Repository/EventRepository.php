@@ -111,7 +111,7 @@ class EventRepository extends ServiceEntityRepository
         return $this->createQueryBuilder('event')
             ->leftJoin('event.series', 'series')
             ->where('series.isPublic = :isPublic')
-            ->orWhere('event.IsPublic = :isPublic')
+            ->orWhere('event.isPublic = :isPublic')
             ->setParameter('isPublic', true)
             ->orderBy('series.Name', 'ASC')
             ->addOrderBy('event.date', 'DESC')

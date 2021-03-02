@@ -2,93 +2,158 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Core\Action\NotFoundAction;
+use ApiPlatform\Core\Annotation\ApiResource;
+use ApiPlatform\Core\Annotation\ApiProperty;
+use App\Repository\PublicSermonRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-
-use Gedmo\Mapping\Annotation as Gedmo;
-
-use Gedmo\SoftDeleteable\Traits\SoftDeleteableEntity;
-use Gedmo\Timestampable\Traits\TimestampableEntity;
-use JMS\Serializer\Annotation as Serializer;
+use Ramsey\Uuid\UuidInterface;
 
 /**
- * @ORM\Entity(repositoryClass="App\Repository\PublicSermonRepository")
+ * @ApiResource(
+ *     itemOperations={
+ *         "get"={
+ *             "method"="GET",
+ *             "controller"=NotFoundAction::class,
+ *             "read"=false,
+ *             "outputClass"=false,
+ *         },
+ *     },
+ *     collectionOperations={"get"}
+ * )
  */
 class PublicSermon
 {
-    /**
-     * Hook SoftDeleteable behavior
-     * updates deletedAt field
-     */
-    use SoftDeleteableEntity;
-    use TimestampableEntity;
-    
-    /**
-     * @ORM\Id()
-     * @ORM\GeneratedValue()
-     * @ORM\Column(type="integer")
-     */
-    private $id;
+    private ?UuidInterface $id;
 
-    /**
-     * @ORM\Column(type="string", length=255)
-     */
-    private $Title;
+    private $date;
 
-    /**
-     * @ORM\Column(type="string", length=255)
-     */
-    private $Speaker;
+    private $apm;
 
-    /**
-     * @ORM\OneToOne(targetEntity="App\Entity\Event", cascade={"persist"})
-     * @ORM\JoinColumn(nullable=false)
-     * @Serializer\Exclude()
-     */
-    private $Event;
+    private $series;
+
+    private $reading;
+
+    private $title;
+
+    private $speaker;
+
+    private $audioUrl;
 
     public function __construct()
     {
-        $this->setCreatedAt(new \DateTime());
-        $this->setUpdatedAt(new \DateTime());
+        $this->series = new ArrayCollection();
     }
-    
-    public function getId(): ?int
+
+    public function setId(UuidInterface $id): PublicSermon
+    {
+        $this->id = $id;
+
+        return $this;
+    }
+
+    /**
+     * @ApiProperty(identifier=true)
+     */
+    public function getId(): ?UuidInterface
     {
         return $this->id;
     }
 
-    public function getTitle(): ?string
+    public function getDate(): ?\DateTimeInterface
     {
-        return $this->Title;
+        return $this->date;
     }
 
-    public function setTitle(string $Title): self
+    public function setDate(\DateTimeInterface $date): self
     {
-        $this->Title = $Title;
+        $this->date = $date;
+
+        return $this;
+    }
+
+    public function getApm(): ?string
+    {
+        return $this->apm;
+    }
+
+    public function setApm(string $apm): self
+    {
+        $this->apm = $apm;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Series[]
+     */
+    public function getSeries(): Collection
+    {
+        return $this->series;
+    }
+
+    public function addSeries(Series $series): self
+    {
+        if (!$this->series->contains($series)) {
+            $this->series[] = $series;
+        }
+
+        return $this;
+    }
+
+    public function removeSeries(Series $series): self
+    {
+        $this->series->removeElement($series);
+
+        return $this;
+    }
+
+    public function getReading(): ?string
+    {
+        return $this->reading;
+    }
+
+    public function setReading(string $reading): self
+    {
+        $this->reading = $reading;
+
+        return $this;
+    }
+
+    public function getTitle(): ?string
+    {
+        return $this->title;
+    }
+
+    public function setTitle(string $title): self
+    {
+        $this->title = $title;
 
         return $this;
     }
 
     public function getSpeaker(): ?string
     {
-        return $this->Speaker;
+        return $this->speaker;
     }
 
-    public function setSpeaker(string $Speaker): self
+    public function setSpeaker(string $speaker): self
     {
-        $this->Speaker = $Speaker;
+        $this->speaker = $speaker;
 
         return $this;
     }
 
-    public function getEvent(): ?Event
+    public function getAudioUrl(): ?string
     {
-        return $this->Event;
+        return $this->audioUrl;
     }
 
-    public function setEvent(Event $Event): self
+    public function setAudioUrl(string $audioUrl): self
     {
-        $this->Event = $Event;
+        $this->audioUrl = $audioUrl;
 
         return $this;
     }
