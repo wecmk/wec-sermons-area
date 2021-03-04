@@ -4,13 +4,9 @@ namespace App\DataProvider;
 
 use ApiPlatform\Core\DataProvider\CollectionDataProviderInterface;
 use ApiPlatform\Core\DataProvider\RestrictedDataProviderInterface;
-use App\Entity\AttachmentMetadata;
 use App\Entity\Event;
 use App\Entity\YouTubeLiveServices;
-use App\Entity\PublicSermon;
 use App\Repository\EventRepository;
-use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
-use Symfony\Component\Routing\RouterInterface;
 
 class YouTubeLiveServicesProvider implements CollectionDataProviderInterface, RestrictedDataProviderInterface {
 
