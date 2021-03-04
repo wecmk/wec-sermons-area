@@ -52,6 +52,7 @@ security:
         - { path: ^/api/docs, roles: [IS_AUTHENTICATED_ANONYMOUSLY, ROLE_USER] }
         - { path: ^/api/attachments, roles: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/api/authentication_token, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/api/public_, roles: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/login, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/register, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/reset_password, role: IS_AUTHENTICATED_ANONYMOUSLY }

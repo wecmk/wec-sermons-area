@@ -2,36 +2,30 @@
 
 namespace App\Controller;
 
-use App\Services\Filesystem\FilesystemService;
-use Psr\Log\LoggerInterface;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\BinaryFileResponse;
-use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 use App\Entity\AttachmentMetadata;
-use App\Services\Attachment\UploadService;
 use App\Entity\CanBeDownloaded;
+use App\Entity\Event;
+use App\Entity\Series;
+use App\Services\Filesystem\FilesystemService;
+use FOS\RestBundle\View\View;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\ResponseHeaderBag;
+use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+use AppBundle\Entity\User;
+use AppBundle\Entity\Reward;
 
-/**
- * @Route("/attachment", name="attachment_")
- */
-class AttachmentController extends AbstractController
+class PublicSermonsController extends AbstractController
 {
-
     /**
-     *
      * Optional GET parameter force-dl=true (default to force the download or
      * false to stream
      *
-     * @Route("/{id}", name="index")
-     * @param Request $request
-     * @param LoggerInterface $logger
-     * @param FilesystemService $filesystemService
-     * @param AttachmentMetadata $attachment
-     * @return BinaryFileResponse
+     * @Route("/publicsermon/{id}/download", name="public_sermon_download_v2", methods={"GET"})
      */
-    public function index(Request $request, LoggerInterface $logger, FilesystemService $filesystemService, AttachmentMetadata $attachment)
+    public function download(Request $request, FilesystemService $filesystemService, AttachmentMetadata $attachment): BinaryFileResponse
     {
         $forceDownload = $request->query->get("force-dl", "true") == "true";
         $deposition = ($forceDownload) ? ResponseHeaderBag::DISPOSITION_ATTACHMENT : ResponseHeaderBag::DISPOSITION_INLINE;
@@ -39,9 +33,9 @@ class AttachmentController extends AbstractController
 
         $response = $filesystemService->generateBinaryFileResponse($attachment->getId(), 200);
         if ($attachment->getEvent() instanceof CanBeDownloaded
-                && $attachment->getIsPublic()
-                && $attachment->getType()->getCanBePublic()
-                && $attachment->getComplete()) {
+            && $attachment->getIsPublic()
+            && $attachment->getType()->getCanBePublic()
+            && $attachment->getComplete()) {
             /** @var CanBeDownloaded $canBeDownloaded */
             $canBeDownloaded = $attachment->getEvent();
             $response->setContentDisposition($deposition, $canBeDownloaded->getFilename($attachment->getExtension()));
