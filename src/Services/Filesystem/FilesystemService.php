@@ -52,42 +52,14 @@ class FilesystemService
 
     /**
      * Create a new managed file
-     * @param Event $event
-     * @param string $mimeType
-     * @param string $contentLength
-     * @param string $type
-     * @param string $hash
-     * @param string $hashAlgo
-     * @param string $extension
-     * @param bool $isPublic
+     * @param AttachmentMetadata $attachmentMetadata
      * @return AttachmentMetadata
      */
-    public function create(
-        Event $event,
-        string $mimeType,
-        string $contentLength,
-        AttachmentMetadataType $type,
-        string $hash,
-        string $hashAlgo,
-        string $extension,
-        bool $isPublic
-    ) {
-        $metadata = new AttachmentMetadata();
-        $metadata->setEvent($event);
-        $metadata->setMimeType($mimeType);
-        $metadata->setContentLength($contentLength);
-        $metadata->setType($type);
-        $metadata->setIsPublic($isPublic);
-        $metadata->setExtension($extension);
-        $metadata->setHash($hash);
-        $metadata->setHashAlgo($hashAlgo);
-       
-        $this->em->persist($metadata);
-        $this->em->flush();
+    public function create(AttachmentMetadata $attachmentMetadata): AttachmentMetadata
+    {
+        $this->filesystem->touch($attachmentMetadata->getId());
 
-        $this->filesystem->touch($metadata->getId());
-
-        return $metadata;
+        return $attachmentMetadata;
     }
 
     /**

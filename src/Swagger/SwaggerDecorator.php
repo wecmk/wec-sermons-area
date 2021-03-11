@@ -83,6 +83,40 @@ final class SwaggerDecorator implements NormalizerInterface
             ],
         ];
 
-        return array_merge_recursive($docs, $tokenDocumentation);
+        $filesDocumentation = [
+            'paths' => [
+                '/api/files/{id}' => [
+                    'post' => [
+                        'tags' => ['Files'],
+                        'operationId' => 'postFilesResumable',
+                        'summary' => 'Starts a resumable file upload.',
+                        'requestBody' => [
+                            'description' => 'Creates a files instance, and allows you to "PUT" parts of a binary file using ContentRange header',
+                            'content' => [
+                                'application/json' => [
+                                    'schema' => [
+                                        '$ref' => '#/components/schemas/Credentials',
+                                    ],
+                                ],
+                            ],
+                        ],
+                        'responses' => [
+                            Response::HTTP_OK => [
+                                'description' => 'Get JWT token',
+                                'content' => [
+                                    'application/json' => [
+                                        'schema' => [
+                                            '$ref' => '#/components/schemas/Token',
+                                        ],
+                                    ],
+                                ],
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+        ];
+
+        return array_merge_recursive($docs, $tokenDocumentation, $filesDocumentation);
     }
 }

@@ -11,8 +11,45 @@ use Knp\DoctrineBehaviors\Model\Timestampable\TimestampableTrait;
 use Doctrine\ORM\Id\UuidGenerator;
 
 /**
+ * @ApiResource(
+ *     shortName="attachment_metadata",
+ *     collectionOperations={"get","post"},
+ *     itemOperations={
+ *          "get",
+ *          "put",
+ *          "delete",
+ *          "get_binary"={
+ *              "method"="GET",
+ *              "path"="/attachment_metadata/{id}/binary",
+ *              "controller"="ApiFilesResumableRestController::class",
+ *              "openapi_context"= {
+ *                  "summary" = "Uploads [part of a] binary files",
+ *                  "description" = "Upload part of a binary file. The body contains raw binary data. The binary data is defined by the Content-Range. Input can be partial. The last byte must be submitted last otherwise the hash will not match and a 400 status will be returned. Use the Content-Range to define which chunk of data was submitted",
+ *                  "requestBody" = {
+ *                      "content" = {
+ *                          "application/octet-stream"={
+                                "schema" = {
+ *                                  "type" = "object"
+ *                              }
+ *                          }
+ *                      }
+ *                  },
+ *                  "responses" = {
+ *                      "201" = {
+ *                          "description" = "The file was uploaded successfully"
+ *                      },
+ *                      "308" = {
+ *                          "description" = "The uploaded file is incomplete. Continue to upload more data"
+ *                      },
+ *                      "400" = {
+ *                          "description" = "You send the last chunk of data, but the hash did not match. Please retry"
+ *                      }
+ *                  }
+ *              }
+ *          }
+ *     },
+ * )
  * @ORM\Entity(repositoryClass=AttachmentMetadataRepository::class)
- * @ApiResource()
  */
 class AttachmentMetadata implements TimestampableInterface
 {

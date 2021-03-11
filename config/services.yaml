@@ -11,7 +11,7 @@ services:
         autowire: true      # Automatically injects dependencies in your services.
         autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
         bind:
-            $filesystemBasePath: '%kernel.project_dir%/../media'
+            $filesystemBasePath: '%kernel.project_dir%/../media/'
             $fileRootPath: '%kernel.project_dir%/../media'
             $projectDir: '%kernel.project_dir%'
             $mail_from_address: '%env(resolve:DEFAULT_FROM_ADDRESS)%'
@@ -40,3 +40,6 @@ services:
         decorates: 'api_platform.swagger.normalizer.documentation'
         arguments: ['@App\Swagger\SwaggerDecorator.inner']
         autoconfigure: false
+
+    App\DataPersister\AttachmentMetadataPersister:
+        decorates: 'api_platform.doctrine.orm.data_persister'
