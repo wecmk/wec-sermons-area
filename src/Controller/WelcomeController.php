@@ -34,12 +34,6 @@ class WelcomeController extends AbstractController
                     "alt" => "",
                     "show" => true,
                 ],
-                "Question and Answers" => [
-                    "path" => $this->generateUrl('questions_home'),
-                    "img" => "build/images/question.svg",
-                    "alt" => "",
-                    "show" => true,
-                ],
                 "Logout" => [
                     "path" => $this->generateUrl("security_logout"),
                     "img" => "build/images/logout.svg",
