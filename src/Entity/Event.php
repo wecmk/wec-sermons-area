@@ -348,4 +348,16 @@ class Event implements TimestampableInterface, SoftDeletableInterface
 
         return $this;
     }
+
+    public function getYouTubeLink(): ?string
+    {
+        return $this->youTubeLink;
+    }
+
+    public function setYouTubeLink(?string $youTubeLink): self
+    {
+        $this->youTubeLink = $youTubeLink;
+
+        return $this;
+    }
 }
