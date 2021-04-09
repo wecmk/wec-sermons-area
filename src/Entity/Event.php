@@ -100,14 +100,14 @@ class Event implements TimestampableInterface, SoftDeletableInterface
     private ?string $legacyId = null;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\EventUrl", mappedBy="Event", orphanRemoval=true, cascade={"persist"})
+     * @ORM\Column(type="string", length=255, nullable=false)
      */
-    private Collection $eventUrls;
+    private ?string $youTubeLink;
 
     /**
-     * @ORM\ManyToOne(targetEntity=Speaker::class, inversedBy="events", cascade={"persist"})
+     * @ORM\Column(type="string", length=255, nullable=false)
      */
-    private ?\App\Entity\Speaker $Speaker = null;
+    private ?string $speaker = "";
 
     /**
      * @ORM\ManyToMany(targetEntity=Series::class, inversedBy="events")
@@ -119,7 +119,6 @@ class Event implements TimestampableInterface, SoftDeletableInterface
         $this->setCreatedAt(new \DateTime());
         $this->setUpdatedAt(new \DateTime());
         $this->attachmentMetadata = new ArrayCollection();
-        $this->eventUrls = new ArrayCollection();
         $this->series = new ArrayCollection();
     }
 
@@ -305,7 +304,7 @@ class Event implements TimestampableInterface, SoftDeletableInterface
                 . $this->formatFileNamePart($this->getApm())
                 . $this->formatFileNamePart($this->getReading())
                 . $this->formatFileNamePart($this->getTitle())
-                . $this->formatFileNamePart($this->getSpeaker()->getName())
+                . $this->formatFileNamePart($this->getSpeaker())
                 . $extension;
     }
 
@@ -314,45 +313,14 @@ class Event implements TimestampableInterface, SoftDeletableInterface
         return (empty($stringPart)) ? "" : " - " . $stringPart;
     }
 
-    /**
-     * @return Collection|EventUrl[]
-     */
-    public function getEventUrls(): Collection
+    public function getSpeaker(): ?string
     {
-        return $this->eventUrls;
+        return $this->speaker;
     }
 
-    public function addEventUrl(EventUrl $eventUrl): self
+    public function setSpeaker(?string $Speaker): self
     {
-        if (!$this->eventUrls->contains($eventUrl)) {
-            $this->eventUrls[] = $eventUrl;
-            $eventUrl->setEvent($this);
-        }
-
-        return $this;
-    }
-
-    public function removeEventUrl(EventUrl $eventUrl): self
-    {
-        if ($this->eventUrls->contains($eventUrl)) {
-            $this->eventUrls->removeElement($eventUrl);
-            // set the owning side to null (unless already changed)
-            if ($eventUrl->getEvent() === $this) {
-                $eventUrl->setEvent(null);
-            }
-        }
-
-        return $this;
-    }
-
-    public function getSpeaker(): ?Speaker
-    {
-        return $this->Speaker;
-    }
-
-    public function setSpeaker(?Speaker $Speaker): self
-    {
-        $this->Speaker = $Speaker;
+        $this->speaker = $Speaker;
 
         return $this;
     }
