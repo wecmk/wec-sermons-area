@@ -41,17 +41,17 @@ class Series implements TimestampableInterface, SoftDeletableInterface
     /**
      * @ORM\Column(type="string", length=255)
      */
-    private ?string $Name = null;
+    private ?string $name = null;
 
     /**
      * @ORM\Column(type="text")
      */
-    private string $Description = '';
+    private string $description = '';
 
     /**
      * @ORM\Column(type="boolean")
      */
-    private ?bool $Complete = null;
+    private ?bool $complete = false;
 
     /**
      * @ORM\Column(type="boolean")
@@ -65,7 +65,7 @@ class Series implements TimestampableInterface, SoftDeletableInterface
 
     public function __construct()
     {
-        $this->Complete = false;
+        $this->complete = false;
         $this->event = new ArrayCollection();
         $this->setCreatedAt(new \DateTime());
         $this->setUpdatedAt(new \DateTime());
@@ -79,36 +79,36 @@ class Series implements TimestampableInterface, SoftDeletableInterface
 
     public function getName(): ?string
     {
-        return $this->Name;
+        return $this->name;
     }
 
-    public function setName(string $Name): self
+    public function setName(string $name): self
     {
-        $this->Name = $Name;
+        $this->name = $name;
 
         return $this;
     }
 
     public function getComplete(): ?bool
     {
-        return $this->Complete;
+        return $this->complete;
     }
 
-    public function setComplete(bool $Complete): self
+    public function setComplete(bool $complete): self
     {
-        $this->Complete = $Complete;
+        $this->complete = $complete;
 
         return $this;
     }
 
     public function getDescription(): ?string
     {
-        return $this->Description;
+        return $this->description;
     }
 
-    public function setDescription(string $Description): self
+    public function setDescription(string $description): self
     {
-        $this->Description = $Description;
+        $this->description = $description;
 
         return $this;
     }
