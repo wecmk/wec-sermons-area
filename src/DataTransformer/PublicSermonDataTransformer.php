@@ -4,7 +4,7 @@ namespace App\DataTransformer;
 
 use ApiPlatform\Core\DataTransformer\DataTransformerInterface;
 
-class CheeseListingOutputDataTransformer implements DataTransformerInterface
+class PublicSermonDataTransformer implements DataTransformerInterface
 {
     public function transform($object, string $to, array $context = [])
     {
