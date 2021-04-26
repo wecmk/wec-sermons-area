@@ -37,19 +37,11 @@ class MessageFixture extends Fixture implements \Doctrine\Bundle\FixturesBundle\
         $seriesHebrews->setName("Hebrews");
         $manager->persist($seriesHebrews);
        
-        $speakerAllan = new Speaker();
-        $speakerAllan->setName("Allan Huxtable");
-        $manager->persist($speakerAllan);
+        $speakerAllan = "Allan Huxtable";
         
-        $SpeakerRoger = new Speaker();
-        $SpeakerRoger->setName("Roger March");
-        $manager->persist($SpeakerRoger);
+        $SpeakerRoger = "Roger March";
         
-        $speakerVisitorWithLink = new Speaker();
-        $speakerVisitorWithLink->setName("Visiting Speaker w link");
-        $speakerVisitorWithLink->setOrganisation("Organisation");
-        $speakerVisitorWithLink->setWebsite("https://www.wecmk.org");
-        $manager->persist($speakerVisitorWithLink);
+        $speakerVisitorWithLink = "Visiting Speaker";
         
         $sermon = new Event();
         $sermon->setDate(new \DateTime());

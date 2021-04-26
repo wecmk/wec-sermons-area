@@ -2,13 +2,17 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Core\Annotation\ApiProperty;
 use App\Repository\AttachmentMetadataRepository;
 use ApiPlatform\Core\Annotation\ApiResource;
 use Doctrine\ORM\Mapping as ORM;
+use Ramsey\Uuid\Uuid;
 use Ramsey\Uuid\UuidInterface;
 use Knp\DoctrineBehaviors\Contract\Entity\TimestampableInterface;
 use Knp\DoctrineBehaviors\Model\Timestampable\TimestampableTrait;
 use Doctrine\ORM\Id\UuidGenerator;
+use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Serializer\Annotation\SerializedName;
 
 /**
  * @ApiResource(
@@ -19,7 +23,7 @@ use Doctrine\ORM\Id\UuidGenerator;
  *          "put",
  *          "delete",
  *          "get_binary"={
- *              "method"="GET",
+ *              "method"="PUT",
  *              "path"="/attachment_metadata/{id}/binary",
  *              "controller"="ApiFilesResumableRestController::class",
  *              "openapi_context"= {
@@ -56,12 +60,20 @@ class AttachmentMetadata implements TimestampableInterface
     use TimestampableTrait;
 
     /**
-     * @ORM\Id
-     * @ORM\Column(type="uuid", unique=true)
-     * @ORM\GeneratedValue(strategy="CUSTOM")
-     * @ORM\CustomIdGenerator(class=UuidGenerator::class)
+     * @ORM\Id()
+     * @ORM\GeneratedValue()
+     * @ORM\Column(type="integer")
+     * @ApiProperty(identifier=false)
      */
-    protected ?UuidInterface $id;
+    private int $id;
+
+    /**
+     * @ORM\Column(type="uuid", unique=true)
+     * @ApiProperty(identifier=true)
+     * @SerializedName("id")
+     * @Groups({"user:write"})
+     */
+    private UuidInterface $uuid;
 
     /**
      * @ORM\Column(type="string", length=255)
@@ -108,17 +120,29 @@ class AttachmentMetadata implements TimestampableInterface
      */
     private bool $isPublic = false;
 
-    public function __construct()
+    public function __construct(UuidInterface $uuid = null)
     {
+        $this->uuid = $uuid ?: Uuid::uuid4();
         $this->setCreatedAt(new \DateTime());
         $this->setUpdatedAt(new \DateTime());
     }
 
-    public function getId(): ?UuidInterface
+    public function getId(): ?int
     {
         return $this->id;
     }
 
+    public function setId(int $id): AttachmentMetadata
+    {
+        $this->id = $id;
+
+        return $this;
+    }
+
+    public function getUuid(): UuidInterface
+    {
+        return $this->uuid;
+    }
     public function getMimeType(): ?string
     {
         return $this->mimeType;

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
+use ApiPlatform\Core\Annotation\ApiProperty;
 use ApiPlatform\Core\Annotation\ApiResource;
 use App\Repository\EventRepository;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -13,8 +14,9 @@ use Knp\DoctrineBehaviors\Contract\Entity\SoftDeletableInterface;
 use Knp\DoctrineBehaviors\Model\SoftDeletable\SoftDeletableTrait;
 use Knp\DoctrineBehaviors\Contract\Entity\TimestampableInterface;
 use Knp\DoctrineBehaviors\Model\Timestampable\TimestampableTrait;
+use Ramsey\Uuid\Uuid;
 use Ramsey\Uuid\UuidInterface;
-use Doctrine\ORM\Id\UuidGenerator;
+use Symfony\Component\Serializer\Annotation\SerializedName;
 
 /**
  * @ApiResource()
@@ -31,13 +33,19 @@ class Event implements TimestampableInterface, SoftDeletableInterface
     use TimestampableTrait;
 
     /**
-     *
-     * @ORM\Id
-     * @ORM\Column(type="uuid", unique=true)
-     * @ORM\GeneratedValue(strategy="CUSTOM")
-     * @ORM\CustomIdGenerator(class=UuidGenerator::class)
+     * @ORM\Id()
+     * @ORM\GeneratedValue()
+     * @ORM\Column(type="integer")
+     * @ApiProperty(identifier=false, readable=false)
      */
-    protected UuidInterface $id;
+    private int $id;
+
+    /**
+     * @ORM\Column(type="uuid", unique=true)
+     * @ApiProperty(identifier=true)
+     * @SerializedName("id")
+     */
+    private UuidInterface $uuid;
 
     /**
      * @ORM\Column(type="date")
@@ -100,7 +108,7 @@ class Event implements TimestampableInterface, SoftDeletableInterface
     private ?string $legacyId = null;
 
     /**
-     * @ORM\Column(type="string", length=255, nullable=false)
+     * @ORM\Column(type="string", length=255, nullable=true)
      */
     private ?string $youTubeLink;
 
@@ -114,25 +122,31 @@ class Event implements TimestampableInterface, SoftDeletableInterface
      */
     private Collection $series;
 
-    public function __construct()
+    public function __construct(UuidInterface $uuid = null)
     {
+        $this->uuid = $uuid ?: Uuid::uuid4();
         $this->setCreatedAt(new \DateTime());
         $this->setUpdatedAt(new \DateTime());
         $this->attachmentMetadata = new ArrayCollection();
         $this->series = new ArrayCollection();
+        $this->youTubeLink = null;
     }
 
-
-    public function getId(): ?UuidInterface
+    public function getId(): ?int
     {
         return $this->id;
     }
 
-    public function setId(UuidInterface $id): Event
+    public function setId(int $id): Event
     {
         $this->id = $id;
 
         return $this;
+    }
+
+    public function getUuid(): UuidInterface
+    {
+        return $this->uuid;
     }
 
     public function getDate(): ?\DateTimeInterface

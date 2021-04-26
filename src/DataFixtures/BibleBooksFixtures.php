@@ -2,10 +2,12 @@
 
 namespace App\DataFixtures;
 
+use App\Entity\BibleBooks;
 use Doctrine\Bundle\FixturesBundle\Fixture;
+use Doctrine\Bundle\FixturesBundle\FixtureGroupInterface;
 use Doctrine\Persistence\ObjectManager;
 
-class BibleBooksFixtures extends Fixture implements \Doctrine\Bundle\FixturesBundle\FixtureGroupInterface
+class BibleBooksFixtures extends Fixture implements FixtureGroupInterface
 {
     public function load(ObjectManager $manager)
     {
@@ -78,10 +80,13 @@ class BibleBooksFixtures extends Fixture implements \Doctrine\Bundle\FixturesBun
             66 => array('Revelation', 'Rev', 'Re', 'The Revelation')
         );
         foreach ($books as $key => $value) {
-            $book = new \App\Entity\BibleBooks();
-            $book->setBook($value[0]);
-            $book->setSort($key);
-            $manager->persist($book);
+            $dbBook = $manager->getRepository(BibleBooks::class)->findBy(['book' => $value[0]]);
+            if ($dbBook == null) {
+                $book = new BibleBooks();
+                $book->setBook($value[0]);
+                $book->setSort($key);
+                $manager->persist($book);
+            }
         }
 
         $manager->flush();

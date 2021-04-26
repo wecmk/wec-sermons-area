@@ -2,26 +2,28 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Core\Annotation\ApiProperty;
 use ApiPlatform\Core\Annotation\ApiResource;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-use Doctrine\ORM\Id\UuidGenerator;
 
 use Knp\DoctrineBehaviors\Contract\Entity\SoftDeletableInterface;
 use Knp\DoctrineBehaviors\Model\SoftDeletable\SoftDeletableTrait;
 use Knp\DoctrineBehaviors\Contract\Entity\TimestampableInterface;
 use Knp\DoctrineBehaviors\Model\Timestampable\TimestampableTrait;
+use Ramsey\Uuid\Uuid;
 use Ramsey\Uuid\UuidInterface;
 use App\Repository\SeriesRepository;
+use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Serializer\Annotation\SerializedName;
 
 /**
- * @ApiResource()
+ * @ApiResource(attributes={"denormalization_context"={"api_allow_update":true}})
  * @ORM\Entity(repositoryClass=SeriesRepository::class)
  */
 class Series implements TimestampableInterface, SoftDeletableInterface
 {
-    public ArrayCollection $event;
     /**
      * Hook SoftDeleteable behavior
      * updates deletedAt field
@@ -30,13 +32,20 @@ class Series implements TimestampableInterface, SoftDeletableInterface
     use TimestampableTrait;
 
     /**
-     *
-     * @ORM\Id
-     * @ORM\Column(type="uuid", unique=true)
-     * @ORM\GeneratedValue(strategy="CUSTOM")
-     * @ORM\CustomIdGenerator(class=UuidGenerator::class)
+     * @ORM\Id()
+     * @ORM\GeneratedValue()
+     * @ORM\Column(type="integer")
+     * @ApiProperty(identifier=false)
      */
-    protected UuidInterface $id;
+    private int $id;
+
+    /**
+     * @ORM\Column(type="uuid", unique=true)
+     * @ApiProperty(identifier=true)
+     * @SerializedName("id")
+     * @Groups({"user:write"})
+     */
+    private UuidInterface $uuid;
 
     /**
      * @ORM\Column(type="string", length=255)
@@ -63,18 +72,23 @@ class Series implements TimestampableInterface, SoftDeletableInterface
      */
     private Collection $events;
 
-    public function __construct()
+    public function __construct(UuidInterface $uuid = null)
     {
+        $this->uuid = $uuid ?: Uuid::uuid4();
         $this->complete = false;
-        $this->event = new ArrayCollection();
         $this->setCreatedAt(new \DateTime());
         $this->setUpdatedAt(new \DateTime());
         $this->events = new ArrayCollection();
     }
 
-    public function getId(): ?UuidInterface
+    public function getId(): ?int
     {
         return $this->id;
+    }
+
+    public function getUuid(): UuidInterface
+    {
+        return $this->uuid;
     }
 
     public function getName(): ?string

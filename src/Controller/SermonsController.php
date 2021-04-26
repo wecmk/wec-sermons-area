@@ -56,7 +56,7 @@ class SermonsController extends AbstractController
             $additionalService = [];
             if ($page == 1) {
                 $liveSermon = new Event();
-                $liveSermon->setId(Uuid::fromString("3beb4e09-8c06-47dd-be47-e06d28dcca7a"));
+                $liveSermon->setId(999999);
                 $liveSermon->setDate(new \DateTime("next Sunday"));
                 $liveSermon->setApm("AM/PM");
 

@@ -79,7 +79,7 @@
             </tfoot>
 
             <tbody>
-                {% if liveSermon is empty %}
+                {% if liveSermon is not defined %}
                     {% set liveSermon = [] %}
                 {% endif %}
                 {% for entity in liveSermon | merge(results) %}
@@ -88,7 +88,7 @@
                         <td>{{ entity.Apm }}</td>
                         <td>
                             {% for series in entity.Series %}
-                                <a id="{{ entity.Speaker.id }}" href="{{ path("sermons_list_by_series", { 'value': series.Name }) }}">{{ series.Name }}</a>
+                                <a href="{{ path("sermons_list_by_series", { 'value': series.Name }) }}">{{ series.Name }}</a>
                                 {% if not loop.last %}/{% endif %}
                             {% endfor %}
                         </td>
@@ -99,20 +99,9 @@
                         </td>
                         <td>{{ entity.Title }}</td>
 
-                        {% if entity.Speaker %}
-                            <td id="{{ entity.Speaker.id }}">
-                                {{ entity.Speaker.Name }}
-                                {% if entity.Speaker.Organisation is not empty %}
-                                    {% if entity.Speaker.Website is not empty %}
-                                        (<a href="{{ entity.Speaker.Website }}">{{ entity.Speaker.Organisation }}</a>)
-                                    {%  else %}
-                                        ({{ entity.Speaker.Organisation }})
-                                    {% endif %}
-                                {% endif %}
-                            </td>
-                        {% else %}
-                            <td></td>
-                        {% endif %}
+                        <td>
+                            {{ entity.Speaker }}
+                        </td>
 
                         {% set GAString = entity.Date|date('d-m-Y') ~ " - " ~ entity.Apm %}
 
@@ -154,19 +143,18 @@
                                 </div>
                             {% endfor %}
 
-                            {% if entity.id == "3beb4e09-8c06-47dd-be47-e06d28dcca7a" %}
-                                {{ include('components/button-item-conditional-show.html.twig', {'url': 'https://www.wecmk.org/covid-online-services/', 'eventLabel': 'Sunday Services', 'linkText': 'Watch Now' }) }}
+                            {% if entity.id == 999999 %}
+                                {{ include('components/button-item-conditional-show.html.twig', {'url': 'https://www.wecmk.org/?p=2224', 'eventLabel': 'Sunday Services', 'linkText': 'Watch Now' }) }}
                             {% endif %}
 
-                            {% for url in entity.eventUrls %}
+                            {% if entity.YouTubeLink is defined and entity.YouTubeLink is not empty %}
                                 {% set label = entity.Date|date('d-m-Y') ~ "-" ~ entity.Apm %}
-                                {{ include('components/button-item-conditional-show.html.twig', {'url': url.url, 'eventLabel': label, 'linkText': url.title }) }}
-                            {% endfor %}
+                                {{ include('components/button-item-conditional-show.html.twig', {'url': entity.YouTubeLink, 'eventLabel': "Watch", 'linkText': "Watch" }) }}
+                            {% endif %}
 
                             {% if is_granted("ROLE_ADMIN") %}
                                 {{ include('components/button-item.html.twig', {'url':  path('public_sermon_new', { 'id': entity.Id }), 'linkText': "Make public"}) }}
                             {% endif %}
-
 
                         </td>                      
                     </tr>
