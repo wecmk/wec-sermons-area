@@ -364,9 +364,6 @@
     "symfony/http-kernel": {
         "version": "v5.2.1"
     },
-    "symfony/intl": {
-        "version": "v5.2.1"
-    },
     "symfony/mailer": {
         "version": "4.3",
         "recipe": {
@@ -396,6 +393,9 @@
     },
     "symfony/orm-pack": {
         "version": "v2.1.0"
+    },
+    "symfony/password-hasher": {
+        "version": "v5.3.0"
     },
     "symfony/polyfill-intl-grapheme": {
         "version": "v1.20.0"
