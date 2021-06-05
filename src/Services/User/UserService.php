@@ -84,7 +84,7 @@ class UserService
         $this->em->persist($user);
         $this->em->flush();
         
-        # @todo #3 How do we validate a user was created?
+        # @todo #18 How do we validate a user was created?
     }
 
     public function promote($username, $role)
