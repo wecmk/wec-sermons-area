@@ -24,7 +24,7 @@ class AttachmentController extends AbstractController
      * Optional GET parameter force-dl=true (default to force the download or
      * false to stream
      *
-     * @Route("/{id}", name="index")
+     * @Route("/{uuid}", name="index")
      * @param Request $request
      * @param LoggerInterface $logger
      * @param FilesystemService $filesystemService
@@ -37,7 +37,7 @@ class AttachmentController extends AbstractController
         $deposition = ($forceDownload) ? ResponseHeaderBag::DISPOSITION_ATTACHMENT : ResponseHeaderBag::DISPOSITION_INLINE;
 
 
-        $response = $filesystemService->generateBinaryFileResponse($attachment->getId(), 200);
+        $response = $filesystemService->generateBinaryFileResponse($attachment->getUuid(), 200);
         if ($attachment->getEvent() instanceof CanBeDownloaded
             && $attachment->getIsPublic()
             && $attachment->getType()->getCanBePublic()

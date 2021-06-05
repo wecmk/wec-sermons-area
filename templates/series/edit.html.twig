@@ -1,0 +1,16 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Series Edit{% endblock %}
+{% block covid %}
+{% endblock %}
+{% block content %}
+    <div class="container">
+        <h1>Edit Series</h1>
+
+        {{ include('series/_form.html.twig', {'button_label': 'Update'}) }}
+
+        <a href="{{ path('series_index') }}">back to list</a>
+
+        {{ include('series/_delete_form.html.twig') }}
+    </div>
+{% endblock %}

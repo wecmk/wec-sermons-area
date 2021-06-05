@@ -13,12 +13,17 @@ security:
                 class: App\Entity\User
                 property: username
         # used to reload user from session & other features (e.g. switch_user)
-        # used to reload user from session & other features (e.g. switch_user)
     firewalls:
         dev:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
             security: false
 
+        api:
+            pattern: ^/api
+            stateless: true
+            http_basic:
+                realm: Secured Area
+                provider: app_user_provider
 
         main:
             pattern: ^/
@@ -30,6 +35,7 @@ security:
                 path:   security_logout
                 target: members_area_home
             anonymous:    true
+
 
             # https://symfony.com/doc/current/security/impersonating_user.html
             # switch_user: true

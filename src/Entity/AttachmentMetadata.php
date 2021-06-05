@@ -24,7 +24,7 @@ use Symfony\Component\Serializer\Annotation\SerializedName;
  *          "delete",
  *          "get_binary"={
  *              "method"="PUT",
- *              "path"="/attachment_metadata/{id}/binary",
+ *              "path"="/attachment_metadatas/{id}/binary",
  *              "controller"="ApiFilesResumableRestController::class",
  *              "openapi_context"= {
  *                  "summary" = "Uploads [part of a] binary files",

@@ -11,8 +11,8 @@ use App\Repository\EventRepository;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Routing\RouterInterface;
 
-class PublicSermonsProvider implements CollectionDataProviderInterface, RestrictedDataProviderInterface {
-
+class PublicSermonsProvider implements CollectionDataProviderInterface, RestrictedDataProviderInterface
+{
     private EventRepository $eventRepository;
     private RouterInterface $router;
 
@@ -28,8 +28,7 @@ class PublicSermonsProvider implements CollectionDataProviderInterface, Restrict
         $sermons = $this->eventRepository->findAllPublicEvents();
         $output = [];
         /** @var Event $sermon */
-        foreach ($sermons as $sermon)
-        {
+        foreach ($sermons as $sermon) {
             $attachmentMetadata = $sermon->getAttachmentMetadata()->filter(function (AttachmentMetadata $element) {
                 return $element->getType()->getType() == 'sermon-recording';
             })->get(0);

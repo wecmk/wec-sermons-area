@@ -18,7 +18,7 @@ use Symfony\Component\HttpFoundation\Response;
 class ApiFilesResumableRestController extends AbstractController
 {
     /**
-     * @Route("/attachment/{id}/binary", name="attachment_binary_put", methods={"PUT"})
+     * @Route("/attachment_metadatas/{id}/binary", name="attachment_binary_put", methods={"PUT"})
      *
      * @param Request $request
      * @param LoggerInterface $logger
@@ -62,6 +62,7 @@ class ApiFilesResumableRestController extends AbstractController
                 $attachmentMetadata = $filesystemService->completeAndValidateUpload($uuid);
                 $body = [
                     'id' => $attachmentMetadata->getId(),
+                    'uuid' => $attachmentMetadata->getUuid(),
                     'mimeType' => $attachmentMetadata->getMimeType(),
                     'contentLength' => $attachmentMetadata->getContentLength(),
                     'complete' => $attachmentMetadata->getComplete(),

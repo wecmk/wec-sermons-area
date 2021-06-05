@@ -98,6 +98,7 @@
         </div>
     </div>
 
+    {% block covid %}
     <div class="container">
         <div class="alert alert-danger" role="info">
             <h4 class="alert-heading">COVID-19</h4>
@@ -116,6 +117,8 @@
             </p>
         </div>
     </div>
+    {% endblock %}
+
 
     {% if breadcrumbs is defined %}
         <div class="container">

@@ -65,7 +65,7 @@ class Series implements TimestampableInterface, SoftDeletableInterface
     /**
      * @ORM\Column(type="boolean")
      */
-    private ?bool $isPublic = false;
+    private ?bool $isPublic = true;
 
     /**
      * @ORM\ManyToMany(targetEntity=Event::class, mappedBy="series")
@@ -120,8 +120,11 @@ class Series implements TimestampableInterface, SoftDeletableInterface
         return $this->description;
     }
 
-    public function setDescription(string $description): self
+    public function setDescription(?string $description): self
     {
+        if ($description == null) {
+            $description = "";
+        }
         $this->description = $description;
 
         return $this;

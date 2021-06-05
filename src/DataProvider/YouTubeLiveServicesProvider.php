@@ -8,8 +8,8 @@ use App\Entity\Event;
 use App\Entity\YouTubeLiveServices;
 use App\Repository\EventRepository;
 
-class YouTubeLiveServicesProvider implements CollectionDataProviderInterface, RestrictedDataProviderInterface {
-
+class YouTubeLiveServicesProvider implements CollectionDataProviderInterface, RestrictedDataProviderInterface
+{
     private EventRepository $eventRepository;
 
     public function __construct(EventRepository $eventRepository)
@@ -22,8 +22,12 @@ class YouTubeLiveServicesProvider implements CollectionDataProviderInterface, Re
         $response = new YouTubeLiveServices();
         $response->setId(1);
         $lastSunday = $this->getServices("Last Sunday");
-        $response->setLastWeekAm($lastSunday['AM']);
-        $response->setLastWeekPm($lastSunday['PM']);
+        if (array_key_exists('AM', $lastSunday)) {
+            $response->setLastWeekAm($lastSunday['AM']);
+        }
+        if (array_key_exists('PM', $lastSunday)) {
+            $response->setLastWeekPm($lastSunday['PM']);
+        }
 
         $searchText = (date('D') == 'Sun') ? "Today" : "Next Sunday";
         $nextSunday = $this->getServices($searchText);
@@ -61,10 +65,8 @@ class YouTubeLiveServicesProvider implements CollectionDataProviderInterface, Re
         $response = [];
         /** @var Event $event */;
         foreach ($lastSundayServices as $event) {
-            foreach ($event->getEventUrls() as $url) {
-                if ($url->getTitle() == "Watch") {
-                    $response[$url->getEvent()->getApm()] = $url->getUrl();
-                }
+            if ($event->getYouTubeLink() != null) {
+                $response[$event->getApm()] = $event->getYouTubeLink();
             }
         }
         return $response;

@@ -22,7 +22,7 @@ use Symfony\Component\Serializer\Annotation\SerializedName;
  * @ApiResource()
  * @ORM\Entity(repositoryClass=EventRepository::class)
  */
-class Event implements TimestampableInterface, SoftDeletableInterface
+class Event implements TimestampableInterface, SoftDeletableInterface, CanBeDownloaded
 {
 
     /**
@@ -373,5 +373,15 @@ class Event implements TimestampableInterface, SoftDeletableInterface
         $this->youTubeLink = $youTubeLink;
 
         return $this;
+    }
+
+    public function getFilename($extension)
+    {
+        return $this->getDate()->format('Y-m-d') . "-"
+            . $this->getApm() . "-"
+            . $this->getReading() . "-"
+            . $this->getTitle() . "-"
+            . $this->getSpeaker() . "-"
+            . $this->getLegacyId();
     }
 }

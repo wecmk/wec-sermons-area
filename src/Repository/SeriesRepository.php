@@ -23,4 +23,20 @@ class SeriesRepository extends ServiceEntityRepository
     {
         return $this->findBy(["isPublic" => $isPublic], ['Date']);
     }
+
+    public function findAllByQuery($query)
+    {
+        $query = $this->createQueryBuilder("r")
+            ->where('r.id = ?1')
+            ->orWhere('r.uuid LIKE ?2')
+            ->orWhere('r.name LIKE ?3')
+            ->orWhere('r.name LIKE ?4')
+            ->setParameter(1, $query)
+            ->setParameter(2, "%" . $query . "%")
+            ->setParameter(3, "%" . $query . "%")
+            ->setParameter(4, "%" . $query . "%")
+            ->getQuery();
+
+        return $query->execute();
+    }
 }

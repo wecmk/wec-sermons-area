@@ -22,7 +22,6 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class YouTubeLiveServices
 {
-
     private $id;
 
     private $nextWeekAm;

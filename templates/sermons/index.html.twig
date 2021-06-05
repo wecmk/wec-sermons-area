@@ -110,8 +110,8 @@
                                 <div>
                                     {% if attachmentMetadata.type.canBePublic %}
                                         {% if attachmentMetadata.type.type == "sermon-recording" %}
-                                            <a class="btn btn-primary" style="margin-top: 5px;" id="{{ attachmentMetadata.id }}"
-                                               href="{{ path('attachment_index', {'id': attachmentMetadata.id, 'force-dl': "true" }) }}" onClick="
+                                            <a class="btn btn-primary" style="margin-top: 5px;" id="{{ attachmentMetadata.uuid }}"
+                                               href="{{ path('attachment_index', {'uuid': attachmentMetadata.uuid, 'force-dl': "true" }) }}" onClick="
                                                        ga('send', {
                                                            'hitType': 'event', // Required.
                                                            'eventCategory': 'Media', // Required.
@@ -119,8 +119,8 @@
                                                            'eventLabel': '{{ GAString }}'
                                                        });"                                           
                                                >Download</a>&nbsp;
-                                            <a class="btn btn-primary" style="margin-top: 5px;" id="{{ attachmentMetadata.id }}"
-                                               href="{{ path('attachment_index', {'id': attachmentMetadata.id, 'force-dl': "false" }) }}" onClick="
+                                            <a class="btn btn-primary" style="margin-top: 5px;" id="{{ attachmentMetadata.uuid }}"
+                                               href="{{ path('attachment_index', {'uuid': attachmentMetadata.uuid, 'force-dl': "false" }) }}" onClick="
                                                        ga('send', {
                                                            'hitType': 'event', // Required.
                                                            'eventCategory': 'Media', // Required.
@@ -129,8 +129,8 @@
                                                        });
                                                ">Stream</a>
                                         {% else %}
-                                            <a class="btn btn-primary" style="margin-top: 5px;" id="{{ attachmentMetadata.id }}"
-                                               href="{{ path('attachment_index', {'id': attachmentMetadata.id, 'force-dl': "false" }) }}" onClick="
+                                            <a class="btn btn-primary" style="margin-top: 5px;" id="{{ attachmentMetadata.uuid }}"
+                                               href="{{ path('attachment_index', {'uuid': attachmentMetadata.uuid, 'force-dl': "false" }) }}" onClick="
                                                        ga('send', {
                                                            'hitType': 'event', // Required.
                                                            'eventCategory': 'Media', // Required.

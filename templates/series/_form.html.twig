@@ -1,0 +1,12 @@
+{{ form_start(form) }}
+    {{ form_row(form.name) }}
+    {{ form_row(form.description) }}
+    {{ form_row(form.complete, {label_attr: {class: 'switch-custom'} }) }}
+    {{ form_row(form.isPublic, {label_attr: {class: 'switch-custom'} }) }}
+    {{ form_row(form.uuid) }}
+    {{ form_row(form.deletedAt, {label_attr: {class: 'switch-custom'} }) }}
+
+    {{ form_widget(form) }}
+
+    <button class="btn">{{ button_label|default('Save') }}</button>
+{{ form_end(form) }}
