@@ -21,7 +21,8 @@ use Symfony\Component\Serializer\Annotation\SerializedName;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\DateFilter;
 
 /**
- * @ApiResource()
+ * @ApiResource(attributes={"order"={"updatedAt": "ASC"}})
+ * @ApiFilter(DateFilter::class, properties={"updatedAt"})
  * @ORM\Entity(repositoryClass=EventRepository::class)
  */
 class Event implements TimestampableInterface, SoftDeletableInterface, CanBeDownloaded
