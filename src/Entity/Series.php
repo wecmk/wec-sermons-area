@@ -37,7 +37,7 @@ class Series implements TimestampableInterface, SoftDeletableInterface
      * @ORM\Column(type="integer")
      * @ApiProperty(identifier=false)
      */
-    private int $id;
+    private $id;
 
     /**
      * @ORM\Column(type="uuid", unique=true)
@@ -167,5 +167,10 @@ class Series implements TimestampableInterface, SoftDeletableInterface
         }
 
         return $this;
+    }
+
+    public function __toString()
+    {
+        return $this->getName();
     }
 }

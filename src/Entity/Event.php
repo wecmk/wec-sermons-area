@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
+use ApiPlatform\Core\Annotation\ApiFilter;
 use ApiPlatform\Core\Annotation\ApiProperty;
 use ApiPlatform\Core\Annotation\ApiResource;
 use App\Repository\EventRepository;
@@ -17,6 +18,7 @@ use Knp\DoctrineBehaviors\Model\Timestampable\TimestampableTrait;
 use Ramsey\Uuid\Uuid;
 use Ramsey\Uuid\UuidInterface;
 use Symfony\Component\Serializer\Annotation\SerializedName;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\DateFilter;
 
 /**
  * @ApiResource()
@@ -38,7 +40,7 @@ class Event implements TimestampableInterface, SoftDeletableInterface, CanBeDown
      * @ORM\Column(type="integer")
      * @ApiProperty(identifier=false, readable=false)
      */
-    private int $id;
+    private $id;
 
     /**
      * @ORM\Column(type="uuid", unique=true)
@@ -50,7 +52,7 @@ class Event implements TimestampableInterface, SoftDeletableInterface, CanBeDown
     /**
      * @ORM\Column(type="date")
      */
-    private ?\DateTimeInterface $date = null;
+    private ?\DateTimeInterface $date;
 
     /**
      * @ORM\Column(type="string", length=3)
@@ -60,17 +62,17 @@ class Event implements TimestampableInterface, SoftDeletableInterface, CanBeDown
     /**
      * @ORM\Column(type="string", length=255)
      */
-    private ?string $reading = null;
+    private ?string $reading = '';
 
     /**
      * @ORM\Column(type="string", length=255)
      */
-    private ?string $secondReading = null;
+    private ?string $secondReading = '';
 
     /**
      * @ORM\Column(type="string", length=255)
      */
-    private ?string $title = null;
+    private ?string $title = '';
 
     /**
      * @ORM\Column(type="boolean")
@@ -105,7 +107,7 @@ class Event implements TimestampableInterface, SoftDeletableInterface, CanBeDown
     /**
      * @ORM\Column(type="string", length=10, nullable=true)
      */
-    private ?string $legacyId = null;
+    private ?string $legacyId = '';
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
@@ -125,6 +127,7 @@ class Event implements TimestampableInterface, SoftDeletableInterface, CanBeDown
     public function __construct(UuidInterface $uuid = null)
     {
         $this->uuid = $uuid ?: Uuid::uuid4();
+        $this->date = new \DateTime('NOW');
         $this->setCreatedAt(new \DateTime());
         $this->setUpdatedAt(new \DateTime());
         $this->attachmentMetadata = new ArrayCollection();
@@ -178,9 +181,9 @@ class Event implements TimestampableInterface, SoftDeletableInterface, CanBeDown
         return $this->reading;
     }
 
-    public function setReading(string $reading): self
+    public function setReading(?string $reading): self
     {
-        $this->reading = $reading;
+        $this->reading = $reading ?: "";
 
         return $this;
     }
@@ -190,9 +193,9 @@ class Event implements TimestampableInterface, SoftDeletableInterface, CanBeDown
         return $this->secondReading;
     }
 
-    public function setSecondReading(string $secondReading): self
+    public function setSecondReading(?string $secondReading): self
     {
-        $this->secondReading = $secondReading;
+        $this->secondReading = $secondReading ?: "";
 
         return $this;
     }
@@ -202,9 +205,9 @@ class Event implements TimestampableInterface, SoftDeletableInterface, CanBeDown
         return $this->title;
     }
 
-    public function setTitle(string $title): self
+    public function setTitle(?string $title): self
     {
-        $this->title = $title;
+        $this->title = $title ?: "";
 
         return $this;
     }
@@ -238,9 +241,9 @@ class Event implements TimestampableInterface, SoftDeletableInterface, CanBeDown
         return $this->tags;
     }
 
-    public function setTags(string $tags): self
+    public function setTags(?string $tags): self
     {
-        $this->tags = $tags;
+        $this->tags = $tags ?: "";
 
         return $this;
     }
@@ -250,9 +253,9 @@ class Event implements TimestampableInterface, SoftDeletableInterface, CanBeDown
         return $this->publicComments;
     }
 
-    public function setPublicComments(string $publicComments): self
+    public function setPublicComments(?string $publicComments): self
     {
-        $this->publicComments = $publicComments;
+        $this->publicComments = $publicComments ?: "";
 
         return $this;
     }
@@ -262,9 +265,9 @@ class Event implements TimestampableInterface, SoftDeletableInterface, CanBeDown
         return $this->privateComments;
     }
 
-    public function setPrivateComments(string $privateComments): self
+    public function setPrivateComments(?string $privateComments): self
     {
-        $this->privateComments = $privateComments;
+        $this->privateComments = $privateComments ?: "";
 
         return $this;
     }
@@ -334,7 +337,7 @@ class Event implements TimestampableInterface, SoftDeletableInterface, CanBeDown
 
     public function setSpeaker(?string $Speaker): self
     {
-        $this->speaker = $Speaker;
+        $this->speaker = $Speaker ?: "";
 
         return $this;
     }
