@@ -19,27 +19,26 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 class SermonsController extends AbstractController
 {
-    private $itemsPerPage = 16;
-
+    private $itemsPerPage = 5;
+    private $searchAllQuery = "*";
     /**
      * @Route("/", name="home")
      * @param Request $request
      * @param EventSearchService $search
      * @return Responsen
      */
-    public function indexAction(Request $request, EventSearchService $search)
+    public function indexAction(Request $request, EventSearchService $search): Response
     {
         $page = $request->query->get('page', 1);
-        $limit = 10;
+        $limit = $this->itemsPerPage;
 
-        $searchQuery = $request->query->get("q", null);
+        $searchQuery = $request->query->get("q", "");
 
-        if (is_null($searchQuery)) {
-            // Fix search query so that empty matches everything
-            $searchQuery = ($searchQuery == "") ? "*" : $searchQuery;
+        // Fix search query so that empty matches everything
+        $searchQuery = ($searchQuery == "") ? $this->searchAllQuery : $searchQuery;
 
-            /** @var Paginator $results */
-            $results = $search->search($searchQuery, $page, $limit);
+        if ($searchQuery == $this->searchAllQuery) {
+            $results = $search->findAllWithPagination($page, $limit);
             $resultsCount = $search->searchMaxPagesItems();
 
             // Fix search display so that a match all (*) is written as an empty string
@@ -87,12 +86,11 @@ class SermonsController extends AbstractController
                 'liveSermon' => $additionalService,
             ]);
         } else {
-            $results = $indexService->search($searchQuery);
+            $results = $search->search($searchQuery);
             $searchQueryDisplay = ($searchQuery == "*") ? "" : $searchQuery;
 
             return $this->render('sermons/index.html.twig', [
                 'results' => $results,
-                'enablePagination' => true,
                 'searchQuery' => $searchQueryDisplay,
                 'showReset' => true,
             ]);

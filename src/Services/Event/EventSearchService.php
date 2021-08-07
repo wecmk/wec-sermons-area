@@ -7,7 +7,9 @@ namespace App\Services\Event;
  */
 interface EventSearchService
 {
-    public function search($searchTerm, $page, $limit);
+    public function findAllWithPagination($page, $limit);
+
+    public function search($searchTerm);
 
     public function searchMaxPagesItems();
 

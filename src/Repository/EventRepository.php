@@ -28,7 +28,7 @@ class EventRepository extends ServiceEntityRepository
      * @param int $limit
      * @return Paginator
      */
-    public function findAllWithPagination($currentPage = 1, $limit = 10)
+    public function findAllWithPagination(int $currentPage = 1, int $limit = 10): Paginator
     {
         // Create our query
         $query = $this->createQueryBuilder('s')
@@ -39,6 +39,26 @@ class EventRepository extends ServiceEntityRepository
         // No need to manually get get the result ($query->getResult())
 
         return $this->paginate($query, $currentPage, $limit);
+    }
+
+    public function search($searchTerms)
+    {
+        // Create our query
+        return $this->createQueryBuilder('e')
+            ->leftJoin('e.series', 's')
+            ->where('e.date LIKE :search')
+            ->orWhere('s.name LIKE :search')
+            ->orWhere('e.reading LIKE :search')
+            ->orWhere('e.title LIKE :search')
+            ->orWhere('e.speaker LIKE :search')
+            ->orWhere('e.shortId LIKE :search')
+            ->orWhere('e.legacyId LIKE :search')
+            ->orWhere('e.tags LIKE :search')
+            ->setParameter(':search', $searchTerms)
+            ->orderBy('e.date', 'ASC')
+            ->addOrderBy('e.apm', 'ASC')
+            ->getQuery()
+            ->execute();
     }
 
     /**
