@@ -29,7 +29,7 @@ class WelcomeController extends AbstractController
                     "show" => true
                 ],
                 "Team Lists" => [
-                    "path" => $this->generateUrl("teams_index"),
+                    "path" => "https://www.wecmk.org/covid-community/church-rota/",
                     "img" => "build/images/rota.svg",
                     "alt" => "",
                     "show" => true,
