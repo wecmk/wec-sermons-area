@@ -1,0 +1,12 @@
+easy_admin:
+  formats:
+    date: 'd/m/Y'
+    time: 'H:i'
+    datetime: 'd/m/Y H:i:s'
+  entities:
+    Event:
+      class: App\Entity\Event
+      list:
+        title: "Most recent customers"
+        fields:
+          - { property: 'date', format: 'j/n/Y' }

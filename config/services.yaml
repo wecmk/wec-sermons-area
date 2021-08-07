@@ -54,3 +54,17 @@ services:
 
     App\DataPersister\AttachmentMetadataPersister:
         decorates: 'api_platform.doctrine.orm.data_persister'
+
+    App\EventListener\UpdateShortIdEventListener:
+        tags:
+            -
+                name: 'doctrine.event_listener'
+                # this is the only required option for the lifecycle listener tag
+                event: 'prePersist'
+
+                # listeners can define their priority in case multiple subscribers or listeners are associated
+                # to the same event (default priority = 0; higher numbers = listener is run earlier)
+                priority: 500
+
+                # you can also restrict listeners to a specific Doctrine connection
+                connection: 'default'

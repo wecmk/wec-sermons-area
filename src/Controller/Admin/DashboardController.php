@@ -58,7 +58,8 @@ class DashboardController extends AbstractDashboardController
             MenuItem::section()->setPermission('CAN_SWITCH_USER'),
             MenuItem::linkToExitImpersonation('Stop impersonation', 'fa fa-exit')->setPermission('ROLE_ALLOWED_TO_SWITCH')->setPermission('CAN_SWITCH_USER'),
 
-            MenuItem::section(),
+            MenuItem::section('Quick Links'),
+            MenuItem::linkToUrl('Sermons list', 'fa  fa-user', "https://members.wecmk.org/sermons/"),
             MenuItem::linkToLogout('Logout', 'fa fa-exit'),
         ];
     }

@@ -19,7 +19,7 @@ security:
             security: false
 
         api:
-            pattern: ^/api
+            pattern: ^/api/(?!you_tube_live_services)
             stateless: true
             http_basic:
                 realm: Secured Area
@@ -44,7 +44,8 @@ security:
     # Note: Only the *first* access control that matches will be used
     access_control:
         #- { path: ^/admin, roles: ROLE_ADMIN }
-        - { path: ^/api, roles: [IS_AUTHENTICATED_ANONYMOUSLY] }
+        - { path: ^/api, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/api/you_tube_live_services, roles: [IS_AUTHENTICATED_ANONYMOUSLY] }
         - { path: ^/api/attachments, roles: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/api/authentication_token, roles: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/api/public_, roles: IS_AUTHENTICATED_ANONYMOUSLY }

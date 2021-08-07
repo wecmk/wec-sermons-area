@@ -3,6 +3,7 @@
 namespace App\Controller\Admin;
 
 use App\Entity\Event;
+use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\Field;
@@ -17,6 +18,13 @@ class EventCrudController extends AbstractCrudController
         return Event::class;
     }
 
+    public function configureCrud(Crud $crud): Crud
+    {
+        return $crud
+            ->setSearchFields(['date', 'series.name', 'reading', 'title', 'speaker', 'shortId', 'legacyId', 'tags'])
+            ->setDefaultSort(['date' => 'DESC', 'apm' => 'DESC'])
+            ;
+    }
 
     public function configureFields(string $pageName): iterable
     {
@@ -30,13 +38,13 @@ class EventCrudController extends AbstractCrudController
             TextField::new('secondReading')->setRequired(false)->hideOnIndex(),
             TextField::new('title')->setRequired(false),
             Field::new('speaker')->setRequired(false),
+            Field::new('shortId')->hideOnForm(),
+            Field::new('youTubeLink')->hideOnIndex()->setLabel('YouTube Link'),
             Field::new('corrupt'),
             Field::new('isPublic'),
             TextareaField::new('tags')->setRequired(false)->hideOnIndex(),
             TextareaField::new('publicComments')->setRequired(false)->hideOnIndex(),
             TextareaField::new('privateComments')->setRequired(false)->hideOnIndex(),
-            Field::new('legacyId'),
-            Field::new('youTubeLink')->hideOnIndex()->setLabel('YouTube Link'),
         ];
     }
 }

@@ -15,11 +15,8 @@ use Knp\DoctrineBehaviors\Contract\Entity\SoftDeletableInterface;
 use Knp\DoctrineBehaviors\Model\SoftDeletable\SoftDeletableTrait;
 use Knp\DoctrineBehaviors\Contract\Entity\TimestampableInterface;
 use Knp\DoctrineBehaviors\Model\Timestampable\TimestampableTrait;
-use Ramsey\Uuid\Uuid;
-use Ramsey\Uuid\UuidInterface;
-use Symfony\Component\Serializer\Annotation\SerializedName;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\DateFilter;
-
+use App\Doctrine\ShortIdGenerator;
 /**
  * @ApiResource(attributes={"order"={"updatedAt": "ASC"}})
  * @ApiFilter(DateFilter::class, properties={"updatedAt"})
@@ -38,17 +35,16 @@ class Event implements TimestampableInterface, SoftDeletableInterface, CanBeDown
     /**
      * @ORM\Id()
      * @ORM\GeneratedValue()
-     * @ORM\Column(type="integer")
+     * @ORM\Column(type="integer", nullable=false)
      * @ApiProperty(identifier=false, readable=false)
      */
     private $id;
 
     /**
-     * @ORM\Column(type="uuid", unique=true)
+     * @ORM\Column(type="integer", unique=true, nullable=false)
      * @ApiProperty(identifier=true)
-     * @SerializedName("id")
      */
-    private UuidInterface $uuid;
+    private ?int $shortId = null;
 
     /**
      * @ORM\Column(type="date")
@@ -83,7 +79,7 @@ class Event implements TimestampableInterface, SoftDeletableInterface, CanBeDown
     /**
      * @ORM\Column(type="boolean")
      */
-    private ?bool $isPublic = false;
+    private ?bool $isPublic = true;
 
     /**
      * @ORM\Column(type="text")
@@ -125,9 +121,8 @@ class Event implements TimestampableInterface, SoftDeletableInterface, CanBeDown
      */
     private Collection $series;
 
-    public function __construct(UuidInterface $uuid = null)
+    public function __construct()
     {
-        $this->uuid = $uuid ?: Uuid::uuid4();
         $this->date = new \DateTime('NOW');
         $this->setCreatedAt(new \DateTime());
         $this->setUpdatedAt(new \DateTime());
@@ -148,11 +143,17 @@ class Event implements TimestampableInterface, SoftDeletableInterface, CanBeDown
         return $this;
     }
 
-    public function getUuid(): UuidInterface
+    public function getShortId(): ?int
     {
-        return $this->uuid;
+        return $this->shortId;
     }
 
+    public function setShortId(int $shortId): Event
+    {
+        $this->shortId = $shortId;
+
+        return $this;
+    }
     public function getDate(): ?\DateTimeInterface
     {
         return $this->date;
