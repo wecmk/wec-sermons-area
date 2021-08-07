@@ -55,8 +55,6 @@ class EventRepository extends ServiceEntityRepository
             ->orWhere('e.legacyId LIKE :search')
             ->orWhere('e.tags LIKE :search')
             ->setParameter(':search', $searchTerms)
-            ->orderBy('e.date', 'ASC')
-            ->addOrderBy('e.apm', 'ASC')
             ->getQuery()
             ->execute();
     }
@@ -146,9 +144,8 @@ class EventRepository extends ServiceEntityRepository
             ->leftJoin('event.series', 'series')
             ->where('series = :series')
             ->setParameter('series', $series)
-            ->orderBy('series.Name', 'ASC')
-            ->addOrderBy('event.date', 'DESC')
-            ->addOrderBy('event.apm', 'DESC')
+            ->addOrderBy('event.date', 'ASC')
+            ->addOrderBy('event.apm', 'ASC')
             ->getQuery()
             ->execute();
     }

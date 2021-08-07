@@ -57,7 +57,8 @@ class DbEventSearchService implements EventSearchService
         $series = $this->em->getRepository(Series::class)->findOneBy(
             ['name' => $name]
         );
-        return $series->getEvents();
+        return $this->repository->findBySeries($series);
+
     }
 
     public function searchBySpeaker($name)
