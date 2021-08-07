@@ -160,7 +160,9 @@
                     </tr>
                     {% else %}
                         <tr colspan="7">
-                            Sorry, there is a system error which prevents us from displaying the latest sermons. We're investigating now.
+                            <div class="container">
+                                <div class="alert alert-warning" role="alert"> No results found for "{{ searchQuery }}"</div>
+                            </div>
                         </tr>
                 {% endfor %}
             </tbody>
