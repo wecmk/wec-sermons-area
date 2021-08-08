@@ -1,5 +1,5 @@
 security:
-    enable_authenticator_manager: false
+    enable_authenticator_manager: true
 
     encoders:
         App\Entity\User:
@@ -34,7 +34,6 @@ security:
             logout:
                 path:   security_logout
                 target: members_area_home
-            anonymous:    true
 
 
             # https://symfony.com/doc/current/security/impersonating_user.html
@@ -44,14 +43,14 @@ security:
     # Note: Only the *first* access control that matches will be used
     access_control:
         #- { path: ^/admin, roles: ROLE_ADMIN }
-        - { path: ^/api, roles: IS_AUTHENTICATED_ANONYMOUSLY }
-        - { path: ^/api/you_tube_live_services, roles: [IS_AUTHENTICATED_ANONYMOUSLY] }
-        - { path: ^/api/attachments, roles: IS_AUTHENTICATED_ANONYMOUSLY }
-        - { path: ^/api/authentication_token, roles: IS_AUTHENTICATED_ANONYMOUSLY }
-        - { path: ^/api/public_, roles: IS_AUTHENTICATED_ANONYMOUSLY }
-        - { path: ^/login, role: IS_AUTHENTICATED_ANONYMOUSLY }
-        - { path: ^/register, role: IS_AUTHENTICATED_ANONYMOUSLY }
-        - { path: ^/reset_password, role: IS_AUTHENTICATED_ANONYMOUSLY }
-        - { path: ^/contact, role: IS_AUTHENTICATED_ANONYMOUSLY }
-        - { path: ^/api/v2/public, role: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/api, roles: PUBLIC_ACCESS }
+        - { path: ^/api/you_tube_live_services, roles: [PUBLIC_ACCESS ] }
+        - { path: ^/api/attachments, roles: PUBLIC_ACCESS }
+        - { path: ^/api/authentication_token, roles: PUBLIC_ACCESS }
+        - { path: ^/api/public_, roles: PUBLIC_ACCESS }
+        - { path: ^/login, role: PUBLIC_ACCESS }
+        - { path: ^/register, role: PUBLIC_ACCESS }
+        - { path: ^/reset_password, role: PUBLIC_ACCESS }
+        - { path: ^/contact, role: PUBLIC_ACCESS }
+        - { path: ^/api/v2/public, role: PUBLIC_ACCESS }
         - { path: ^/, role: ROLE_USER }
