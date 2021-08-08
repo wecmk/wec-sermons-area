@@ -19,7 +19,7 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 class SermonsController extends AbstractController
 {
-    private $itemsPerPage = 5;
+    private int $itemsPerPage = 16;
     private $searchAllQuery = "*";
     /**
      * @Route("/", name="home")
