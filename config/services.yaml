@@ -16,6 +16,9 @@ services:
             $projectDir: '%kernel.project_dir%'
             $mail_from_address: '%env(resolve:DEFAULT_FROM_ADDRESS)%'
             $mail_to_address: '%env(resolve:DEFAULT_TO_ADDRESS)%'
+            $OAUTH_GOOGLE_CLIENT_ID: '%env(resolve:OAUTH_GOOGLE_CLIENT_ID)%'
+            $OAUTH_GOOGLE_CLIENT_SECRET: '%env(resolve:OAUTH_GOOGLE_CLIENT_SECRET)%'
+
 
 
     offer.date_filter:
@@ -68,3 +71,10 @@ services:
 
                 # you can also restrict listeners to a specific Doctrine connection
                 connection: 'default'
+
+    App\EventListener\EventUpdateYouTubeNotifier:
+        tags:
+            -
+                name: 'doctrine.orm.entity_listener'
+                event: 'postUpdate'
+                entity: 'App\Entity\Event'

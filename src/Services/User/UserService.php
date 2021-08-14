@@ -2,10 +2,10 @@
 
 namespace App\Services\User;
 
-use Psr\Log\LoggerInterface;
 use App\Entity\User;
-use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Doctrine\ORM\EntityManagerInterface;
+use Psr\Log\LoggerInterface;
+use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 /*
  * @author Samuel Pearce <samuel.pearce@open.ac.uk>

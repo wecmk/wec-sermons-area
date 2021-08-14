@@ -8,7 +8,6 @@ use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * @ORM\Entity(repositoryClass=UserRepository::class)
- * @method string getUserIdentifier()
  */
 class User implements UserInterface
 {
@@ -39,6 +38,21 @@ class User implements UserInterface
      * @ORM\Column(type="string", length=255)
      */
     private $email;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private ?string $accessToken;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private ?string $refreshToken;
+
+    /**
+     * @ORM\Column(type="integer", options={"default": 0})
+     */
+    private ?int $expires;
 
     public function getId(): ?int
     {
@@ -125,8 +139,46 @@ class User implements UserInterface
         return $this;
     }
 
-    public function __call($name, $arguments)
+    public function getAccessToken(): ?string
     {
-        // TODO: Implement @method string getUserIdentifier()
+        return $this->accessToken;
     }
+
+    public function setAccessToken(?string $accessToken): self
+    {
+        $this->accessToken = $accessToken;
+
+        return $this;
+    }
+
+    public function getRefreshToken(): ?string
+    {
+        return $this->refreshToken;
+    }
+
+    public function setRefreshToken(?string $refreshToken): self
+    {
+        $this->refreshToken = $refreshToken;
+
+        return $this;
+    }
+
+    public function getExpires(): ?int
+    {
+        return $this->expires;
+    }
+
+    public function setExpires(int $expires): self
+    {
+        $this->expires = $expires;
+
+        return $this;
+    }
+
+
+    public function getUserIdentifier(): string
+    {
+        return $this->getUsername();
+    }
+
 }
