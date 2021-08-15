@@ -80,7 +80,9 @@ class GoogleController extends AbstractController
 
             $user = $userRepository->findOneBy(['username' => $security->getUser()->getUserIdentifier()]);
             $user->setAccessToken($accessToken);
-            $user->setRefreshToken($refreshToken);
+            if ($refreshToken != null) {
+                $user->setRefreshToken($refreshToken);
+            }
             $user->setExpires($expires);
             $entityManager->persist($user);
             $entityManager->flush();
