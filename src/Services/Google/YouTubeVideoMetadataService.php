@@ -3,12 +3,12 @@
 namespace App\Services\Google;
 
 use App\Entity\Event;
-use App\Entity\User;
+use Google\Service\YouTube;
+use Google\Service\YouTube\LiveBroadcast;
 use Google_Client;
 use Google_Service_YouTube;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Routing\RouterInterface;
-use Symfony\Component\Security\Core\Security;
 
 class YouTubeVideoMetadataService
 {
@@ -17,10 +17,11 @@ class YouTubeVideoMetadataService
 
     private string $OAUTH_GOOGLE_CLIENT_ID;
     private string $OAUTH_GOOGLE_CLIENT_SECRET;
-    private User $user;
+    private ?Google_Service_YouTube $google_Service_YouTube;
+    private GoogleCredentials $googleCredentials;
     private Google_Client $client;
 
-    public function __construct(LoggerInterface $logger, RouterInterface $router, Security $security, string $OAUTH_GOOGLE_CLIENT_ID, string $OAUTH_GOOGLE_CLIENT_SECRET)
+    public function __construct(LoggerInterface $logger, RouterInterface $router, GoogleCredentials $googleCredentials, string $OAUTH_GOOGLE_CLIENT_ID, string $OAUTH_GOOGLE_CLIENT_SECRET)
     {
         $this->logger = $logger;
         $this->router = $router;
@@ -34,21 +35,23 @@ class YouTubeVideoMetadataService
         ];
         $this->client = new Google_Client($config);
 
-        $user = $security->getUser();
-        if ($user instanceof User) {
-            $this->user = $user;
-        }
+        $this->googleCredentials = $googleCredentials;
+
+        $this->google_Service_YouTube = null;
 
     }
 
-    public function updateVideo(Event $event) {
-
+    public function googleServiceYouTube()
+    {
+        if ($this->google_Service_YouTube != null) {
+            return $this->google_Service_YouTube;
+        }
         $accessKeys = [];
         $this->logger->debug("Loaded key");
-        $accessKeys['expires_in'] = time() - $this->user->getExpires();
-        $accessKeys['access_token'] = $this->user->getAccessToken();
-        if ($this->user->getRefreshToken() != null) {
-            $accessKeys['refresh_token'] = $this->user->getRefreshToken();
+        $accessKeys['expires_in'] = time() - $this->googleCredentials->getExpires();
+        $accessKeys['access_token'] = $this->googleCredentials->getAccessToken();
+        if ($this->googleCredentials->getRefreshToken() != null) {
+            $accessKeys['refresh_token'] = $this->googleCredentials->getRefreshToken();
         }
 
         $this->client->setAccessToken($accessKeys);
@@ -57,12 +60,17 @@ class YouTubeVideoMetadataService
         $this->client->setAccessType('offline');
         $this->client->setApprovalPrompt('force');
 
-        if($this->client->isAccessTokenExpired()){  // if token expired
+        if ($this->client->isAccessTokenExpired()) {  // if token expired
             // refresh the token
             $this->logger->warning("OAuth2.0 token expired");
             $this->client->refreshToken($accessKeys['refresh_token']);
         }
-        $youtube = new Google_Service_YouTube($this->client);
+        return $this->google_Service_YouTube = new Google_Service_YouTube($this->client);
+    }
+
+    public function updateVideo(Event $event)
+    {
+        $youtube = $this->googleServiceYouTube();
 
         if (strpos($event->getYouTubeLink(), "youtube.com") !== false) {
             $stringParts = explode("=", $event->getYouTubeLink());
@@ -78,12 +86,14 @@ class YouTubeVideoMetadataService
                 return null;
             }
         }
+
         // Call the API's videos.list method to retrieve the video resource.
         $listResponse = $youtube->videos->listVideos("snippet,status",
             array('id' => $stringParts[1]));
         $this->logger->debug("Searched for videos. Count of videos: " . $listResponse->count());
 
         $video = null;
+
         // If $listResponse is empty, the specified video was not found.
         if (empty($listResponse)) {
             $htmlBody = sprintf('<h3>Can\'t find a video with video id: %s</h3>', $stringParts[1]);
@@ -135,5 +145,54 @@ class YouTubeVideoMetadataService
             }
         }
         return $video;
+    }
+
+    public function createLiveBroadcast(Event $event)
+    {
+        $youtube = $this->googleServiceYouTube();
+
+        if (strpos($event->getYouTubeLink(), "youtube.com") !== false) {
+            $stringParts = explode("=", $event->getYouTubeLink());
+            if (count($stringParts) != 2) {
+                return null;
+            }
+        }
+
+        if (str_contains($event->getYouTubeLink(), "youtu.be")) {
+            $string = str_replace("//", "", $event->getYouTubeLink());
+            $stringParts = explode("/", $string);
+            if (count($stringParts) != 2) {
+                return null;
+            }
+        }
+
+        // Call the API's videos.list method to retrieve the video resource.
+        $listResponse = $youtube->videos->listVideos("snippet,status",
+            array('id' => $stringParts[1]));
+        $this->logger->debug("Searched for videos. Count of videos: " . $listResponse->count());
+
+        $video = null;
+
+
+        $liveBroadcast = new LiveBroadcast();
+        $liveBroadcastSnippet = new YouTube\LiveBroadcastSnippet();
+        $liveBroadcastSnippet->setTitle("TestLiveBroadcast");
+        $startDateTime = new DateTime('2021-10-03 23:21:46');
+        $liveBroadcastSnippet->setScheduledStartTime($startDateTime->format(\DateTimeInterface::ATOM));
+        $liveBroadcastSnippet->setTitle($event->getDate()->format('l j M Y ') . " | ");
+        $liveBroadcast->setSnippet($liveBroadcastSnippet);
+
+        $contentDetails = new YouTube\LiveBroadcastContentDetails();
+        $contentDetails->setEnableDvr(true);
+        $contentDetails->setEnableAutoStart(false);
+        $contentDetails->setEnableAutoStop(false);
+        $liveBroadcast->setContentDetails($contentDetails);
+
+        $status = new YouTube\LiveBroadcastStatus();
+        $status->setPrivacyStatus("Unlisted");
+        $liveBroadcast->setStatus($status);
+
+        $result = $youtube->liveBroadcasts->insert('snippet,contentDetails,status', $liveBroadcast);
+        return $result->getId();
     }
 }

@@ -18,7 +18,7 @@ use Knp\DoctrineBehaviors\Model\Timestampable\TimestampableTrait;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\DateFilter;
 use App\Doctrine\ShortIdGenerator;
 /**
- * @ApiResource(attributes={"order"={"updatedAt": "ASC"}})
+ * @ApiResource(attributes={"order"={"date": "DESC", "apm": "DESC"}})
  * @ApiFilter(DateFilter::class, properties={"updatedAt"})
  * @ORM\Entity(repositoryClass=EventRepository::class)
  */

@@ -39,21 +39,6 @@ class User implements UserInterface
      */
     private $email;
 
-    /**
-     * @ORM\Column(type="string", length=255, nullable=true)
-     */
-    private ?string $accessToken;
-
-    /**
-     * @ORM\Column(type="string", length=255, nullable=true)
-     */
-    private ?string $refreshToken;
-
-    /**
-     * @ORM\Column(type="integer", options={"default": 0})
-     */
-    private ?int $expires;
-
     public function getId(): ?int
     {
         return $this->id;
@@ -139,46 +124,13 @@ class User implements UserInterface
         return $this;
     }
 
-    public function getAccessToken(): ?string
-    {
-        return $this->accessToken;
-    }
-
-    public function setAccessToken(?string $accessToken): self
-    {
-        $this->accessToken = $accessToken;
-
-        return $this;
-    }
-
-    public function getRefreshToken(): ?string
-    {
-        return $this->refreshToken;
-    }
-
-    public function setRefreshToken(?string $refreshToken): self
-    {
-        $this->refreshToken = $refreshToken;
-
-        return $this;
-    }
-
-    public function getExpires(): ?int
-    {
-        return $this->expires;
-    }
-
-    public function setExpires(int $expires): self
-    {
-        $this->expires = $expires;
-
-        return $this;
-    }
-
-
     public function getUserIdentifier(): string
     {
         return $this->getUsername();
     }
 
+    public function __toString(): string
+    {
+        return $this->username;
+    }
 }

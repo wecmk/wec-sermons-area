@@ -3,6 +3,7 @@
 namespace App\Services\User;
 
 use App\Entity\User;
+use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
@@ -13,28 +14,23 @@ use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 class UserService
 {
-    /* @var $logger LoggerInterface */
+    private LoggerInterface $logger;
 
-    private $logger;
-
-    /* @var $repository \Doctrine\Common\Persistence\ObjectManager */
-    private $repository;
+    private UserRepository $repository;
     
-    /** @var EntityManagerInterface $em */
-    private $em;
+    private EntityManagerInterface $em;
     
-    /** @var UserPasswordEncoderInterface $encoder */
-    private $encoder;
+    private UserPasswordEncoderInterface $encoder;
     
     public function __construct(
         LoggerInterface $logger,
-        EntityManagerInterface $em,
+        UserRepository $userRepository,
         UserPasswordEncoderInterface $encoder,
         EntityManagerInterface $entityManager
     ) {
         $this->logger = $logger;
-        $this->em = $em;
-        $this->repository = $em->getRepository(User::class);
+        $this->em = $entityManager;
+        $this->repository = $userRepository;
         $this->encoder = $encoder;
     }
 

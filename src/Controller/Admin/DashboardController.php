@@ -40,7 +40,11 @@ class DashboardController extends AbstractDashboardController
 
             // set this option if you prefer the page content to span the entire
             // browser width, instead of the default design which sets a max width
-            ->renderContentMaximized();
+            ->renderContentMaximized()
+
+            ->disableUrlSignatures(true);
+
+
 
     }
 

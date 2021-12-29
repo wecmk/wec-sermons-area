@@ -156,6 +156,10 @@
                                 {{ include('components/button-item.html.twig', {'url':  path('public_sermon_new', { 'id': entity.Id }), 'linkText': "Make public"}) }}
                             {% endif %}
 
+                            {% if is_granted("ROLE_API") %}
+                                {{ include('components/button-item.html.twig', {'url':  "https://members.wecmk.org/admin?crudAction=edit&crudControllerFqcn=App%5CController%5CAdmin%5CEventCrudController&entityId=" ~ entity.Id, 'linkText': "Edit"}) }}
+                            {% endif %}
+
                         </td>                      
                     </tr>
                     {% else %}

@@ -30,6 +30,7 @@ class EventCrudController extends AbstractCrudController
     {
         return [
             IdField::new('id')->hideOnForm()->hideOnIndex()->hideOnDetail(),
+            Field::new('shortId')->setFormTypeOption('disabled','disabled'),
             Field::new('date')->setHelp('Date of the recorded event'),
             TextField::new('uuid')->hideOnIndex()->hideOnForm(),
             Field::new('apm')->setHelp('One of AM,PM,MON,TUE,WED,THU,FRI,SAT'),
@@ -38,7 +39,6 @@ class EventCrudController extends AbstractCrudController
             TextField::new('secondReading')->setRequired(false)->hideOnIndex(),
             TextField::new('title')->setRequired(false),
             Field::new('speaker')->setRequired(false),
-            Field::new('shortId')->hideOnForm(),
             Field::new('youTubeLink')->hideOnIndex()->setLabel('YouTube Link'),
             Field::new('corrupt'),
             Field::new('isPublic'),

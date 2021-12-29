@@ -14,7 +14,7 @@ final class Version20210705090500 extends AbstractMigration
 {
     public function getDescription(): string
     {
-        return '';
+        return 'Adds custom id generation for events. Also assigns ids to existing events';
     }
 
     public function up(Schema $schema): void

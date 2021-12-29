@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Repository\EventRepository;
 use App\Repository\UserRepository;
+use App\Services\Google\GoogleCredentials;
 use App\Services\Google\YouTubeVideoMetadataService;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
@@ -51,7 +52,7 @@ class GoogleController extends AbstractController
      * @throws ORMException
      * @throws OptimisticLockException
      */
-    public function connectCheckAction(Request $request, LoggerInterface $logger, ClientRegistry $clientRegistry, Security $security, EntityManagerInterface $entityManager, UserRepository $userRepository)
+    public function connectCheckAction(Request $request, LoggerInterface $logger, ClientRegistry $clientRegistry, GoogleCredentials $googleCredentials, EntityManagerInterface $entityManager, UserRepository $userRepository)
     {
         // ** if you want to *authenticate* the user, then
         // leave this method blank and create a Guard authenticator
@@ -67,7 +68,7 @@ class GoogleController extends AbstractController
 
             $accessToken = $obj['access_token'];
             $idToken = $obj['id_token'];
-            $refreshToken = $obj['refresh_token'];
+            $refreshToken = $obj['refresh_token'] ?? null;
             $expires = $obj['expires'];
 
             $accessTokenObj = new AccessToken($obj);
@@ -78,14 +79,12 @@ class GoogleController extends AbstractController
                 throw new \Exception("Google Account User not expected (expected 'Wolverton Evangelical Church', not" . $user->getName());
             }
 
-            $user = $userRepository->findOneBy(['username' => $security->getUser()->getUserIdentifier()]);
-            $user->setAccessToken($accessToken);
+            $googleCredentials->setAccessToken($accessToken, true);
             if ($refreshToken != null) {
-                $user->setRefreshToken($refreshToken);
+                $googleCredentials->setRefreshToken($refreshToken, true);
             }
-            $user->setExpires($expires);
-            $entityManager->persist($user);
-            $entityManager->flush();
+            $googleCredentials->setExpires($expires, true);
+            $googleCredentials->persist();
 
             // Todo: store refresh token and access token and expires time in User entity
             // todo: update login logic

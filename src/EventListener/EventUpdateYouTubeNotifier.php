@@ -27,8 +27,10 @@ class EventUpdateYouTubeNotifier
     public function postUpdate(Event $event, LifecycleEventArgs $args)
     {
         try {
-            $this->logger->info("EventUpdateYouTubeNotifier notified");
-            $this->youTubeVideoMetadataService->updateVideo($event);
+            if ($event->getDate()->format("U") > date('U', strtotime("10 April 2021"))) {
+                $this->logger->info("EventUpdateYouTubeNotifier notified");
+                $this->youTubeVideoMetadataService->updateVideo($event);
+            }
         } catch (\Exception $e) {
             $this->logger->error($e->getMessage());
         }
