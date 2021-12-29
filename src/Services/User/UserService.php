@@ -6,7 +6,7 @@ use App\Entity\User;
 use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Psr\Log\LoggerInterface;
-use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 /*
  * @author Samuel Pearce <samuel.pearce@open.ac.uk>
@@ -20,18 +20,18 @@ class UserService
     
     private EntityManagerInterface $em;
     
-    private UserPasswordEncoderInterface $encoder;
-    
+    private UserPasswordHasherInterface $passwordHasher;
+
     public function __construct(
         LoggerInterface $logger,
         UserRepository $userRepository,
-        UserPasswordEncoderInterface $encoder,
+        UserPasswordHasherInterface $hasher,
         EntityManagerInterface $entityManager
     ) {
         $this->logger = $logger;
         $this->em = $entityManager;
         $this->repository = $userRepository;
-        $this->encoder = $encoder;
+        $this->passwordHasher = $hasher;
     }
 
     /**
@@ -53,7 +53,7 @@ class UserService
     {
         // If the password isn't set, let's encode what is set is PlainPassword
         if (empty($user->getPassword())) {
-            $user->setPassword($this->encoder->encodePassword($user, $user->getPlainPassword()));
+            $user->setPassword($this->passwordHasher->hashPassword($user, $user->getPlainPassword()));
         }
         $this->em->persist($user);
         $this->em->flush();
@@ -75,7 +75,7 @@ class UserService
         }
         $user->setRoles($roles);
         
-        $password = $this->encoder->encodePassword($user, $unhashedPassword);
+        $password = $this->passwordHasher->encodePassword($user, $unhashedPassword);
         $user->setPassword($password);
         $this->em->persist($user);
         $this->em->flush();
