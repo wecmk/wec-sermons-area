@@ -61,6 +61,16 @@ class DbEventSearchService implements EventSearchService
 
     }
 
+    public function searchBySeriesUuid($uuid)
+    {
+        /** @var Series $series */
+        $series = $this->em->getRepository(Series::class)->findOneBy(
+            ['uuid' => $uuid]
+        );
+        return $this->repository->findBySeries($series);
+
+    }
+
     public function searchBySpeaker($name)
     {
         return $this->repository->findBy(["speaker" => $name], ['date' => 'DESC', 'apm' => 'DESC']);

@@ -45,6 +45,23 @@
                     Help
                 </a>
             </div>
+
+            {% if is_granted("ROLE_API") %}
+                <div class="btn-group" role="group">
+                    <a type="btn btn-secondary" class="btn btn-secondary" href="{{ "/admin?crudAction=new&crudControllerFqcn=App%5CController%5CAdmin%5CEventCrudController" }}">
+                        Add new Event
+                    </a>
+                </div>
+            {% endif %}
+
+            {% if is_granted("ROLE_API") and series is defined %}
+                <div class="btn-group" role="group">
+                    <a type="btn btn-secondary" class="btn btn-secondary" href="{{ "/admin?crudAction=edit&crudControllerFqcn=App%5CController%5CAdmin%5CSeriesCrudController&entityId=" ~ series.Id }}">
+                        Edit Series
+                    </a>
+                </div>
+            {% endif %}
+
         </div>
     </div>
     <div class="sermons-list col-md-12">
@@ -88,7 +105,7 @@
                         <td>{{ entity.Apm }}</td>
                         <td>
                             {% for series in entity.Series %}
-                                <a href="{{ path("sermons_list_by_series", { 'value': series.Name }) }}">{{ series.Name }}</a>
+                                <a href="{{ path("sermons_list_by_series", { 'uuid': series.uuid }) }}">{{ series.Name }}</a>
                                 {% if not loop.last %}/{% endif %}
                             {% endfor %}
                         </td>
@@ -217,28 +234,5 @@
 
             </nav>
         {% endif %}
-    </div>
-
-
-
-
-    <div class="modal fade help-modal-dialog" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"
-         aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
-                            aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title" id="myModalLabel">Need help?</h4>
-                </div>
-                <div class="modal-body">
-                    Email <a href="mailto:***REMOVED***">***REMOVED***</a> or fill out <a
-                        href="{{ path('contact_form') }}">this form</a>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                </div>
-            </div>
-        </div>
     </div>
 {% endblock %}

@@ -5,9 +5,11 @@ namespace App\Controller;
 use App\Entity\BibleBooks;
 use App\Entity\Event;
 use App\Entity\Series;
+use App\Repository\BibleBooksRepository;
+use App\Repository\EventRepository;
+use App\Repository\SeriesRepository;
+use App\Services\Books\BooksService;
 use App\Services\Event\EventSearchService;
-use App\Services\Event\IndexEventSearchService;
-use Doctrine\ORM\Tools\Pagination\Paginator;
 use Ramsey\Uuid\Uuid;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -21,6 +23,19 @@ class SermonsController extends AbstractController
 {
     private int $itemsPerPage = 16;
     private $searchAllQuery = "*";
+
+    private BooksService $booksService;
+    private EventRepository $eventRepository;
+    private SeriesRepository $seriesRepository;
+
+
+    public function __construct(BooksService $booksService, EventRepository $eventRepository, SeriesRepository $seriesRepository)
+    {
+        $this->booksService = $booksService;
+        $this->eventRepository = $eventRepository;
+        $this->seriesRepository = $seriesRepository;
+    }
+
     /**
      * @Route("/", name="home")
      * @param Request $request
@@ -98,12 +113,16 @@ class SermonsController extends AbstractController
     }
 
     /**
-     * @Route("/series/{value}", name="list_by_series")
+     * @Route("/series/{uuid}", name="list_by_series")
      */
-    public function searchFieldAction(Request $request, EventSearchService $search, $value)
+    public function searchFieldAction(Request $request, EventSearchService $search, SeriesRepository $seriesRepository, $uuid)
     {
+        if (!$uuid instanceof Uuid) {
+            $uuid = Uuid::fromString($uuid);
+        }
         return $this->render('sermons/index.html.twig', [
-                    'results' => $search->searchBySeries($value),
+                    'results' => $search->searchBySeriesUuid($uuid),
+                    'series' => $seriesRepository->findOneBy(['uuid' => $uuid]),
                     'searchQuery' => "",
         ]);
     }
@@ -124,31 +143,35 @@ class SermonsController extends AbstractController
      */
     public function ListOfSeriesAction(Request $request)
     {
-        // make a database call or other logic
-        // to get the "$max" most recent articles
-        $em = $this->getDoctrine()->getManager();
-        $books = $em->getRepository(BibleBooks::class)->findAll();
-        $bookNames = array();
-        foreach ($books as $book) {
-            if (strpos($book->getBook(), '/') === false) {
-                $bookNames[] = $book->getBook();
-            }
-        }
-        $allSeries = $em->getRepository(Series::class)->findAll();
-        $seriesNames = array();
+        $books = $this->booksService->asBibleNameArray();
+        $allSeries = $this->seriesRepository->findAll();
+
+        $seriesFromBibleBooks = [];
+        $seriesOther = [];
         foreach ($allSeries as $series) {
-            if (strpos($series->getName(), '/') === false) {
-                $seriesNames[] = $series->getName();
+            if (in_array($series->getName(), $books)) {
+                $seriesFromBibleBooks[] = $series;
+            } else {
+                $seriesOther[] = $series;
             }
         }
-        $seriesList = array_diff($seriesNames, $bookNames);
 
-        $bookSeries = array_intersect($bookNames, $seriesNames);
+        usort($seriesFromBibleBooks, function(Series $a, Series $b) {
+            return $a->getName() <=> $b->getName();
+        });
 
-        usort($seriesList, 'strcmp');
+        usort($seriesOther, function(Series $a, Series $b) {
+            return $a->getName() <=> $b->getName();
+        });
+
+
+        $visitingSpeakerSeries = $this->seriesRepository->findOneBy(['name' => "Visiting Speaker"]);
+
+        usort($allSeries, 'strcmp');
         return $this->render('sermons/list_of_series.html.twig', [
-                    'books' => $bookSeries,
-                    'seriesList' => $seriesList,
+                    'books' => $seriesFromBibleBooks,
+                    'seriesList' => $seriesOther,
+                    'visitingSpeakerSeries' => $visitingSpeakerSeries,
                     'searchQuery' => "",
         ]);
     }

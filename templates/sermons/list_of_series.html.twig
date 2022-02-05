@@ -41,29 +41,47 @@
         </div>
     </div>
     <div class="container">
+        <h1>Current/ongoing series</h1>
         <div class="row">
             <div class="col-6">
-                <h3>Search by series (Bible books):</h3>
-
+                <h3>Series by Bible books:</h3>
                 {% for book in books %}
-                    <a href="{{ path('sermons_list_by_series', {'value': book }) }}">{{ book }}</a>
-                    <br />
-                {% endfor %}
-                <br>
-            </div>
-
-            <div class="col-6">
-                <h3>Search by series (other):</h3>
-                {% for key,series in seriesList %}
-                    {% if series is not empty %}
-                        <a href="{{ path('sermons_list_by_series', {'value': series }) }}">{{ series }}</a>
+                    {% if not book.complete %}
+                        <a href="{{ path('sermons_list_by_series', {'uuid': book.Uuid }) }}">{{ book.prettyName }}</a>
                         <br />
-                    {% endif %} 
+                    {% endif %}
                 {% endfor %}
-                <br>             
+            </div>
+            <div class="col-6">
+                <h3>Other series:</h3>
+                {% for key,series in seriesList %}
+                    {% if series is not empty and not series.complete %}
+                        <a href="{{ path("sermons_list_by_series", { 'uuid': series.uuid }) }}">{{ series.PrettyName }}</a>
+                        <br />
+                    {% endif %}
+                {% endfor %}
             </div>
         </div>
+        <h1>Completed series</h1>
         <div class="row">
+            <div class="col-6">
+                <h3>Series by Bible books:</h3>
+                {% for book in books %}
+                    {% if book.complete %}
+                        <a href="{{ path('sermons_list_by_series', {'uuid': book.Uuid }) }}">{{ book.prettyName }}</a>
+                        <br />
+                    {% endif %}
+                {% endfor %}
+            </div>
+            <div class="col-6">
+                <h3>Other series:</h3>
+                {% for key,series in seriesList %}
+                    {% if series is not empty and series.complete %}
+                        <a href="{{ path("sermons_list_by_series", { 'uuid': series.uuid }) }}">{{ series.PrettyName }}</a>
+                        <br />
+                    {% endif %}
+                {% endfor %}
+            </div>
 
             <div class="col-6">
                 <h3>Search by Speaker:</h3>
@@ -71,7 +89,8 @@
                 <a href="{{ path('sermons_list_by_speaker', {'value': 'Roger March'}) }}">Roger March</a><br>
                 <a href="{{ path('sermons_list_by_speaker', {'value': 'Roy Moffatt'}) }}">Roy Moffatt</a><br>
                 <a href="{{ path('sermons_list_by_speaker', {'value': 'Derek Sparrow'}) }}">Derek Sparrow</a><br>
-                <a href="{{ path('sermons_list_by_series', {'value': 'Visiting Speaker'}) }}">Visiting Speakers</a><br>                       
+                <a href="{{ path("sermons_list_by_series", { 'uuid': visitingSpeakerSeries.uuid }) }}">{{ visitingSpeakerSeries.Name }}</a>
+
             </div>
         </div>
     </div>

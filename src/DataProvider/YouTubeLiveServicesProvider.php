@@ -17,7 +17,7 @@ class YouTubeLiveServicesProvider implements CollectionDataProviderInterface, Re
         $this->eventRepository = $eventRepository;
     }
 
-    public function getCollection(string $resourceClass, string $operationName = null): YouTubeLiveServices
+    public function getCollection(string $resourceClass, string $operationName = null): array
     {
         $response = new YouTubeLiveServices();
         $response->setId(1);
@@ -40,7 +40,7 @@ class YouTubeLiveServicesProvider implements CollectionDataProviderInterface, Re
             }
         }
 
-        return $response;
+        return [$response];
     }
 
     public function supports(string $resourceClass, string $operationName = null, array $context = []): bool

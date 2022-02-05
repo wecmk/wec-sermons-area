@@ -30,7 +30,7 @@ class BibleBooksFixtures extends Fixture implements FixtureGroupInterface
             16 => array('Nehemiah', 'Neh', 'Ne'),
             17 => array('Esther', 'Esth', 'Es'),
             18 => array('Job', 'Job', 'Job', 'Jb'),
-            19 => array('Psalm', 'Pslm', 'Ps', 'Psalms', 'Psa', 'Psm', 'Pss'),
+            19 => array('Psalms', 'Pslm', 'Ps', 'Psalms', 'Psa', 'Psm', 'Pss'),
             20 => array('Proverbs', 'Prov', 'Pr', 'Prv'),
             21 => array('Ecclesiastes', 'Eccles', 'Ec', 'Ecc', 'Qoh', 'Qoheleth'),
             22 => array('Song of Solomon', 'Song', 'So', 'Canticle of Canticles', 'Canticles', 'Song of Songs', 'SOS'),

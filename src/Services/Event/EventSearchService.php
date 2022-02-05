@@ -15,5 +15,7 @@ interface EventSearchService
 
     public function searchBySeries($name);
 
+    public function searchBySeriesUuid($uuid);
+
     public function searchBySpeaker($name);
 }

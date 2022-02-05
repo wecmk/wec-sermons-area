@@ -79,7 +79,7 @@ class Event implements TimestampableInterface, SoftDeletableInterface, CanBeDown
     /**
      * @ORM\Column(type="boolean")
      */
-    private ?bool $isPublic = true;
+    private ?bool $isPublic = false;
 
     /**
      * @ORM\Column(type="text")

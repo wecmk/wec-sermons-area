@@ -72,6 +72,21 @@ class Series implements TimestampableInterface, SoftDeletableInterface
      */
     private Collection $events;
 
+    /**
+     * @ORM\Column(type="date", nullable=true)
+     */
+    private $startDate;
+
+    /**
+     * @ORM\Column(type="date", nullable=true)
+     */
+    private $endDate;
+
+    /**
+     * @ORM\Column(type="string", length=50, nullable=true)
+     */
+    private $Author;
+
     public function __construct(UuidInterface $uuid = null)
     {
         $this->uuid = $uuid ?: Uuid::uuid4();
@@ -169,8 +184,51 @@ class Series implements TimestampableInterface, SoftDeletableInterface
         return $this;
     }
 
+    public function getStartDate(): ?\DateTimeInterface
+    {
+        return $this->startDate;
+    }
+
+    public function setStartDate(?\DateTimeInterface $startDate): self
+    {
+        $this->startDate = $startDate;
+
+        return $this;
+    }
+
+    public function getEndDate(): ?\DateTimeInterface
+    {
+        return $this->endDate;
+    }
+
+    public function setEndDate(?\DateTimeInterface $endDate): self
+    {
+        $this->endDate = $endDate;
+
+        return $this;
+    }
+
+    public function getPrettyName(): string
+    {
+        $author = ($this->getAuthor() != null) ? " - " . $this->getAuthor() . " " : "";
+        $date = ($this->getStartDate() != null && $this->getComplete()) ? " (" . $this->getStartDate()->format("Y") . ")" : "";
+        return trim($this->getName() . $author . $date);
+    }
+
     public function __toString()
     {
-        return $this->getName();
+        return $this->getPrettyName();
+    }
+
+    public function getAuthor(): ?string
+    {
+        return $this->Author;
+    }
+
+    public function setAuthor(?string $Author): self
+    {
+        $this->Author = $Author;
+
+        return $this;
     }
 }

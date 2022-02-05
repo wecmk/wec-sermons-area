@@ -23,6 +23,8 @@ class SeriesCrudController extends AbstractCrudController
             IdField::new('id')->hideOnForm()->hideOnIndex()->hideOnDetail(),
             TextField::new('uuid')->hideOnIndex()->hideOnForm(),
             Field::new('name'),
+            Field::new('author'),
+            Field::new('startDate'),
             TextareaField::new('description')->setRequired(false),
             BooleanField::new('complete'),
             BooleanField::new('isPublic'),

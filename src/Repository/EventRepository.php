@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\Event;
+use App\Entity\Series;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 use Doctrine\ORM\Query;
@@ -138,15 +139,18 @@ class EventRepository extends ServiceEntityRepository
             ->execute();
     }
 
-    public function findBySeries(\App\Entity\Series $series)
+    public function findBySeries(Series $series, String $order = "ASC", int $maxResults = null)
     {
-        return $this->createQueryBuilder('event')
+        $query = $this->createQueryBuilder('event')
             ->leftJoin('event.series', 'series')
             ->where('series = :series')
             ->setParameter('series', $series)
-            ->addOrderBy('event.date', 'ASC')
-            ->addOrderBy('event.apm', 'ASC')
-            ->getQuery()
+            ->addOrderBy('event.date', $order)
+            ->addOrderBy('event.apm', $order);
+        if ($maxResults != null) {
+            $query->setMaxResults($maxResults);
+        }
+        return $query->getQuery()
             ->execute();
     }
 }

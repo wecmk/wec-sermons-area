@@ -75,7 +75,7 @@ class UserService
         }
         $user->setRoles($roles);
         
-        $password = $this->passwordHasher->encodePassword($user, $unhashedPassword);
+        $password = $this->passwordHasher->hashPassword($user, $unhashedPassword);
         $user->setPassword($password);
         $this->em->persist($user);
         $this->em->flush();
