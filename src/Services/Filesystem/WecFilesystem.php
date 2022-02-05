@@ -60,7 +60,7 @@ class WecFilesystem extends Filesystem
      *
      * @return bool true if the file exists, false otherwise
      */
-    public function exists($files)
+    public function exists(string|iterable $files): bool
     {
         return parent::exists($files);
     }
@@ -191,7 +191,7 @@ class WecFilesystem extends Filesystem
      *
      * @return string|null
      */
-    public function readlink($path, $canonicalize = false)
+    public function readlink(string $path, bool $canonicalize = false): ?string
     {
         return parent::readlink($path, $canonicalize);
     }
@@ -204,7 +204,7 @@ class WecFilesystem extends Filesystem
      *
      * @return string Path of target relative to starting path
      */
-    public function makePathRelative($endPath, $startPath)
+    public function makePathRelative(string $endPath, string $startPath): string
     {
         return parent::makePathRelative($endPath, $startPath);
     }
@@ -240,7 +240,7 @@ class WecFilesystem extends Filesystem
      *
      * @return bool
      */
-    public function isAbsolutePath($file)
+    public function isAbsolutePath(string $file): bool
     {
         return parent::isAbsolutePath($file);
     }
@@ -254,7 +254,7 @@ class WecFilesystem extends Filesystem
      *
      * @return string The new temporary filename (with path), or throw an exception on failure
      */
-    public function tempnam($dir, $prefix)
+    public function tempnam(string $dir, string $prefix, string $suffix = ''): string
     {
         return parent::tempnam($dir, $prefix);
     }
