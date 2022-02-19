@@ -6,7 +6,7 @@ use Psr\Log\LoggerInterface;
 use App\Services\Cache\CacheService;
 use Http\Client\HttpClient;
 use FOS\ElasticaBundle\Elastica\Index;
-use \Elastica\Type;
+use Elastica\Type;
 use Elastica\Query\QueryString;
 use FOS\ElasticaBundle\Finder\TransformedFinder;
 use App\Entity\Event;
@@ -26,10 +26,10 @@ class IndexEventSearchService
 
     /** @var \Doctrine\ORM\EntityManagerInterface $em */
     private $em;
-    
+
     /** @var \App\Repository\EventRepository $repository */
     private $repository;
-    
+
     public function __construct(LoggerInterface $logger, TransformedFinder $index, \Doctrine\ORM\EntityManagerInterface $em)
     {
         $this->logger = $logger;
@@ -65,7 +65,7 @@ class IndexEventSearchService
         );
         $nested->setQuery($nested_bool);
         $query_part->addMust($nested);
-        
+
         $searchQuery = new \Elastica\Query($query_part);
         $searchQuery->addSort(array('Date' => 'asc', 'Apm' => 'asc'));
         $results = $this->index->find($searchQuery);

@@ -19,7 +19,7 @@ class AttachmentMetadataTypeFixtures extends Fixture implements FixtureGroupInte
 
         $manager->flush();
     }
-     
+
     public static function getGroups(): array
     {
         return ['prod', 'dev', 'test'];

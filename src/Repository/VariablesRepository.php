@@ -55,8 +55,8 @@ class VariablesRepository extends ServiceEntityRepository
      * @throws OptimisticLockException
      * @throws ORMException
      */
-    public function flush() {
+    public function flush()
+    {
         $this->getEntityManager()->flush();
     }
-
 }

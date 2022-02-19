@@ -18,12 +18,12 @@ class AttachmentMetadataType
      * @ORM\Column(type="integer")
      */
     private ?int $id = null;
-    
+
     /**
      * @ORM\Column(type="string", length=30)
      */
     private ?string $type = null;
-    
+
     /**
      * @ORM\Column(type="string", length=20)
      */
@@ -45,7 +45,7 @@ class AttachmentMetadataType
         $this->description = $description;
         $this->canBePublic = true;
     }
-    
+
     public function getId(): ?int
     {
         return $this->id;

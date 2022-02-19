@@ -18,7 +18,6 @@ use App\Entity\CanBeDownloaded;
  */
 class AttachmentController extends AbstractController
 {
-
     /**
      *
      * Optional GET parameter force-dl=true (default to force the download or

@@ -14,9 +14,7 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class DashboardController extends AbstractDashboardController
 {
-    /**
-     * @Route("/admin", name="admin")
-     */
+    #[Route('/admin', name: 'some_route_name')]
     public function index(): Response
     {
         return parent::index();
@@ -27,9 +25,6 @@ class DashboardController extends AbstractDashboardController
         return Dashboard::new()
             // the name visible to end users
             ->setTitle('WEC Members Area Admin')
-
-            // the path defined in this method is passed to the Twig asset() function
-            //->setFaviconPath('favicon.svg')
 
             // the domain used by default is 'messages'
             ->setTranslationDomain('admin')
@@ -43,9 +38,6 @@ class DashboardController extends AbstractDashboardController
             ->renderContentMaximized()
 
             ->disableUrlSignatures(true);
-
-
-
     }
 
     public function configureMenuItems(): iterable

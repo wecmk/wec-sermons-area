@@ -17,9 +17,9 @@ class UserService
     private LoggerInterface $logger;
 
     private UserRepository $repository;
-    
+
     private EntityManagerInterface $em;
-    
+
     private UserPasswordHasherInterface $passwordHasher;
 
     public function __construct(
@@ -43,7 +43,7 @@ class UserService
     {
         return $this->repository->findBy(['username' => $username]);
     }
-    
+
     /**
      * Adds a new user
      * @param User $user
@@ -59,7 +59,7 @@ class UserService
         $this->em->flush();
         return $user;
     }
-    
+
     /**
      * Adds a series
      * @param Series $series
@@ -74,12 +74,12 @@ class UserService
             $roles[] = 'ROLE_USER';
         }
         $user->setRoles($roles);
-        
+
         $password = $this->passwordHasher->hashPassword($user, $unhashedPassword);
         $user->setPassword($password);
         $this->em->persist($user);
         $this->em->flush();
-        
+
         # @todo #18 How do we validate a user was created?
     }
 

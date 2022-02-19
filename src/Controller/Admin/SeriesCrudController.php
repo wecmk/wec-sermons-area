@@ -30,5 +30,4 @@ class SeriesCrudController extends AbstractCrudController
             BooleanField::new('isPublic'),
         ];
     }
-
 }

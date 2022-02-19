@@ -1,6 +1,5 @@
 <?php
 
-
 namespace App\EventListener;
 
 use App\Entity\Event;
@@ -23,7 +22,7 @@ class UpdateShortIdEventListener
         $em = $args->getObjectManager();
         $result = $em->createQueryBuilder()
             ->select('MAX(event.shortId)')
-            ->from(Event::class, 'event' )
+            ->from(Event::class, 'event')
             ->OrderBy('event.shortId', 'DESC')
             ->getQuery()
             ->getSingleScalarResult();

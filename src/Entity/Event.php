@@ -17,6 +17,7 @@ use Knp\DoctrineBehaviors\Contract\Entity\TimestampableInterface;
 use Knp\DoctrineBehaviors\Model\Timestampable\TimestampableTrait;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\DateFilter;
 use App\Doctrine\ShortIdGenerator;
+
 /**
  * @ApiResource(attributes={"order"={"date": "DESC", "apm": "DESC"}})
  * @ApiFilter(DateFilter::class, properties={"updatedAt"})
@@ -24,7 +25,6 @@ use App\Doctrine\ShortIdGenerator;
  */
 class Event implements TimestampableInterface, SoftDeletableInterface, CanBeDownloaded
 {
-
     /**
      * Hook SoftDeleteable behavior
      * updates deletedAt field

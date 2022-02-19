@@ -15,7 +15,7 @@ class EventService
     private LoggerInterface $logger;
 
     private EventRepository $repository;
-    
+
     private EntityManagerInterface $em;
 
     public function __construct(LoggerInterface $logger, EntityManagerInterface $em)
@@ -37,7 +37,7 @@ class EventService
         }
         return $this->repository->findBy(['Name' => $name]);
     }
-    
+
     /**
      * Adds a sermon
      * @param Event $sermon
@@ -49,7 +49,7 @@ class EventService
         $this->em->flush();
         return $sermon;
     }
-    
+
     /**
      * Find Event by ID
      * @param type $id
@@ -59,7 +59,7 @@ class EventService
     {
         return $this->repository->find($id);
     }
-    
+
     public function deleteById($id)
     {
         $event = $this->em->getReference(Event::class, $id);

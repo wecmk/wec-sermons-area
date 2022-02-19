@@ -156,11 +156,11 @@ class SermonsController extends AbstractController
             }
         }
 
-        usort($seriesFromBibleBooks, function(Series $a, Series $b) {
+        usort($seriesFromBibleBooks, function (Series $a, Series $b) {
             return $a->getName() <=> $b->getName();
         });
 
-        usort($seriesOther, function(Series $a, Series $b) {
+        usort($seriesOther, function (Series $a, Series $b) {
             return $a->getName() <=> $b->getName();
         });
 

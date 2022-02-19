@@ -1,8 +1,6 @@
 <?php
 
-
 namespace App\Services\Books;
-
 
 use App\Entity\BibleBooks;
 use App\Repository\BibleBooksRepository;

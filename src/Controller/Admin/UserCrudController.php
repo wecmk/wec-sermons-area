@@ -24,5 +24,4 @@ class UserCrudController extends AbstractCrudController
             TextField::new('email'),
         ];
     }
-
 }

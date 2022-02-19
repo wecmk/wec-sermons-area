@@ -1,8 +1,6 @@
 <?php
 
-
 namespace App\Services\Google;
-
 
 use App\Repository\VariablesRepository;
 
@@ -49,7 +47,8 @@ class GoogleCredentials
         $this->variablesRepository->setByName($this->expires, $expires, $persistImmediately);
     }
 
-    public function persist() {
+    public function persist()
+    {
         $this->variablesRepository->flush();
     }
 }

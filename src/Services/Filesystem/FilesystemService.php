@@ -32,7 +32,7 @@ class FilesystemService
 
     /** @var EntityManagerInterface $em */
     private $em;
-    
+
     /** @var string $fileRootPath */
     private $fileRootPath;
 

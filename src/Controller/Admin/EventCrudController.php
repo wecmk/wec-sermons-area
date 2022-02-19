@@ -30,7 +30,7 @@ class EventCrudController extends AbstractCrudController
     {
         return [
             IdField::new('id')->hideOnForm()->hideOnIndex()->hideOnDetail(),
-            Field::new('shortId')->setFormTypeOption('disabled','disabled'),
+            Field::new('shortId')->setFormTypeOption('disabled', 'disabled'),
             Field::new('date')->setHelp('Date of the recorded event'),
             TextField::new('uuid')->hideOnIndex()->hideOnForm(),
             Field::new('apm')->setHelp('One of AM,PM,MON,TUE,WED,THU,FRI,SAT'),

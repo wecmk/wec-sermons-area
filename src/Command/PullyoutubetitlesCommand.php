@@ -33,7 +33,7 @@ class PullyoutubetitlesCommand extends Command
         $this->entityManager = $entityManager;
         $this->eventRepository = $eventRepository;
         $user = $userRepository->findOneBy(['username' => 'samuel']);
-        $tokenStorage->setToken(new UsernamePasswordToken($user, null,'main', $user->getRoles()));
+        $tokenStorage->setToken(new UsernamePasswordToken($user, null, 'main', $user->getRoles()));
         $this->youTubeVideoMetadataService = $youTubeVideoMetadataService;
     }
 
@@ -50,7 +50,7 @@ class PullyoutubetitlesCommand extends Command
         foreach ($items as $event) {
             $youtube = $this->youTubeVideoMetadataService->googleServiceYouTube();
 
-            if ($event->getYouTubeLink() == null || $event->getYouTubeLink() == "" ){//|| $event->getDate()->format("U") > date('U', strtotime("10 April 2021"))) {
+            if ($event->getYouTubeLink() == null || $event->getYouTubeLink() == "") {//|| $event->getDate()->format("U") > date('U', strtotime("10 April 2021"))) {
                 continue;
             }
 
@@ -70,8 +70,10 @@ class PullyoutubetitlesCommand extends Command
             }
 
             // Call the API's videos.list method to retrieve the video resource.
-            $listResponse = $youtube->videos->listVideos("snippet,status",
-                array('id' => $stringParts[1]));
+            $listResponse = $youtube->videos->listVideos(
+                "snippet,status",
+                array('id' => $stringParts[1])
+            );
             $io->info("Searched for videos. Count of videos: " . $listResponse->count());
 
             $video = null;
@@ -104,7 +106,6 @@ class PullyoutubetitlesCommand extends Command
                 } else {
                     $io->warning("No results found");
                 }
-
             }
         }
         $this->entityManager->flush();

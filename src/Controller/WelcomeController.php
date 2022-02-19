@@ -7,7 +7,6 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class WelcomeController extends AbstractController
 {
-
     /**
      * @Route("/", name="members_area_home")
      */

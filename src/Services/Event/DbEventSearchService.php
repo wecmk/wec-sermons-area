@@ -24,9 +24,9 @@ class DbEventSearchService implements EventSearchService
 
     /** @var EntityManagerInterface $em */
     private $em;
-    
+
     private EventRepository $repository;
-    
+
     public function __construct(LoggerInterface $logger, EntityManagerInterface $em)
     {
         $this->logger = $logger;
@@ -42,7 +42,8 @@ class DbEventSearchService implements EventSearchService
         return $this->repository->search($searchTerm);
     }
 
-    public function findAllWithPagination($page, $limit) {
+    public function findAllWithPagination($page, $limit)
+    {
         return $this->repository->findAllWithPagination($page, $limit);
     }
 
@@ -58,7 +59,6 @@ class DbEventSearchService implements EventSearchService
             ['name' => $name]
         );
         return $this->repository->findBySeries($series);
-
     }
 
     public function searchBySeriesUuid($uuid)
@@ -68,7 +68,6 @@ class DbEventSearchService implements EventSearchService
             ['uuid' => $uuid]
         );
         return $this->repository->findBySeries($series);
-
     }
 
     public function searchBySpeaker($name)

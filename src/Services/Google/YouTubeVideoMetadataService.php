@@ -38,7 +38,6 @@ class YouTubeVideoMetadataService
         $this->googleCredentials = $googleCredentials;
 
         $this->google_Service_YouTube = null;
-
     }
 
     public function googleServiceYouTube()
@@ -88,8 +87,10 @@ class YouTubeVideoMetadataService
         }
 
         // Call the API's videos.list method to retrieve the video resource.
-        $listResponse = $youtube->videos->listVideos("snippet,status",
-            array('id' => $stringParts[1]));
+        $listResponse = $youtube->videos->listVideos(
+            "snippet,status",
+            array('id' => $stringParts[1])
+        );
         $this->logger->debug("Searched for videos. Count of videos: " . $listResponse->count());
 
         $video = null;
@@ -116,12 +117,12 @@ class YouTubeVideoMetadataService
                 if ($isTodayOrNextSunday) {
                     if ($event->getApm() == "AM") {
                         $videoApm = " - 10:30 AM service";
-                    } else if ($event->getApm() == "PM") {
+                    } elseif ($event->getApm() == "PM") {
                         $videoApm = " - 6:30 PM service";
                     } else {
                         $videoApm = "";
                     }
-                } else if ($event->getReading() != "") {
+                } elseif ($event->getReading() != "") {
                     $videoApm = " | " . $event->getReading();
                 }
                 $videoSpeaker = ($event->getSpeaker() == "") ? "" : $event->getSpeaker();
@@ -138,7 +139,6 @@ class YouTubeVideoMetadataService
                         }
                     }
                     $youtube->videos->update("snippet,status", $video);
-
                 }
             } else {
                 $this->logger->debug("No videos loaded");
@@ -167,8 +167,10 @@ class YouTubeVideoMetadataService
         }
 
         // Call the API's videos.list method to retrieve the video resource.
-        $listResponse = $youtube->videos->listVideos("snippet,status",
-            array('id' => $stringParts[1]));
+        $listResponse = $youtube->videos->listVideos(
+            "snippet,status",
+            array('id' => $stringParts[1])
+        );
         $this->logger->debug("Searched for videos. Count of videos: " . $listResponse->count());
 
         $video = null;

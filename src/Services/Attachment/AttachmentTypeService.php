@@ -41,12 +41,12 @@ class AttachmentTypeService
         $attachment->setType($type);
         $attachment->setDescription($description);
         $attachment->setCanBePublic($canBePublic);
-                
+
         $this->em->persist($attachment);
         $this->em->flush();
         return $attachment;
     }
-    
+
     public function findByType($type)
     {
         return $this->repository->findOneBy([

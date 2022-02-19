@@ -239,7 +239,7 @@ class AttachmentMetadata implements TimestampableInterface
     public function setIsPublic(bool $isPublic): self
     {
         $this->isPublic = $isPublic;
-     
+
         return $this;
     }
 

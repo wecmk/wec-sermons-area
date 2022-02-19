@@ -8,10 +8,10 @@ class UploadedContent
 {
     /** @var UploadedContentRange $uploadedContentRange */
     private $uploadedContentRange;
-    
+
     /** @var Resource|string $uploadedContentRange */
     private $content;
-    
+
     public function __construct($uploadedContentRange, $content)
     {
         if ($uploadedContentRange instanceof UploadedContentRange) {
@@ -21,7 +21,7 @@ class UploadedContent
         }
         $this->content = $content;
     }
-    
+
     public function getUploadedContentRange(): UploadedContentRange
     {
         return $this->uploadedContentRange;

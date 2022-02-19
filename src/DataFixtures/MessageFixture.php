@@ -13,36 +13,36 @@ class MessageFixture extends Fixture implements \Doctrine\Bundle\FixturesBundle\
 {
     /** @var AttachmentMetadataTypeRepository $attachmentMetadataTypeRepository */
     private $attachmentMetadataTypeRepository;
-    
+
     public function __construct(\App\Repository\AttachmentMetadataTypeRepository $attachmentMetadataTypeRepository)
     {
         $this->attachmentMetadataTypeRepository = $attachmentMetadataTypeRepository;
     }
-    
+
     public function load(ObjectManager $manager)
     {
         $seriesColossians = new Series();
         $seriesColossians->setName("Colossians");
         $manager->persist($seriesColossians);
-        
+
         $seriesVisitingSpeaker = new Series();
         $seriesVisitingSpeaker->setName("Visiting Speaker");
         $manager->persist($seriesVisitingSpeaker);
-        
+
         $seriesUncategorised = new Series();
         $seriesUncategorised->setName("Uncategorised");
         $manager->persist($seriesUncategorised);
-        
+
         $seriesHebrews = new Series();
         $seriesHebrews->setName("Hebrews");
         $manager->persist($seriesHebrews);
-       
+
         $speakerAllan = "Allan Huxtable";
-        
+
         $SpeakerRoger = "Roger March";
-        
+
         $speakerVisitorWithLink = "Visiting Speaker";
-        
+
         $sermon = new Event();
         $sermon->setDate(new \DateTime());
         $sermon->setApm("AM");
@@ -56,7 +56,7 @@ class MessageFixture extends Fixture implements \Doctrine\Bundle\FixturesBundle\
         $sermon->setTags("");
         $sermon->setPublicComments("");
         $sermon->setPrivateComments("");
-        
+
         $attachmentMetadata = new AttachmentMetadata();
         $attachmentMetadata->setMimeType("audio/mpeg");
         $attachmentMetadata->setContentLength("200");
@@ -99,7 +99,7 @@ class MessageFixture extends Fixture implements \Doctrine\Bundle\FixturesBundle\
         $sermon->setPublicComments("");
         $sermon->setPrivateComments("");
         $manager->persist($sermon);
-       
+
         $sermon = new Event();
         $sermon->setDate(\DateTime::createFromFormat('Y-m-d', "2016-10-23"));
         $sermon->setApm("THU");
@@ -113,7 +113,7 @@ class MessageFixture extends Fixture implements \Doctrine\Bundle\FixturesBundle\
         $sermon->setTags("");
         $sermon->setPublicComments("");
         $sermon->setPrivateComments("");
-        
+
         $attachmentMetadata = new AttachmentMetadata();
         $attachmentMetadata->setMimeType("audio/mpeg");
         $attachmentMetadata->setContentLength("250");
@@ -126,15 +126,15 @@ class MessageFixture extends Fixture implements \Doctrine\Bundle\FixturesBundle\
         $attachmentMetadata->setType($type);
         $sermon->addAttachmentMetadata($attachmentMetadata);
         $manager->persist($sermon);
-        
+
         $sermon = new Event();
         $sermon->setDate(\DateTime::createFromFormat('d-m-Y', "26-05-2013"));
         $sermon->setApm("AM");
-        
+
         $seriesBaptisms = new Series();
         $seriesBaptisms->setName("Baptisms");
         $manager->persist($seriesBaptisms);
-        
+
         $sermon->addSeries($seriesBaptisms);
         $sermon->addSeries($seriesColossians);
         $sermon->setReading("Philippians 3 - 4 v. 1");
@@ -146,9 +146,9 @@ class MessageFixture extends Fixture implements \Doctrine\Bundle\FixturesBundle\
         $sermon->setTags("");
         $sermon->setPublicComments("");
         $sermon->setPrivateComments("");
-        
+
         $manager->persist($sermon);
-        
+
         $sermon = new Event();
         $sermon->setDate(\DateTime::createFromFormat('d-m-Y', "16-01-2005"));
         $sermon->setApm("AM");
@@ -162,7 +162,7 @@ class MessageFixture extends Fixture implements \Doctrine\Bundle\FixturesBundle\
         $sermon->setTags("");
         $sermon->setPublicComments("");
         $sermon->setPrivateComments("");
-        
+
         $attachmentMetadata = new AttachmentMetadata();
         $attachmentMetadata->setMimeType("application/pdf");
         $attachmentMetadata->setContentLength("200");
@@ -170,15 +170,15 @@ class MessageFixture extends Fixture implements \Doctrine\Bundle\FixturesBundle\
         $attachmentMetadata->setHash("asdf");
         $attachmentMetadata->setIsPublic(true);
         $attachmentMetadata->setExtension(".pdf");
-        
+
         $type = $this->attachmentMetadataTypeRepository->findOneBy(["type" => "service-sheet"]);
         $attachmentMetadata->setType($type);
         $sermon->addAttachmentMetadata($attachmentMetadata);
         $manager->persist($sermon);
-        
+
         $manager->flush();
     }
-    
+
     public static function getGroups(): array
     {
         return ['dev', 'test'];

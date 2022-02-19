@@ -21,7 +21,6 @@ use Symfony\Component\Mime\Email;
  */
 class ContactFormController extends AbstractController
 {
-
     /**
      * @Route("/", name="form")
      * @param Request $request
@@ -50,9 +49,9 @@ class ContactFormController extends AbstractController
                 ->subject("Message from Members Area - " . date("Y-m-d H:i:s"))
                 ->replyTo(
                     new Address(
-                    $contactUs->getEmail(),
-                    $toEmail
-                )
+                        $contactUs->getEmail(),
+                        $toEmail
+                    )
                 )
                 ->html(nl2br(print_r($contactUs, true)), 'text/html');
             $mailer->send($message);

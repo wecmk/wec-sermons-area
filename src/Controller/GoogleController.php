@@ -96,14 +96,13 @@ class GoogleController extends AbstractController
             //       do not update if before 4 April 2021
             //      Unlisted
             //      Title
-
-
         } catch (IdentityProviderException $e) {
             // something went wrong!
             // probably you should return the reason to the user
             $logger->error($e->getMessage(), $e->getTrace());
             throw $e;
-            var_dump("error: " . $e->getMessage()); die;
+            var_dump("error: " . $e->getMessage());
+            die;
         } catch (MissingAuthorizationCodeException $e) {
             throw $e;
         } catch (OptimisticLockException $e) {
@@ -113,7 +112,6 @@ class GoogleController extends AbstractController
         }
 
         return $this->redirectToRoute('members_area_home');
-
     }
 
     /**
