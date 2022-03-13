@@ -47,7 +47,7 @@ class SermonsController extends AbstractController
         $page = $request->query->get('page', 1);
         $limit = $this->itemsPerPage;
 
-        $searchQuery = $request->query->get("q", "");
+        $searchQuery = trim($request->query->get("q", ""));
 
         // Fix search query so that empty matches everything
         $searchQuery = ($searchQuery == "") ? $this->searchAllQuery : $searchQuery;
