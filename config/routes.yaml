@@ -24,3 +24,6 @@ api:
 authentication_token:
   path: /api/authentication_token
   methods: [ 'POST' ]
+
+login_check:
+  path: /login_check
