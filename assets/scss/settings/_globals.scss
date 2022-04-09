@@ -10,6 +10,12 @@ h1, h2, h3, h4, h5, h6 {
 
 a {
     color: $wec-c-red;
+    text-decoration: none !important;
+}
+
+a:hover {
+  color: $wec-c-red;
+  text-decoration: underline !important;
 }
 
 .container {
