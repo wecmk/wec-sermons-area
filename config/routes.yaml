@@ -9,6 +9,12 @@ wecmk_public_home:
   defaults:
     _controller: Symfony\Bundle\FrameworkBundle\Controller\RedirectController::redirectAction
 
+members_area_home:
+  path: /members
+  host: "www.wecmk.org"
+  schemes: "https"
+  defaults:
+    _controller: Symfony\Bundle\FrameworkBundle\Controller\RedirectController::redirectAction
 
 api:
   resource: '.'

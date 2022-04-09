@@ -111,7 +111,7 @@ class GoogleController extends AbstractController
             throw $e;
         }
 
-        return $this->redirectToRoute('members_area_home');
+        return $this->redirectToRoute('sermons_home');
     }
 
     /**

@@ -17,7 +17,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
- * @Route("/sermons", name="sermons_")
+ * @Route("/", name="sermons_")
  */
 class SermonsController extends AbstractController
 {
