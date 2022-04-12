@@ -125,7 +125,7 @@
                         <td>
                             {% for attachmentMetadata in entity.attachmentMetadata %}
                                 <div>
-                                    {% if attachmentMetadata.type.canBePublic %}
+                                    {% if not entity.corrupt and attachmentMetadata.type.canBePublic %}
                                         {% if attachmentMetadata.type.type == "sermon-recording" %}
                                             <a class="btn btn-primary" style="margin-top: 5px;" id="{{ attachmentMetadata.uuid }}"
                                                href="{{ path('attachment_index', {'uuid': attachmentMetadata.uuid, 'force-dl': "true" }) }}" onClick="
@@ -164,9 +164,13 @@
                                 {{ include('components/button-item-conditional-show.html.twig', {'url': 'https://www.wecmk.org/?p=2224', 'eventLabel': 'Sunday Services', 'linkText': 'Watch Now' }) }}
                             {% endif %}
 
-                            {% if entity.YouTubeLink is defined and entity.YouTubeLink is not empty %}
-                                {% set label = entity.Date|date('d-m-Y') ~ "-" ~ entity.Apm %}
-                                {{ include('components/button-item-conditional-show.html.twig', {'url': entity.YouTubeLink, 'eventLabel': "Watch", 'linkText': "Watch" }) }}
+                            {% if entity.corrupt %}
+                                <span>Audio unavailable</span>
+                            {% else %}
+                                {% if entity.YouTubeLink is defined and entity.YouTubeLink is not empty %}
+                                    {% set label = entity.Date|date('d-m-Y') ~ "-" ~ entity.Apm %}
+                                    {{ include('components/button-item-conditional-show.html.twig', {'url': entity.YouTubeLink, 'eventLabel': "Watch", 'linkText': "Watch" }) }}
+                                {% endif %}
                             {% endif %}
 
                             {% if is_granted("ROLE_ADMIN") %}
