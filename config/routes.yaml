@@ -16,6 +16,13 @@ members_area_home:
   defaults:
     _controller: Symfony\Bundle\FrameworkBundle\Controller\RedirectController::redirectAction
 
+sermons_redirect:
+  path: /sermons
+  controller: Symfony\Bundle\FrameworkBundle\Controller\RedirectController::urlRedirectAction
+  defaults:
+    path: /
+    permanent: true
+
 api:
   resource: '.'
   type: 'api_platform'
