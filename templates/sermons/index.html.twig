@@ -1,8 +1,8 @@
 {% extends 'base.html.twig' %}
 
-{% set breadcrumbs = { 
-    "members_area_home": "Home",
-    "sermons_home": "Sermons"
+{% set breadcrumbs = {
+    "wecmk_public_home": "Home",
+    "members_area_home": "Members Area"
 } %}
 
 {% block title %}Sermons{% endblock %}
@@ -38,11 +38,6 @@
             <div class="btn-group" role="group">
                 <a type="btn btn-secondary" class="btn btn-secondary" href="{{ path("sermons_list_series") }}">
                     List all Series
-                </a>
-            </div>
-            <div class="btn-group" role="group">
-                <a type="btn btn-secondary" class="btn btn-secondary" href="{{ path("contact_form") }}">
-                    Help
                 </a>
             </div>
 

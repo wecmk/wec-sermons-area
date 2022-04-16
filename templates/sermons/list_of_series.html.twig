@@ -1,9 +1,9 @@
 {% extends 'base.html.twig' %}
 
-{% set breadcrumbs = { 
-    "members_area_home": "Home",
-    "sermons_home": "Sermons",
-    "list_series": "List of Series"
+{% set breadcrumbs = {
+    "wecmk_public_home": "Home",
+    "members_area_home": "Members Area",
+    "sermons_home": "Sermons"
 } %}
 
 {% block title %}Sermons{% endblock %}
@@ -32,11 +32,6 @@
                 <a type="btn btn-secondary" class="btn btn-secondary" href="{% if mainPage is defined %}{{ path('search_all') }}{% else %}{{ path('sermons_home') }}{% endif %}">
                     Back to Sermons
                 </a>
-            </div>           
-            <div class="btn-group" role="group">
-                <button type="button" class="btn btn-secondary" data-toggle="modal" data-target=".help-modal-dialog">
-                    Help
-                </button>
             </div>
         </div>
     </div>

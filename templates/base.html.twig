@@ -116,12 +116,8 @@
             <nav aria-label="breadcrumb">
                 <ol class="breadcrumb">
                     {% for key,value in breadcrumbs %}
-                        {% if loop.last %}
-                            <li class="breadcrumb-item active" aria-current="page">{{ value }}</li>
-                            {% else %}
-                            <li class="breadcrumb-item"><a href="{{ path(key) }}">{{ value }}</a></li>
-                            {% endif %}
-                        {% endfor %}
+                        <li class="breadcrumb-item"><a href="{{ path(key) }}">{{ value }}</a></li>
+                    {% endfor %}
                 </ol>                
             </nav>
         </div>
