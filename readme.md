@@ -4,27 +4,26 @@
 
 [![Build Status](https://travis-ci.com/samuelpearce/wec-members.svg?token=19LW8Y8PepjC4HymS1nt&branch=master)](https://travis-ci.com/samuelpearce/wec-members)
 
-WEC Members is a Symfony web project to host sermons, Team lists and other
-members-only data.
+WEC Members is a Symfony web project to host sermons.
 
 ## Requirements
 
 Supported
 
-- Ubuntu 16.04
+- Ubuntu CentOS 7
 
 Requires
 
 - [Composer](https://getcomposer.org/)
-- [Elasticsearch](https://www.elastic.co/downloads/elasticsearch) - It's free,
 - MariaDB/MySQL
-- PHP 7.4
+- PHP 8.1
   - curl
   - ctype
   - gettext
   - libsodium
   - mysql
   - xml
+  - zip
 - [Symfony CLI](https://symfony.com/download)
 - [Yarn](https://yarnpkg.com/)
 
@@ -34,24 +33,30 @@ For development
 
 # Quick Start
 
+## Start Database
 Start your MySQL/MariaDB Database (however it's configured for you)
 
+## Configure settings
+
+Copy `.env` to `.env.local`
+
+`.env.local` is ignored in git so add your config here, not in .env
+
+## Seed database
+
 Run Migration (this creates your DB Schema)
-
-Update .env.local
-
-```
-php bin/console doctrine:migrations:migrate
+```shell
+symfony console doctrine:migrations:migrate
 ```
 
-Run Fixtures (this loads some default values for the DB)
-Note that some fixtures contain sensitive information which is not contained 
-within the repository. Contact a repository admin if you need a copy.
+Run init to seed database
+```shell
+symfony console app:init
 ```
-php bin/console doctrine:fixtures:load --group=dev
-```
+note: this is a custom implementation of Fixtures. We don't use fixtures as it's only designed for development, 
+but we want to seed a production database.
 
-Start a web server
+## Start a web server
 ```
 symfony serve
 ```
