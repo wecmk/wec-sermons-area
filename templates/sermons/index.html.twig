@@ -91,10 +91,8 @@
             </tfoot>
 
             <tbody>
-                {% if liveSermon is not defined %}
-                    {% set liveSermon = [] %}
-                {% endif %}
-                {% for entity in liveSermon | merge(results) %}
+               
+                {% for entity in results %}
                     <tr id="{{ entity.Id }}">
                         <td>{% if entity.Date %}{{ entity.Date|date('d-m-Y') }}{% endif %}</td>
                         <td>{{ entity.Apm }}</td>

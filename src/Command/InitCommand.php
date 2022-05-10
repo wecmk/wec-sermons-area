@@ -23,7 +23,9 @@ class InitCommand extends Command
         parent::__construct($name);
         $this->entityManager = $entityManager;
         $this->fixtures = [
-            $usersFixture
+            $attachmentMetadataTypeFixtures,
+            $bibleBooksFixtures,
+            $usersFixture,
         ];
     }
 
