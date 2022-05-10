@@ -87,12 +87,13 @@ class Series implements TimestampableInterface, SoftDeletableInterface
      */
     private $Author;
 
-    public function __construct(UuidInterface $uuid = null)
+    public function __construct(UuidInterface $uuid = null, string $name = null)
     {
         $this->uuid = $uuid ?: Uuid::uuid4();
         $this->complete = false;
         $this->setCreatedAt(new \DateTime());
         $this->setUpdatedAt(new \DateTime());
+        $this->setName($name ?: "");
         $this->events = new ArrayCollection();
     }
 

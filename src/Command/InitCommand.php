@@ -5,6 +5,9 @@ namespace App\Command;
 use App\DataFixtures\AttachmentMetadataTypeFixtures;
 use App\DataFixtures\BibleBooksFixtures;
 use App\DataFixtures\UsersFixture;
+use App\DataFixtures\SeriesFixture;
+use App\DataFixtures\MessageFixture;
+
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
@@ -18,14 +21,16 @@ class InitCommand extends Command
     private EntityManagerInterface $entityManager;
     private array $fixtures = [];
 
-    public function __construct(EntityManagerInterface $entityManager, AttachmentMetadataTypeFixtures $attachmentMetadataTypeFixtures, BibleBooksFixtures $bibleBooksFixtures, UsersFixture $usersFixture = null, string $name = null)
+    public function __construct(EntityManagerInterface $entityManager, AttachmentMetadataTypeFixtures $attachmentMetadataTypeFixtures, BibleBooksFixtures $bibleBooksFixtures, UsersFixture $usersFixture = null, SeriesFixture $seriesFixture, MessageFixture $messageFixture, string $name = null)
     {
         parent::__construct($name);
         $this->entityManager = $entityManager;
         $this->fixtures = [
-            $attachmentMetadataTypeFixtures,
-            $bibleBooksFixtures,
-            $usersFixture,
+             //$attachmentMetadataTypeFixtures, this is no longer used
+             $bibleBooksFixtures,
+             $usersFixture,
+             $seriesFixture, 
+             //$messageFixture, this has old code that might need to be updated
         ];
     }
 
