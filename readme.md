@@ -60,3 +60,11 @@ but we want to seed a production database.
 ```
 symfony serve
 ```
+
+# CRON Scripts
+You'll need to set up a CRON script to run every 1 hour
+
+```shell
+APP_ENV=prod symfony console app:renewoauth2
+```
+This will renew the OAuth2 tokens (not required, but nicer for UX for admin)
