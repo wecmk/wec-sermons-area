@@ -29,7 +29,6 @@
 
 {% block stylesheets %}
     <link href='https://fonts.googleapis.com/css?family=Lato&amp;subset=latin,latin-ext' rel='stylesheet' type='text/css'>
-    {{ encore_entry_link_tags('app') }}
     {{ parent() }}
 {% endblock %}
 
@@ -89,7 +88,7 @@
     <!-- End Google Tag Manager (noscript) -->
 
     <div class="header">
-        <div class="header-inner-container">
+        <div class="container header-inner-container">
             <div class="row">
                 <div class="col-3">
                     <a class="header-link" href="{{ path('members_area_home') }}">
@@ -109,7 +108,11 @@
             <nav aria-label="breadcrumb">
                 <ol class="breadcrumb">
                     {% for key,value in breadcrumbs %}
-                        <li class="breadcrumb-item"><a href="{{ path(key) }}">{{ value }}</a></li>
+                        {% if loop.last %}
+                            <li class="breadcrumb-item">{{ value }}</li>
+                        {% else %}
+                            <li class="breadcrumb-item"><a href="{{ path(key) }}">{{ value }}</a></li>
+                        {% endif %}
                     {% endfor %}
                 </ol>                
             </nav>
