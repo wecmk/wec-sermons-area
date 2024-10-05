@@ -347,3 +347,8 @@ $RECYCLE.BIN/
 prod.decrypt.private.php
 TeamsFixture.php
 public/media/
+
+###> symfony/asset-mapper ###
+/public/assets/
+/assets/vendor/
+###< symfony/asset-mapper ###
