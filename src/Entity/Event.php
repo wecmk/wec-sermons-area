@@ -37,43 +37,43 @@ class Event implements TimestampableInterface, SoftDeletableInterface, CanBeDown
      */
     #[ORM\Id]
     #[ORM\GeneratedValue]
-    #[ORM\Column(type: 'integer', nullable: false)]
+    #[ORM\Column(type: \Doctrine\DBAL\Types\Types::INTEGER, nullable: false)]
     private int $id;
 
     /**
      * @ApiProperty(identifier=true)
      */
-    #[ORM\Column(type: 'integer', unique: true, nullable: false)]
+    #[ORM\Column(type: \Doctrine\DBAL\Types\Types::INTEGER, unique: true, nullable: false)]
     private ?int $shortId = null;
 
-    #[ORM\Column(type: 'date')]
+    #[ORM\Column(type: \Doctrine\DBAL\Types\Types::DATE_MUTABLE)]
     private ?\DateTimeInterface $date;
 
-    #[ORM\Column(type: 'string', length: 3)]
+    #[ORM\Column(type: \Doctrine\DBAL\Types\Types::STRING, length: 3)]
     private ?string $apm = null;
 
-    #[ORM\Column(type: 'string', length: 255)]
+    #[ORM\Column(type: \Doctrine\DBAL\Types\Types::STRING, length: 255)]
     private ?string $reading = '';
 
-    #[ORM\Column(type: 'string', length: 255)]
+    #[ORM\Column(type: \Doctrine\DBAL\Types\Types::STRING, length: 255)]
     private ?string $secondReading = '';
 
-    #[ORM\Column(type: 'string', length: 255)]
+    #[ORM\Column(type: \Doctrine\DBAL\Types\Types::STRING, length: 255)]
     private ?string $title = '';
 
-    #[ORM\Column(type: 'boolean')]
+    #[ORM\Column(type: \Doctrine\DBAL\Types\Types::BOOLEAN)]
     private ?bool $corrupt = false;
 
-    #[ORM\Column(type: 'boolean')]
+    #[ORM\Column(type: \Doctrine\DBAL\Types\Types::BOOLEAN)]
     private ?bool $isPublic = false;
 
-    #[ORM\Column(type: 'text')]
+    #[ORM\Column(type: \Doctrine\DBAL\Types\Types::TEXT)]
     private ?string $tags = "";
 
-    #[ORM\Column(type: 'text')]
+    #[ORM\Column(type: \Doctrine\DBAL\Types\Types::TEXT)]
     private ?string $publicComments = "";
 
-    #[ORM\Column(type: 'text')]
+    #[ORM\Column(type: \Doctrine\DBAL\Types\Types::TEXT)]
     private ?string $privateComments = "";
 
     /**
@@ -82,13 +82,13 @@ class Event implements TimestampableInterface, SoftDeletableInterface, CanBeDown
     #[ORM\OneToMany(targetEntity: AttachmentMetadata::class, mappedBy: 'event', orphanRemoval: true, cascade: ['persist'])]
     private Collection $attachmentMetadata;
 
-    #[ORM\Column(type: 'string', length: 10, nullable: true)]
+    #[ORM\Column(type: \Doctrine\DBAL\Types\Types::STRING, length: 10, nullable: true)]
     private ?string $legacyId = '';
 
-    #[ORM\Column(type: 'string', length: 255, nullable: true)]
+    #[ORM\Column(type: \Doctrine\DBAL\Types\Types::STRING, length: 255, nullable: true)]
     private ?string $youTubeLink = null;
 
-    #[ORM\Column(type: 'string', length: 255, nullable: false)]
+    #[ORM\Column(type: \Doctrine\DBAL\Types\Types::STRING, length: 255, nullable: false)]
     private ?string $speaker = "";
 
     /**

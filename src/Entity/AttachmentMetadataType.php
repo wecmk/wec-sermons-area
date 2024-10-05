@@ -14,26 +14,17 @@ class AttachmentMetadataType
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
-    #[ORM\Column(type: 'integer')]
+    #[ORM\Column(type: \Doctrine\DBAL\Types\Types::INTEGER)]
     private ?int $id = null;
 
-    #[ORM\Column(type: 'string', length: 30)]
-    private ?string $type = null;
-
-    #[ORM\Column(type: 'string', length: 20)]
-    private ?string $name = null;
-
-    #[ORM\Column(type: 'string', length: 255)]
-    private ?string $description = null;
-
-    #[ORM\Column(type: 'boolean', options: ['default' => true])]
+    #[ORM\Column(type: \Doctrine\DBAL\Types\Types::BOOLEAN, options: ['default' => true])]
     private ?bool $canBePublic = true;
 
-    public function __construct($type, $name, $description, $canBePublic = true)
+    public function __construct(#[ORM\Column(type: \Doctrine\DBAL\Types\Types::STRING, length: 30)]
+    private ?string $type, #[ORM\Column(type: \Doctrine\DBAL\Types\Types::STRING, length: 20)]
+    private ?string $name, #[ORM\Column(type: \Doctrine\DBAL\Types\Types::STRING, length: 255)]
+    private ?string $description, $canBePublic = true)
     {
-        $this->type = $type;
-        $this->name = $name;
-        $this->description = $description;
     }
 
     public function getId(): ?int

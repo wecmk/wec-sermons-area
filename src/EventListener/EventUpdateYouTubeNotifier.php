@@ -13,14 +13,8 @@ use Doctrine\Persistence\Event\LifecycleEventArgs;
  */
 class EventUpdateYouTubeNotifier
 {
-    private LoggerInterface $logger;
-
-    private YouTubeVideoMetadataService $youTubeVideoMetadataService;
-
-    public function __construct(LoggerInterface $logger, YouTubeVideoMetadataService $youTubeVideoMetadataService)
+    public function __construct(private readonly LoggerInterface $logger, private readonly YouTubeVideoMetadataService $youTubeVideoMetadataService)
     {
-        $this->logger = $logger;
-        $this->youTubeVideoMetadataService = $youTubeVideoMetadataService;
     }
 
     public function postUpdate(Event $event, LifecycleEventArgs $args)

@@ -64,7 +64,7 @@ class AttachmentMetadata implements TimestampableInterface
      */
     #[ORM\Id]
     #[ORM\GeneratedValue]
-    #[ORM\Column(type: 'integer')]
+    #[ORM\Column(type: \Doctrine\DBAL\Types\Types::INTEGER)]
     private int $id;
 
     /**
@@ -75,22 +75,22 @@ class AttachmentMetadata implements TimestampableInterface
     #[Groups(['user:write'])]
     private UuidInterface $uuid;
 
-    #[ORM\Column(type: 'string', length: 255)]
+    #[ORM\Column(type: \Doctrine\DBAL\Types\Types::STRING, length: 255)]
     private ?string $mimeType = null;
 
-    #[ORM\Column(type: 'string', length: 10)]
+    #[ORM\Column(type: \Doctrine\DBAL\Types\Types::STRING, length: 10)]
     private ?string $extension = null;
 
-    #[ORM\Column(type: 'string', length: 255)]
+    #[ORM\Column(type: \Doctrine\DBAL\Types\Types::STRING, length: 255)]
     private ?string $contentLength = null;
 
-    #[ORM\Column(type: 'boolean')]
+    #[ORM\Column(type: \Doctrine\DBAL\Types\Types::BOOLEAN)]
     private ?bool $complete = false;
 
-    #[ORM\Column(type: 'string', length: 128)]
+    #[ORM\Column(type: \Doctrine\DBAL\Types\Types::STRING, length: 128)]
     private string $hash = "";
 
-    #[ORM\Column(type: 'string', length: 10)]
+    #[ORM\Column(type: \Doctrine\DBAL\Types\Types::STRING, length: 10)]
     private ?string $hashAlgo = "sha512";
 
     #[ORM\ManyToOne(targetEntity: \App\Entity\Event::class, inversedBy: 'attachmentMetadata')]
@@ -99,7 +99,7 @@ class AttachmentMetadata implements TimestampableInterface
     #[ORM\ManyToOne(targetEntity: \App\Entity\AttachmentMetadataType::class, cascade: ['persist'])]
     private ?AttachmentMetadataType $type = null;
 
-    #[ORM\Column(type: 'boolean')]
+    #[ORM\Column(type: \Doctrine\DBAL\Types\Types::BOOLEAN)]
     private bool $isPublic = false;
 
     public function __construct(UuidInterface $uuid = null)

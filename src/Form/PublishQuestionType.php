@@ -21,14 +21,8 @@ class PublishQuestionType extends AbstractType
     {
         $builder
             ->add('Number', HiddenType::class)
-            ->add('publishDate', DateTimeType::class, array(
-                'data' => new \DateTime()
-            ))
-            ->add('scheduleSubsequentQuestions', CheckboxType::class, array(
-                'mapped' => false,
-                'data' => false,
-                'required' => false,
-            ));
+            ->add('publishDate', DateTimeType::class, ['data' => new \DateTime()])
+            ->add('scheduleSubsequentQuestions', CheckboxType::class, ['mapped' => false, 'data' => false, 'required' => false]);
     }
 
     /**
@@ -36,9 +30,7 @@ class PublishQuestionType extends AbstractType
      */
     public function setDefaultOptions(OptionsResolverInterface $resolver): void
     {
-        $resolver->setDefaults(array(
-            'data_class' => 'Wec\QuestionsBundle\Entity\Question'
-        ));
+        $resolver->setDefaults(['data_class' => 'Wec\QuestionsBundle\Entity\Question']);
     }
 
     /**

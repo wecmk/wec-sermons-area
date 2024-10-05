@@ -12,17 +12,11 @@ use App\Entity\Event;
  */
 class EventService
 {
-    private LoggerInterface $logger;
+    private readonly EventRepository $repository;
 
-    private EventRepository $repository;
-
-    private EntityManagerInterface $em;
-
-    public function __construct(LoggerInterface $logger, EntityManagerInterface $em)
+    public function __construct(private readonly LoggerInterface $logger, private readonly EntityManagerInterface $em)
     {
-        $this->logger = $logger;
-        $this->em = $em;
-        $this->repository = $em->getRepository(Event::class);
+        $this->repository = $this->em->getRepository(Event::class);
     }
 
     /**

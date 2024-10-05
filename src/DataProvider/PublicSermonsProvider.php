@@ -13,13 +13,8 @@ use Symfony\Component\Routing\RouterInterface;
 
 class PublicSermonsProvider implements CollectionDataProviderInterface, RestrictedDataProviderInterface
 {
-    private EventRepository $eventRepository;
-    private RouterInterface $router;
-
-    public function __construct(EventRepository $eventRepository, RouterInterface $router)
+    public function __construct(private readonly EventRepository $eventRepository, private readonly RouterInterface $router)
     {
-        $this->eventRepository = $eventRepository;
-        $this->router = $router;
     }
 
 
@@ -29,9 +24,7 @@ class PublicSermonsProvider implements CollectionDataProviderInterface, Restrict
         $output = [];
         /** @var Event $sermon */
         foreach ($sermons as $sermon) {
-            $attachmentMetadata = $sermon->getAttachmentMetadata()->filter(function (AttachmentMetadata $element) {
-                return $element->getType()->getType() == 'sermon-recording';
-            })->get(0);
+            $attachmentMetadata = $sermon->getAttachmentMetadata()->filter(fn(AttachmentMetadata $element) => $element->getType()->getType() == 'sermon-recording')->get(0);
 
             if (null == $attachmentMetadata) {
                 continue;

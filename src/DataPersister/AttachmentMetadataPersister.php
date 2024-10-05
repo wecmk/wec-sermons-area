@@ -9,13 +9,11 @@ use Symfony\Component\Intl\Exception\NotImplementedException;
 
 final class AttachmentMetadataPersister implements ContextAwareDataPersisterInterface
 {
-    private ContextAwareDataPersisterInterface $decorated;
-    private FilesystemService $filesystemService;
+    private readonly ContextAwareDataPersisterInterface $decorated;
 
-    public function __construct(ContextAwareDataPersisterInterface $decorated, FilesystemService $filesystemService)
+    public function __construct(ContextAwareDataPersisterInterface $decorated, private readonly FilesystemService $filesystemService)
     {
         $this->decorated = $decorated;
-        $this->filesystemService = $filesystemService;
     }
 
     public function supports($data, array $context = []): bool

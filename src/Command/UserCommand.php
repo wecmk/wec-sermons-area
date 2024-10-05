@@ -18,12 +18,9 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 )]
 class UserCommand extends Command
 {
-    private UserService $userService;
-
-    public function __construct(UserService $userService, string $name = null)
+    public function __construct(private readonly UserService $userService, string $name = null)
     {
         parent::__construct($name);
-        $this->userService = $userService;
     }
 
     protected function configure(): void

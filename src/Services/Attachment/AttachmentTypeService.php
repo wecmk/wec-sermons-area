@@ -12,21 +12,12 @@ use App\Entity\UploadedContent;
  */
 class AttachmentTypeService
 {
-    /* @var $logger LoggerInterface */
-
-    private $logger;
-
     /* @var $repository \Doctrine\Common\Persistence\ObjectManager */
     private $repository;
 
-    /** @var \Doctrine\ORM\EntityManagerInterface $em */
-    private $em;
-
-    public function __construct(LoggerInterface $logger, \Doctrine\ORM\EntityManagerInterface $em)
+    public function __construct(private readonly LoggerInterface $logger, private readonly \Doctrine\ORM\EntityManagerInterface $em)
     {
-        $this->logger = $logger;
-        $this->em = $em;
-        $this->repository = $em->getRepository(AttachmentMetadataType::class);
+        $this->repository = $this->em->getRepository(AttachmentMetadataType::class);
     }
 
     /**

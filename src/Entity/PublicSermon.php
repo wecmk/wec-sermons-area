@@ -26,7 +26,7 @@ use Ramsey\Uuid\UuidInterface;
  */
 class PublicSermon
 {
-    private ?UuidInterface $id;
+    private ?UuidInterface $id = null;
 
     private $date;
 

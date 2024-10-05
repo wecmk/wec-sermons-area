@@ -22,7 +22,7 @@ use Symfony\Component\Serializer\Annotation\SerializedName;
  * @ApiResource(attributes={"denormalization_context"={"api_allow_update":true}})
  */
 #[ORM\Entity(repositoryClass: SeriesRepository::class)]
-class Series implements TimestampableInterface, SoftDeletableInterface
+class Series implements TimestampableInterface, SoftDeletableInterface, \Stringable
 {
     /**
      * Hook SoftDeleteable behavior
@@ -36,7 +36,7 @@ class Series implements TimestampableInterface, SoftDeletableInterface
      */
     #[ORM\Id]
     #[ORM\GeneratedValue]
-    #[ORM\Column(type: 'integer')]
+    #[ORM\Column(type: \Doctrine\DBAL\Types\Types::INTEGER)]
     private ?int $id = null;
 
     /**
@@ -47,31 +47,31 @@ class Series implements TimestampableInterface, SoftDeletableInterface
     #[Groups(['user:write'])]
     private UuidInterface $uuid;
 
-    #[ORM\Column(type: 'string', length: 255)]
+    #[ORM\Column(type: \Doctrine\DBAL\Types\Types::STRING, length: 255)]
     private ?string $name = null;
 
-    #[ORM\Column(type: 'text')]
+    #[ORM\Column(type: \Doctrine\DBAL\Types\Types::TEXT)]
     private string $description = '';
 
-    #[ORM\Column(type: 'boolean')]
+    #[ORM\Column(type: \Doctrine\DBAL\Types\Types::BOOLEAN)]
     private ?bool $complete = false;
 
-    #[ORM\Column(type: 'boolean')]
+    #[ORM\Column(type: \Doctrine\DBAL\Types\Types::BOOLEAN)]
     private ?bool $isPublic = true;
 
     /**
-     * @var \Doctrine\Common\Collections\Collection<int, \Event>
+     * @var \Doctrine\Common\Collections\Collection<int, \App\Entity\Event>
      */
     #[ORM\ManyToMany(targetEntity: Event::class, mappedBy: 'series')]
     private Collection $events;
 
-    #[ORM\Column(type: 'date', nullable: true)]
+    #[ORM\Column(type: \Doctrine\DBAL\Types\Types::DATE_MUTABLE, nullable: true)]
     private ?\DateTimeInterface $startDate = null;
 
-    #[ORM\Column(type: 'date', nullable: true)]
+    #[ORM\Column(type: \Doctrine\DBAL\Types\Types::DATE_MUTABLE, nullable: true)]
     private ?\DateTimeInterface $endDate = null;
 
-    #[ORM\Column(type: 'string', length: 50, nullable: true)]
+    #[ORM\Column(type: \Doctrine\DBAL\Types\Types::STRING, length: 50, nullable: true)]
     private ?string $Author = null;
 
     public function __construct(UuidInterface $uuid = null, string $name = null)

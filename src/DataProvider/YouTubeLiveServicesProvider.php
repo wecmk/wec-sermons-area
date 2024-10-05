@@ -10,11 +10,8 @@ use App\Repository\EventRepository;
 
 class YouTubeLiveServicesProvider implements CollectionDataProviderInterface, RestrictedDataProviderInterface
 {
-    private EventRepository $eventRepository;
-
-    public function __construct(EventRepository $eventRepository)
+    public function __construct(private readonly EventRepository $eventRepository)
     {
-        $this->eventRepository = $eventRepository;
     }
 
     public function getCollection(string $resourceClass, string $operationName = null): array

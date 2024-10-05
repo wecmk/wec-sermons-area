@@ -17,13 +17,13 @@ class BibleBooks
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
-    #[ORM\Column(type: 'integer')]
+    #[ORM\Column(type: \Doctrine\DBAL\Types\Types::INTEGER)]
     private ?int $id = null;
 
-    #[ORM\Column(type: 'string', length: 16)]
+    #[ORM\Column(type: \Doctrine\DBAL\Types\Types::STRING, length: 16)]
     private ?string $book = null;
 
-    #[ORM\Column(type: 'integer')]
+    #[ORM\Column(type: \Doctrine\DBAL\Types\Types::INTEGER)]
     private ?int $sort = null;
 
     public function getId(): ?int

@@ -26,18 +26,11 @@ use Symfony\Component\Security\Core\User\UserInterface;
 class PullyoutubetitlesCommand extends Command
 {
 
-    private EntityManagerInterface $entityManager;
-    private EventRepository $eventRepository;
-    private YouTubeVideoMetadataService $youTubeVideoMetadataService;
-
-    public function __construct(EntityManagerInterface $entityManager, EventRepository $eventRepository, TokenStorageInterface $tokenStorage, UserRepository $userRepository, \Symfony\Bundle\SecurityBundle\Security $security, YouTubeVideoMetadataService $youTubeVideoMetadataService, string $name = null)
+    public function __construct(private readonly EntityManagerInterface $entityManager, private readonly EventRepository $eventRepository, TokenStorageInterface $tokenStorage, UserRepository $userRepository, \Symfony\Bundle\SecurityBundle\Security $security, private readonly YouTubeVideoMetadataService $youTubeVideoMetadataService, string $name = null)
     {
         parent::__construct($name);
-        $this->entityManager = $entityManager;
-        $this->eventRepository = $eventRepository;
         $user = $userRepository->findOneBy(['username' => 'samuel']);
         $tokenStorage->setToken(new UsernamePasswordToken($user, 'main', $user->getRoles()));
-        $this->youTubeVideoMetadataService = $youTubeVideoMetadataService;
     }
 
     protected function configure(): void
@@ -57,7 +50,7 @@ class PullyoutubetitlesCommand extends Command
                 continue;
             }
 
-            if (strpos($event->getYouTubeLink(), "youtube.com") !== false) {
+            if (str_contains($event->getYouTubeLink(), "youtube.com")) {
                 $stringParts = explode("=", $event->getYouTubeLink());
                 if (count($stringParts) != 2) {
                     continue;
@@ -75,7 +68,7 @@ class PullyoutubetitlesCommand extends Command
             // Call the API's videos.list method to retrieve the video resource.
             $listResponse = $youtube->videos->listVideos(
                 "snippet,status",
-                array('id' => $stringParts[1])
+                ['id' => $stringParts[1]]
             );
             $io->info("Searched for videos. Count of videos: " . $listResponse->count());
 

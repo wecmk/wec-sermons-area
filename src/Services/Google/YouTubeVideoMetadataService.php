@@ -13,30 +13,18 @@ use Symfony\Component\Routing\RouterInterface;
 class YouTubeVideoMetadataService
 {
     public $_redirectURI;
-    private LoggerInterface $logger;
-    private RouterInterface $router;
-
-    private string $OAUTH_GOOGLE_CLIENT_ID;
-    private string $OAUTH_GOOGLE_CLIENT_SECRET;
     private ?Google_Service_YouTube $google_Service_YouTube = null;
-    private GoogleCredentials $googleCredentials;
-    private Google_Client $client;
+    private readonly Google_Client $client;
 
-    public function __construct(LoggerInterface $logger, RouterInterface $router, GoogleCredentials $googleCredentials, string $OAUTH_GOOGLE_CLIENT_ID, string $OAUTH_GOOGLE_CLIENT_SECRET)
+    public function __construct(private readonly LoggerInterface $logger, private readonly RouterInterface $router, private readonly GoogleCredentials $googleCredentials, private readonly string $OAUTH_GOOGLE_CLIENT_ID, private readonly string $OAUTH_GOOGLE_CLIENT_SECRET)
     {
-        $this->logger = $logger;
-        $this->router = $router;
-        $this->OAUTH_GOOGLE_CLIENT_ID = $OAUTH_GOOGLE_CLIENT_ID;
-        $this->OAUTH_GOOGLE_CLIENT_SECRET = $OAUTH_GOOGLE_CLIENT_SECRET;
         $config = [
-            "client_id" => $OAUTH_GOOGLE_CLIENT_ID,
-            "client_secret" => $OAUTH_GOOGLE_CLIENT_SECRET,
+            "client_id" => $this->OAUTH_GOOGLE_CLIENT_ID,
+            "client_secret" => $this->OAUTH_GOOGLE_CLIENT_SECRET,
             "access_type" => "offline",
             "api_format_v2" => true,
         ];
         $this->client = new Google_Client($config);
-
-        $this->googleCredentials = $googleCredentials;
     }
 
     public function googleServiceYouTube()
@@ -70,14 +58,14 @@ class YouTubeVideoMetadataService
     {
         $youtube = $this->googleServiceYouTube();
 
-        if (strpos($event->getYouTubeLink(), "youtube.com") !== false) {
-            $stringParts = explode("=", $event->getYouTubeLink());
+        if (str_contains((string) $event->getYouTubeLink(), "youtube.com")) {
+            $stringParts = explode("=", (string) $event->getYouTubeLink());
             if (count($stringParts) != 2) {
                 return null;
             }
         }
 
-        if (str_contains($event->getYouTubeLink(), "youtu.be")) {
+        if (str_contains((string) $event->getYouTubeLink(), "youtu.be")) {
             $string = str_replace("//", "", $event->getYouTubeLink());
             $stringParts = explode("/", $string);
             if (count($stringParts) != 2) {
@@ -88,7 +76,7 @@ class YouTubeVideoMetadataService
         // Call the API's videos.list method to retrieve the video resource.
         $listResponse = $youtube->videos->listVideos(
             "snippet,status",
-            array('id' => $stringParts[1])
+            ['id' => $stringParts[1]]
         );
         $this->logger->debug("Searched for videos. Count of videos: " . $listResponse->count());
 
@@ -146,14 +134,14 @@ class YouTubeVideoMetadataService
     {
         $youtube = $this->googleServiceYouTube();
 
-        if (strpos($event->getYouTubeLink(), "youtube.com") !== false) {
-            $stringParts = explode("=", $event->getYouTubeLink());
+        if (str_contains((string) $event->getYouTubeLink(), "youtube.com")) {
+            $stringParts = explode("=", (string) $event->getYouTubeLink());
             if (count($stringParts) != 2) {
                 return null;
             }
         }
 
-        if (str_contains($event->getYouTubeLink(), "youtu.be")) {
+        if (str_contains((string) $event->getYouTubeLink(), "youtu.be")) {
             $string = str_replace("//", "", $event->getYouTubeLink());
             $stringParts = explode("/", $string);
             if (count($stringParts) != 2) {
@@ -164,7 +152,7 @@ class YouTubeVideoMetadataService
         // Call the API's videos.list method to retrieve the video resource.
         $listResponse = $youtube->videos->listVideos(
             "snippet,status",
-            array('id' => $stringParts[1])
+            ['id' => $stringParts[1]]
         );
         $this->logger->debug("Searched for videos. Count of videos: " . $listResponse->count());
 

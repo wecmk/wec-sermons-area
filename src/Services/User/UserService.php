@@ -14,24 +14,8 @@ use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 class UserService
 {
-    private LoggerInterface $logger;
-
-    private UserRepository $repository;
-
-    private EntityManagerInterface $em;
-
-    private UserPasswordHasherInterface $passwordHasher;
-
-    public function __construct(
-        LoggerInterface $logger,
-        UserRepository $userRepository,
-        UserPasswordHasherInterface $hasher,
-        EntityManagerInterface $entityManager
-    ) {
-        $this->logger = $logger;
-        $this->em = $entityManager;
-        $this->repository = $userRepository;
-        $this->passwordHasher = $hasher;
+    public function __construct(private readonly LoggerInterface $logger, private readonly UserRepository $repository, private readonly UserPasswordHasherInterface $passwordHasher, private readonly EntityManagerInterface $em)
+    {
     }
 
     /**

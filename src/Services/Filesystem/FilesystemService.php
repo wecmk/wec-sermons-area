@@ -24,30 +24,15 @@ class FilesystemService
 {
     private $paramRootPath = "fileRootPath";
 
-    /* @var $logger LoggerInterface */
-    private $logger;
-
     /* @var $repository ObjectManager */
     private $repository;
 
-    /** @var EntityManagerInterface $em */
-    private $em;
-
-    /** @var string $fileRootPath */
-    private $fileRootPath;
-
     /**
-     * @var WecFilesystem
+     * @param string $fileRootPath
      */
-    private $filesystem;
-
-    public function __construct(LoggerInterface $logger, EntityManagerInterface $em, WecFilesystem $filesystem, $fileRootPath)
+    public function __construct(private readonly LoggerInterface $logger, private readonly EntityManagerInterface $em, private readonly WecFilesystem $filesystem, private $fileRootPath)
     {
-        $this->logger = $logger;
-        $this->em = $em;
-        $this->repository = $em->getRepository(AttachmentMetadata::class);
-        $this->filesystem = $filesystem;
-        $this->fileRootPath = $fileRootPath;
+        $this->repository = $this->em->getRepository(AttachmentMetadata::class);
     }
 
     /**

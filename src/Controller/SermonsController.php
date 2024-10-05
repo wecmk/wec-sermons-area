@@ -22,16 +22,9 @@ class SermonsController extends AbstractController
     private int $itemsPerPage = 16;
     private $searchAllQuery = "*";
 
-    private BooksService $booksService;
-    private EventRepository $eventRepository;
-    private SeriesRepository $seriesRepository;
 
-
-    public function __construct(BooksService $booksService, EventRepository $eventRepository, SeriesRepository $seriesRepository)
+    public function __construct(private readonly BooksService $booksService, private readonly EventRepository $eventRepository, private readonly SeriesRepository $seriesRepository)
     {
-        $this->booksService = $booksService;
-        $this->eventRepository = $eventRepository;
-        $this->seriesRepository = $seriesRepository;
     }
 
     /**
@@ -122,12 +115,8 @@ class SermonsController extends AbstractController
                 $seriesOther[] = $series;
             }
         }
-        usort($seriesFromBibleBooks, function (Series $a, Series $b) {
-            return $a->getName() <=> $b->getName();
-        });
-        usort($seriesOther, function (Series $a, Series $b) {
-            return $a->getName() <=> $b->getName();
-        });
+        usort($seriesFromBibleBooks, fn(Series $a, Series $b) => $a->getName() <=> $b->getName());
+        usort($seriesOther, fn(Series $a, Series $b) => $a->getName() <=> $b->getName());
         $visitingSpeakerSeries = $this->seriesRepository->findOneBy(['name' => "Visiting Speaker"]);
         usort($allSeries, 'strcmp');
         return $this->render('sermons/list_of_series.html.twig', [
@@ -140,17 +129,9 @@ class SermonsController extends AbstractController
 
     public function convert_smart_quotes($string)
     {
-        $search = array(chr(145),
-            chr(146),
-            chr(147),
-            chr(148),
-            chr(151));
+        $search = [chr(145), chr(146), chr(147), chr(148), chr(151)];
 
-        $replace = array("'",
-            "'",
-            '"',
-            '"',
-            '-');
+        $replace = ["'", "'", '"', '"', '-'];
 
         return str_replace($search, $replace, $string);
     }

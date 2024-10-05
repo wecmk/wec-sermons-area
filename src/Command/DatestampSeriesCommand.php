@@ -20,16 +20,9 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 class DatestampSeriesCommand extends Command
 {
 
-    private EntityManagerInterface $entityManager;
-    private SeriesRepository $seriesRepository;
-    private EventRepository $eventRepository;
-
-    public function __construct(EntityManagerInterface $entityManager, SeriesRepository $seriesRepository, EventRepository $eventRepository, String $name = null)
+    public function __construct(private readonly EntityManagerInterface $entityManager, private readonly SeriesRepository $seriesRepository, private readonly EventRepository $eventRepository, String $name = null)
     {
         parent::__construct($name);
-        $this->entityManager = $entityManager;
-        $this->seriesRepository = $seriesRepository;
-        $this->eventRepository = $eventRepository;
     }
 
     protected function configure(): void
@@ -58,11 +51,9 @@ class DatestampSeriesCommand extends Command
                 $series->setComplete(true);
             }
 
-            $series->setName(trim($series->getName()));
+            $series->setName(trim((string) $series->getName()));
 
-            $seriesSpeakers = array_map(function (Event $object) {
-                return trim($object->getSpeaker());
-            }, $this->eventRepository->findBySeries($series));
+            $seriesSpeakers = array_map(fn(Event $object) => trim((string) $object->getSpeaker()), $this->eventRepository->findBySeries($series));
 
             $seriesSpeakers = array_unique($seriesSpeakers);
 

@@ -16,22 +16,14 @@ use App\Entity\Event;
 
 class DbEventSearchService implements EventSearchService
 {
-    /* @var $logger LoggerInterface */
-    private $logger;
-
     /* @var $index TransformedFinder */
     private $index;
 
-    /** @var EntityManagerInterface $em */
-    private $em;
+    private readonly EventRepository $repository;
 
-    private EventRepository $repository;
-
-    public function __construct(LoggerInterface $logger, EntityManagerInterface $em)
+    public function __construct(private readonly LoggerInterface $logger, private readonly EntityManagerInterface $em)
     {
-        $this->logger = $logger;
-        $this->em = $em;
-        $this->repository = $em->getRepository(Event::class);
+        $this->repository = $this->em->getRepository(Event::class);
     }
 
     public function search($searchTerm)

@@ -6,15 +6,12 @@ use App\Repository\VariablesRepository;
 
 class GoogleCredentials
 {
-    private VariablesRepository $variablesRepository;
-
     private string $accessTokenName = "GoogleCredentialsAccessToken";
     private string $refreshTokenName = "GoogleCredentialsRefreshToken";
     private string $expires = "GoogleCredentialsExpires";
 
-    public function __construct(VariablesRepository $variablesRepository)
+    public function __construct(private readonly VariablesRepository $variablesRepository)
     {
-        $this->variablesRepository = $variablesRepository;
     }
 
     public function getAccessToken(): ?string

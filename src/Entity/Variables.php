@@ -5,20 +5,19 @@ namespace App\Entity;
 use App\Repository\VariablesRepository;
 use Doctrine\ORM\Mapping as ORM;
 
-#[ORM\Table]
 #[ORM\Index(columns: ['name'])]
 #[ORM\Entity(repositoryClass: VariablesRepository::class)]
 class Variables
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
-    #[ORM\Column(type: 'integer')]
+    #[ORM\Column(type: \Doctrine\DBAL\Types\Types::INTEGER)]
     private int $id;
 
-    #[ORM\Column(type: 'string', length: 255)]
+    #[ORM\Column(type: \Doctrine\DBAL\Types\Types::STRING, length: 255)]
     private string $name;
 
-    #[ORM\Column(type: 'text')]
+    #[ORM\Column(type: \Doctrine\DBAL\Types\Types::TEXT)]
     private ?string $value;
 
     public function __construct($name = null)

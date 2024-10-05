@@ -17,25 +17,16 @@ use App\Entity\Event;
 
 class IndexEventSearchService
 {
-    /* @var $logger LoggerInterface */
-
-    private $logger;
-
     /* @var $index \FOS\ElasticaBundle\Finder\TransformedFinder */
     private $index;
-
-    /** @var \Doctrine\ORM\EntityManagerInterface $em */
-    private $em;
 
     /** @var \App\Repository\EventRepository $repository */
     private $repository;
 
-    public function __construct(LoggerInterface $logger, TransformedFinder $index, \Doctrine\ORM\EntityManagerInterface $em)
+    public function __construct(private readonly LoggerInterface $logger, TransformedFinder $index, private readonly \Doctrine\ORM\EntityManagerInterface $em)
     {
-        $this->logger = $logger;
         $this->index = $index;
-        $this->em = $em;
-        $this->repository = $em->getRepository(Event::class);
+        $this->repository = $this->em->getRepository(Event::class);
     }
 
     public function search($searchTerm)
@@ -47,7 +38,7 @@ class IndexEventSearchService
         $boolQuery->addShould($fieldQuery);
 
         $searchQuery = new \Elastica\Query($boolQuery);
-        $searchQuery->addSort(array('Date' => 'desc', 'Apm' => 'desc'));
+        $searchQuery->addSort(['Date' => 'desc', 'Apm' => 'desc']);
         $results = $this->index->find($searchQuery);
 
         return $results;
@@ -67,7 +58,7 @@ class IndexEventSearchService
         $query_part->addMust($nested);
 
         $searchQuery = new \Elastica\Query($query_part);
-        $searchQuery->addSort(array('Date' => 'asc', 'Apm' => 'asc'));
+        $searchQuery->addSort(['Date' => 'asc', 'Apm' => 'asc']);
         $results = $this->index->find($searchQuery);
         return $this->index->find($searchQuery);
     }

@@ -8,15 +8,13 @@ use Symfony\Component\Filesystem\Filesystem;
 
 class WecFilesystem extends Filesystem
 {
-    private $basePath;
     /**
      * @var Filesystem
      */
     private $filesystem;
 
-    public function __construct($filesystemBasePath)
+    public function __construct(private $basePath)
     {
-        $this->basePath = $filesystemBasePath;
         $this->filesystem = new Filesystem();
     }
 

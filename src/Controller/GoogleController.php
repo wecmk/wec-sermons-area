@@ -102,11 +102,7 @@ class GoogleController extends AbstractController
             throw $e;
             var_dump("error: " . $e->getMessage());
             die;
-        } catch (MissingAuthorizationCodeException $e) {
-            throw $e;
-        } catch (OptimisticLockException $e) {
-            throw $e;
-        } catch (ORMException $e) {
+        } catch (MissingAuthorizationCodeException|OptimisticLockException|ORMException $e) {
             throw $e;
         }
 

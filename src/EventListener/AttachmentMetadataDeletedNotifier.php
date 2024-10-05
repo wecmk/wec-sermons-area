@@ -19,16 +19,10 @@ use Doctrine\Persistence\Event\LifecycleEventArgs;
  */
 class AttachmentMetadataDeletedNotifier
 {
-    private $logger;
-
     private $id;
 
-    private $filesystem;
-
-    public function __construct(LoggerInterface $logger, WecFilesystem $filesystem)
+    public function __construct(private readonly LoggerInterface $logger, private readonly WecFilesystem $filesystem)
     {
-        $this->logger = $logger;
-        $this->filesystem = $filesystem;
     }
 
     public function preRemove(AttachmentMetadata $attachmentMetadata, LifecycleEventArgs $args)
