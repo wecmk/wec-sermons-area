@@ -34,7 +34,7 @@ class PublishQuestionType extends AbstractType
     /**
      * @param OptionsResolverInterface $resolver
      */
-    public function setDefaultOptions(OptionsResolverInterface $resolver)
+    public function setDefaultOptions(OptionsResolverInterface $resolver): void
     {
         $resolver->setDefaults(array(
             'data_class' => 'Wec\QuestionsBundle\Entity\Question'

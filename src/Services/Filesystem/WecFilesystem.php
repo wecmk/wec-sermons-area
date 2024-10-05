@@ -48,7 +48,7 @@ class WecFilesystem extends Filesystem
      *
      * @throws IOException On any directory creation failure
      */
-    public function mkdir($dirs, $mode = 0777)
+    public function mkdir($dirs, $mode = 0777): void
     {
         parent::mkdir($dirs, $mode);
     }
@@ -341,7 +341,7 @@ class WecFilesystem extends Filesystem
         }
     }
 
-    public function getFilePath($fileName)
+    public function getFilePath($fileName): string
     {
         return $this->basePath . $fileName;
     }

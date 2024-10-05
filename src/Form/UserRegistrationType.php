@@ -28,12 +28,8 @@ class UserRegistrationType extends AbstractType
     /**
      * @param OptionsResolver $resolver
      */
-    public function configureOptions(OptionsResolver $resolver)
+    public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults(['data_class' => User::class]);
-    }
-    public function getBlockPrefix()
-    {
-        return null;
     }
 }
