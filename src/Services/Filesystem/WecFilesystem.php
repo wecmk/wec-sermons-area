@@ -14,7 +14,7 @@ class WecFilesystem extends Filesystem
      */
     private $filesystem;
 
-    public function __construct(private $basePath)
+    public function __construct(private string $filesystemBasePath)
     {
         $this->filesystem = new Filesystem();
     }
@@ -299,7 +299,7 @@ class WecFilesystem extends Filesystem
      */
     public function writeContentToFile($filename, $content, $startsAt = 0, $length = null)
     {
-        $filename = $this->basePath . $filename;
+        $filename = $this->filesystemBasePath . $filename;
         $outputStream = fopen($filename, "c+b");
         try {
             fseek($outputStream, $startsAt);
@@ -344,6 +344,6 @@ class WecFilesystem extends Filesystem
 
     public function getFilePath($fileName): string
     {
-        return $this->basePath . $fileName;
+        return $this->filesystemBasePath . $fileName;
     }
 }
