@@ -14,6 +14,6 @@ class BooksService
     public function asBibleNameArray()
     {
         $asdf = $this->bibleBooksRepository->findBy([], ['sort' => 'ASC']);
-        return array_map(fn(BibleBooks $object) => $object->getBook(), $this->bibleBooksRepository->findBy([], ['sort' => 'ASC']));
+        return array_map(fn (BibleBooks $object) => $object->getBook(), $this->bibleBooksRepository->findBy([], ['sort' => 'ASC']));
     }
 }

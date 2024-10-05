@@ -24,7 +24,7 @@ class PublicSermonsProvider implements CollectionDataProviderInterface, Restrict
         $output = [];
         /** @var Event $sermon */
         foreach ($sermons as $sermon) {
-            $attachmentMetadata = $sermon->getAttachmentMetadata()->filter(fn(AttachmentMetadata $element) => $element->getType()->getType() == 'sermon-recording')->get(0);
+            $attachmentMetadata = $sermon->getAttachmentMetadata()->filter(fn (AttachmentMetadata $element) => $element->getType()->getType() == 'sermon-recording')->get(0);
 
             if (null == $attachmentMetadata) {
                 continue;

@@ -115,8 +115,8 @@ class SermonsController extends AbstractController
                 $seriesOther[] = $series;
             }
         }
-        usort($seriesFromBibleBooks, fn(Series $a, Series $b) => $a->getName() <=> $b->getName());
-        usort($seriesOther, fn(Series $a, Series $b) => $a->getName() <=> $b->getName());
+        usort($seriesFromBibleBooks, fn (Series $a, Series $b) => $a->getName() <=> $b->getName());
+        usort($seriesOther, fn (Series $a, Series $b) => $a->getName() <=> $b->getName());
         $visitingSpeakerSeries = $this->seriesRepository->findOneBy(['name' => "Visiting Speaker"]);
         usort($allSeries, 'strcmp');
         return $this->render('sermons/list_of_series.html.twig', [

@@ -36,7 +36,7 @@ class GoogleCredentials
 
     public function getExpires(): ?int
     {
-        return $this->variablesRepository->findByName($this->expires)->getValue(time()-10);
+        return $this->variablesRepository->findByName($this->expires)->getValue(time() - 10);
     }
 
     public function setExpires(int $expires, $persistImmediately = true): void

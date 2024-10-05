@@ -21,9 +21,9 @@ class AttachmentMetadataType
     private ?bool $canBePublic = true;
 
     public function __construct(#[ORM\Column(type: \Doctrine\DBAL\Types\Types::STRING, length: 30)]
-    private ?string $type, #[ORM\Column(type: \Doctrine\DBAL\Types\Types::STRING, length: 20)]
-    private ?string $name, #[ORM\Column(type: \Doctrine\DBAL\Types\Types::STRING, length: 255)]
-    private ?string $description, $canBePublic = true)
+        private ?string $type, #[ORM\Column(type: \Doctrine\DBAL\Types\Types::STRING, length: 20)]
+        private ?string $name, #[ORM\Column(type: \Doctrine\DBAL\Types\Types::STRING, length: 255)]
+        private ?string $description, $canBePublic = true)
     {
     }
 

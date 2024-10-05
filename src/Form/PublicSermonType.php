@@ -20,11 +20,11 @@ class PublicSermonType extends AbstractType
             ->add(
                 'Event',
                 EntityType::class,
-                ['class' => Event::class, 'query_builder' => fn(EventRepository $er) => $er->createQueryBuilder('u')
+                ['class' => Event::class, 'query_builder' => fn (EventRepository $er) => $er->createQueryBuilder('u')
                     ->where('u.id = :id')
                     ->setParameter(':id', $options['event']->getId()->toString())
                     ->orderBy('u.Date', 'DESC')
-                    ->setMaxResults(100), 'choice_label' => fn(Event $event) => $event->getDate()->format('d-m-Y') . " " .
+                    ->setMaxResults(100), 'choice_label' => fn (Event $event) => $event->getDate()->format('d-m-Y') . " " .
                     $event->getApm() . "  " .
                     $event->getReading() . "  " .
                     $event->getTitle()  . " - " .

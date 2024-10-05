@@ -18,7 +18,6 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 )]
 class DatestampSeriesCommand extends Command
 {
-
     public function __construct(private readonly EntityManagerInterface $entityManager, private readonly SeriesRepository $seriesRepository, private readonly EventRepository $eventRepository, String $name = null)
     {
         parent::__construct($name);
@@ -52,7 +51,7 @@ class DatestampSeriesCommand extends Command
 
             $series->setName(trim((string) $series->getName()));
 
-            $seriesSpeakers = array_map(fn(Event $object) => trim((string) $object->getSpeaker()), $this->eventRepository->findBySeries($series));
+            $seriesSpeakers = array_map(fn (Event $object) => trim((string) $object->getSpeaker()), $this->eventRepository->findBySeries($series));
 
             $seriesSpeakers = array_unique($seriesSpeakers);
 

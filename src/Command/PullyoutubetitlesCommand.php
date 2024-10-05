@@ -25,7 +25,6 @@ use Symfony\Component\Security\Core\User\UserInterface;
 )]
 class PullyoutubetitlesCommand extends Command
 {
-
     public function __construct(private readonly EntityManagerInterface $entityManager, private readonly EventRepository $eventRepository, TokenStorageInterface $tokenStorage, UserRepository $userRepository, \Symfony\Bundle\SecurityBundle\Security $security, private readonly YouTubeVideoMetadataService $youTubeVideoMetadataService, string $name = null)
     {
         parent::__construct($name);

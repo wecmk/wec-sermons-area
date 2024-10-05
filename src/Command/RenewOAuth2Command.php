@@ -22,7 +22,6 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 )]
 class RenewOAuth2Command extends Command
 {
-
     /**
      * @var null
      */

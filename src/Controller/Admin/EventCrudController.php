@@ -23,7 +23,7 @@ class EventCrudController extends AbstractCrudController
         return $crud
             ->setSearchFields(['date', 'series.name', 'reading', 'title', 'speaker', 'shortId', 'legacyId', 'tags'])
             ->setDefaultSort(['date' => 'DESC', 'apm' => 'DESC'])
-            ;
+        ;
     }
 
     public function configureFields(string $pageName): iterable

@@ -7,7 +7,6 @@ use App\DataFixtures\BibleBooksFixtures;
 use App\DataFixtures\UsersFixture;
 use App\DataFixtures\SeriesFixture;
 use App\DataFixtures\MessageFixture;
-
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
@@ -20,7 +19,6 @@ use Symfony\Component\Console\Output\OutputInterface;
 )]
 class InitCommand extends Command
 {
-
     private array $fixtures = [];
 
     public function __construct(private readonly EntityManagerInterface $entityManager, AttachmentMetadataTypeFixtures $attachmentMetadataTypeFixtures, BibleBooksFixtures $bibleBooksFixtures, SeriesFixture $seriesFixture, MessageFixture $messageFixture, UsersFixture $usersFixture = null, string $name = null)
@@ -30,7 +28,7 @@ class InitCommand extends Command
              //$attachmentMetadataTypeFixtures, this is no longer used
              $bibleBooksFixtures,
              $usersFixture,
-             $seriesFixture, 
+             $seriesFixture,
              //$messageFixture, this has old code that might need to be updated
         ];
     }
