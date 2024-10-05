@@ -2,13 +2,11 @@
 
 namespace App\DataProvider;
 
-use ApiPlatform\Core\DataProvider\CollectionDataProviderInterface;
-use ApiPlatform\Core\DataProvider\RestrictedDataProviderInterface;
 use App\Entity\Event;
 use App\Entity\YouTubeLiveServices;
 use App\Repository\EventRepository;
 
-class YouTubeLiveServicesProvider implements CollectionDataProviderInterface, RestrictedDataProviderInterface
+class YouTubeLiveServicesProvider
 {
     public function __construct(private readonly EventRepository $eventRepository)
     {
