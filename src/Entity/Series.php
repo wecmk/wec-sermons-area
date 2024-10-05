@@ -20,8 +20,8 @@ use Symfony\Component\Serializer\Annotation\SerializedName;
 
 /**
  * @ApiResource(attributes={"denormalization_context"={"api_allow_update":true}})
- * @ORM\Entity(repositoryClass=SeriesRepository::class)
  */
+#[ORM\Entity(repositoryClass: SeriesRepository::class)]
 class Series implements TimestampableInterface, SoftDeletableInterface
 {
     /**
@@ -32,65 +32,51 @@ class Series implements TimestampableInterface, SoftDeletableInterface
     use TimestampableTrait;
 
     /**
-     * @ORM\Id()
-     * @ORM\GeneratedValue()
-     * @ORM\Column(type="integer")
      * @ApiProperty(identifier=false)
      */
-    private $id;
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column(type: 'integer')]
+    private ?int $id = null;
 
     /**
-     * @ORM\Column(type="uuid", unique=true)
      * @ApiProperty(identifier=true)
-     * @SerializedName("id")
-     * @Groups({"user:write"})
      */
+    #[ORM\Column(type: 'uuid', unique: true)]
+    #[SerializedName('id')]
+    #[Groups(['user:write'])]
     private UuidInterface $uuid;
 
-    /**
-     * @ORM\Column(type="string", length=255)
-     */
+    #[ORM\Column(type: 'string', length: 255)]
     private ?string $name = null;
 
-    /**
-     * @ORM\Column(type="text")
-     */
+    #[ORM\Column(type: 'text')]
     private string $description = '';
 
-    /**
-     * @ORM\Column(type="boolean")
-     */
+    #[ORM\Column(type: 'boolean')]
     private ?bool $complete = false;
 
-    /**
-     * @ORM\Column(type="boolean")
-     */
+    #[ORM\Column(type: 'boolean')]
     private ?bool $isPublic = true;
 
     /**
-     * @ORM\ManyToMany(targetEntity=Event::class, mappedBy="series")
+     * @var \Doctrine\Common\Collections\Collection<int, \Event>
      */
+    #[ORM\ManyToMany(targetEntity: Event::class, mappedBy: 'series')]
     private Collection $events;
 
-    /**
-     * @ORM\Column(type="date", nullable=true)
-     */
-    private $startDate;
+    #[ORM\Column(type: 'date', nullable: true)]
+    private ?\DateTimeInterface $startDate = null;
 
-    /**
-     * @ORM\Column(type="date", nullable=true)
-     */
-    private $endDate;
+    #[ORM\Column(type: 'date', nullable: true)]
+    private ?\DateTimeInterface $endDate = null;
 
-    /**
-     * @ORM\Column(type="string", length=50, nullable=true)
-     */
-    private $Author;
+    #[ORM\Column(type: 'string', length: 50, nullable: true)]
+    private ?string $Author = null;
 
     public function __construct(UuidInterface $uuid = null, string $name = null)
     {
         $this->uuid = $uuid ?: Uuid::uuid4();
-        $this->complete = false;
         $this->setCreatedAt(new \DateTime());
         $this->setUpdatedAt(new \DateTime());
         $this->setName($name ?: "");
@@ -216,7 +202,7 @@ class Series implements TimestampableInterface, SoftDeletableInterface
         return trim($this->getName() . $author . $date);
     }
 
-    public function __toString()
+    public function __toString(): string
     {
         return $this->getPrettyName();
     }

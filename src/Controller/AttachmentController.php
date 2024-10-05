@@ -13,9 +13,7 @@ use App\Entity\AttachmentMetadata;
 use App\Services\Attachment\UploadService;
 use App\Entity\CanBeDownloaded;
 
-/**
- * @Route("/attachment", name="attachment_")
- */
+#[Route(path: '/attachment', name: 'attachment_')]
 class AttachmentController extends AbstractController
 {
     /**
@@ -23,13 +21,13 @@ class AttachmentController extends AbstractController
      * Optional GET parameter force-dl=true (default to force the download or
      * false to stream
      *
-     * @Route("/{uuid}", name="index")
      * @param Request $request
      * @param LoggerInterface $logger
      * @param FilesystemService $filesystemService
      * @param AttachmentMetadata $attachment
      * @return BinaryFileResponse
      */
+    #[Route(path: '/{uuid}', name: 'index')]
     public function index(Request $request, LoggerInterface $logger, FilesystemService $filesystemService, AttachmentMetadata $attachment)
     {
         $forceDownload = $request->query->get("force-dl", "true") == "true";

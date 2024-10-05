@@ -11,25 +11,19 @@ use Doctrine\ORM\Mapping as ORM;
  *     collectionOperations={"get"},
  *     itemOperations={"get"}
  *     )
- * @ORM\Entity(repositoryClass=BibleBooksRepository::class)
  */
+#[ORM\Entity(repositoryClass: BibleBooksRepository::class)]
 class BibleBooks
 {
-    /**
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     * @ORM\Column(type="integer")
-     */
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column(type: 'integer')]
     private ?int $id = null;
 
-    /**
-     * @ORM\Column(type="string", length=16)
-     */
+    #[ORM\Column(type: 'string', length: 16)]
     private ?string $book = null;
 
-    /**
-     * @ORM\Column(type="integer")
-     */
+    #[ORM\Column(type: 'integer')]
     private ?int $sort = null;
 
     public function getId(): ?int

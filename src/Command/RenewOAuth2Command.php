@@ -10,16 +10,23 @@ use Google_Client;
 use KnpU\OAuth2ClientBundle\Client\ClientRegistry;
 use KnpU\OAuth2ClientBundle\Client\Provider\GoogleClient;
 use Psr\Log\LoggerInterface;
+use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
+#[AsCommand(
+    name: 'app:renewoauth2',
+    description: 'Renews the oauth2 tokens.',
+)]
 class RenewOAuth2Command extends Command
 {
-    protected static $defaultName = 'app:renewoauth2';
-    protected static $defaultDescription = 'Renews the oauth2 tokens';
 
+    /**
+     * @var null
+     */
+    public $google_Service_YouTube = null;
     private LoggerInterface $logger;
     private string $OAUTH_GOOGLE_CLIENT_ID;
     private string $OAUTH_GOOGLE_CLIENT_SECRET;
@@ -48,8 +55,6 @@ class RenewOAuth2Command extends Command
         $this->client->setLogger($this->logger);
 
         $this->googleCredentials = $googleCredentials;
-
-        $this->google_Service_YouTube = null;
     }
 
     protected function configure(): void

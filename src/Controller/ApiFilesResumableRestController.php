@@ -11,14 +11,11 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-/**
- *
- * @Route("/api", name="api_")
- */
+
+#[Route(path: '/api', name: 'api_')]
 class ApiFilesResumableRestController extends AbstractController
 {
     /**
-     * @Route("/attachment_metadatas/{id}/binary", name="attachment_binary_put", methods={"PUT"})
      *
      * @param Request $request
      * @param LoggerInterface $logger
@@ -26,12 +23,13 @@ class ApiFilesResumableRestController extends AbstractController
      * @param $id
      * @return Response
      */
+    #[Route(path: '/attachment_metadatas/{id}/binary', name: 'attachment_binary_put', methods: ['PUT'])]
     public function resumableUploadContinue(
         Request $request,
         LoggerInterface $logger,
         FilesystemService $filesystemService,
         $id
-    ) {
+    ): \Symfony\Component\HttpFoundation\Response {
         $uuid = Uuid::fromString($id);
         // Based on https://developers.google.com/drive/api/v3/manage-uploads
         // input request
@@ -71,11 +69,11 @@ class ApiFilesResumableRestController extends AbstractController
                 $response = $this->json($body, $status);
             } else {
                 $response = new Response();
-                $response->setStatusCode(400, "Hash does not match. Retry upload");
+                $response->setStatusCode(\Symfony\Component\HttpFoundation\Response::HTTP_BAD_REQUEST, "Hash does not match. Retry upload");
             }
         } else {
             $response = new Response();
-            $response->setStatusCode(308, "Resume Incomplete");
+            $response->setStatusCode(\Symfony\Component\HttpFoundation\Response::HTTP_PERMANENTLY_REDIRECT, "Resume Incomplete");
             $rangeValue = "0-" . strval($pointer - 1);
             $response->headers->set("Content-Range", $rangeValue);
         }

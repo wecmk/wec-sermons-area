@@ -15,109 +15,91 @@ use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Serializer\Annotation\SerializedName;
 
 /**
- * @ApiResource(
- *     shortName="attachment_metadata",
- *     collectionOperations={"get","post"},
- *     itemOperations={
- *          "get",
- *          "put",
- *          "delete",
- *          "get_binary"={
- *              "method"="PUT",
- *              "path"="/attachment_metadatas/{id}/binary",
- *              "controller"="ApiFilesResumableRestController::class",
- *              "openapi_context"= {
- *                  "summary" = "Uploads [part of a] binary files",
- *                  "description" = "Upload part of a binary file. The body contains raw binary data. The binary data is defined by the Content-Range. Input can be partial. The last byte must be submitted last otherwise the hash will not match and a 400 status will be returned. Use the Content-Range to define which chunk of data was submitted",
- *                  "requestBody" = {
- *                      "content" = {
- *                          "application/octet-stream"={
-                                "schema" = {
- *                                  "type" = "object"
- *                              }
- *                          }
- *                      }
- *                  },
- *                  "responses" = {
- *                      "201" = {
- *                          "description" = "The file was uploaded successfully"
- *                      },
- *                      "308" = {
- *                          "description" = "The uploaded file is incomplete. Continue to upload more data"
- *                      },
- *                      "400" = {
- *                          "description" = "You send the last chunk of data, but the hash did not match. Please retry"
- *                      }
- *                  }
- *              }
- *          }
- *     },
- * )
- * @ORM\Entity(repositoryClass=AttachmentMetadataRepository::class)
- */
+* @ApiResource(
+*     shortName="attachment_metadata",
+*     collectionOperations={"get","post"},
+*     itemOperations={
+*          "get",
+*          "put",
+*          "delete",
+*          "get_binary"={
+*              "method"="PUT",
+*              "path"="/attachment_metadatas/{id}/binary",
+*              "controller"="ApiFilesResumableRestController::class",
+*              "openapi_context"= {
+*                  "summary" = "Uploads [part of a] binary files",
+*                  "description" = "Upload part of a binary file. The body contains raw binary data. The binary data is defined by the Content-Range. Input can be partial. The last byte must be submitted last otherwise the hash will not match and a 400 status will be returned. Use the Content-Range to define which chunk of data was submitted",
+*                  "requestBody" = {
+*                      "content" = {
+*                          "application/octet-stream"={
+                               "schema" = {
+*                                  "type" = "object"
+*                              }
+*                          }
+*                      }
+*                  },
+*                  "responses" = {
+*                      "201" = {
+*                          "description" = "The file was uploaded successfully"
+*                      },
+*                      "308" = {
+*                          "description" = "The uploaded file is incomplete. Continue to upload more data"
+*                      },
+*                      "400" = {
+*                          "description" = "You send the last chunk of data, but the hash did not match. Please retry"
+*                      }
+*                  }
+*              }
+*          }
+*     },
+* )
+*/
+#[ORM\Entity(repositoryClass: AttachmentMetadataRepository::class)]
 class AttachmentMetadata implements TimestampableInterface
 {
     use TimestampableTrait;
 
     /**
-     * @ORM\Id()
-     * @ORM\GeneratedValue()
-     * @ORM\Column(type="integer")
      * @ApiProperty(identifier=false)
      */
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column(type: 'integer')]
     private int $id;
 
     /**
-     * @ORM\Column(type="uuid", unique=true)
      * @ApiProperty(identifier=true)
-     * @SerializedName("id")
-     * @Groups({"user:write"})
      */
+    #[ORM\Column(type: 'uuid', unique: true)]
+    #[SerializedName('id')]
+    #[Groups(['user:write'])]
     private UuidInterface $uuid;
 
-    /**
-     * @ORM\Column(type="string", length=255)
-     */
+    #[ORM\Column(type: 'string', length: 255)]
     private ?string $mimeType = null;
 
-    /**
-     * @ORM\Column(type="string", length=10)
-     */
+    #[ORM\Column(type: 'string', length: 10)]
     private ?string $extension = null;
 
-    /**
-     * @ORM\Column(type="string", length=255)
-     */
+    #[ORM\Column(type: 'string', length: 255)]
     private ?string $contentLength = null;
 
-    /**
-     * @ORM\Column(type="boolean")
-     */
+    #[ORM\Column(type: 'boolean')]
     private ?bool $complete = false;
 
-    /**
-     * @ORM\Column(type="string", length=128)
-     */
+    #[ORM\Column(type: 'string', length: 128)]
     private string $hash = "";
 
-    /**
-     * @ORM\Column(type="string", length=10)
-     */
+    #[ORM\Column(type: 'string', length: 10)]
     private ?string $hashAlgo = "sha512";
 
-    /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\Event", inversedBy="attachmentMetadata")
-     */
+    #[ORM\ManyToOne(targetEntity: \App\Entity\Event::class, inversedBy: 'attachmentMetadata')]
     private ?Event $event = null;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\AttachmentMetadataType", cascade={"persist"})
-     */
+    #[ORM\ManyToOne(targetEntity: \App\Entity\AttachmentMetadataType::class, cascade: ['persist'])]
     private ?AttachmentMetadataType $type = null;
 
-    /**
-     * @ORM\Column(type="boolean")
-     */
+    #[ORM\Column(type: 'boolean')]
     private bool $isPublic = false;
 
     public function __construct(UuidInterface $uuid = null)

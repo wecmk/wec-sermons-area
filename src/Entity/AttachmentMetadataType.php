@@ -8,42 +8,32 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ApiResource()
- * @ORM\Entity(repositoryClass=AttachmentMetadataTypeRepository::class)
  */
+#[ORM\Entity(repositoryClass: AttachmentMetadataTypeRepository::class)]
 class AttachmentMetadataType
 {
-    /**
-     * @ORM\Id()
-     * @ORM\GeneratedValue()
-     * @ORM\Column(type="integer")
-     */
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column(type: 'integer')]
     private ?int $id = null;
 
-    /**
-     * @ORM\Column(type="string", length=30)
-     */
+    #[ORM\Column(type: 'string', length: 30)]
     private ?string $type = null;
 
-    /**
-     * @ORM\Column(type="string", length=20)
-     */
+    #[ORM\Column(type: 'string', length: 20)]
     private ?string $name = null;
 
-    /**
-     * @ORM\Column(type="string", length=255)
-     */
+    #[ORM\Column(type: 'string', length: 255)]
     private ?string $description = null;
 
-    /**
-     * @ORM\Column(type="boolean", options={"default":true}) */
-    private ?bool $canBePublic = null;
+    #[ORM\Column(type: 'boolean', options: ['default' => true])]
+    private ?bool $canBePublic = true;
 
     public function __construct($type, $name, $description, $canBePublic = true)
     {
         $this->type = $type;
         $this->name = $name;
         $this->description = $description;
-        $this->canBePublic = true;
     }
 
     public function getId(): ?int

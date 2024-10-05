@@ -9,19 +9,22 @@ use App\DataFixtures\SeriesFixture;
 use App\DataFixtures\MessageFixture;
 
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
+#[AsCommand(
+    name: 'app:init',
+    description: 'Creates seed data such as bible books.',
+)]
 class InitCommand extends Command
 {
-    protected static $defaultName = 'app:init';
-    protected static $defaultDescription = 'Creates seed data such as bible books';
 
     private EntityManagerInterface $entityManager;
     private array $fixtures = [];
 
-    public function __construct(EntityManagerInterface $entityManager, AttachmentMetadataTypeFixtures $attachmentMetadataTypeFixtures, BibleBooksFixtures $bibleBooksFixtures, UsersFixture $usersFixture = null, SeriesFixture $seriesFixture, MessageFixture $messageFixture, string $name = null)
+    public function __construct(EntityManagerInterface $entityManager, AttachmentMetadataTypeFixtures $attachmentMetadataTypeFixtures, BibleBooksFixtures $bibleBooksFixtures, SeriesFixture $seriesFixture, MessageFixture $messageFixture, UsersFixture $usersFixture = null, string $name = null)
     {
         parent::__construct($name);
         $this->entityManager = $entityManager;

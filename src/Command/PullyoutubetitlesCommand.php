@@ -7,6 +7,7 @@ use App\Repository\UserRepository;
 use App\Services\Google\YouTubeVideoMetadataService;
 use Doctrine\ORM\EntityManagerInterface;
 use Google_Service_YouTube_Video;
+use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -18,22 +19,24 @@ use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 use Symfony\Component\Security\Core\Security;
 use Symfony\Component\Security\Core\User\UserInterface;
 
+#[AsCommand(
+    name: 'app:pullyoutubetitlescommand',
+    description: 'Add a short description for your command.',
+)]
 class PullyoutubetitlesCommand extends Command
 {
-    protected static $defaultName = 'app:pullyoutubetitlescommand';
-    protected static $defaultDescription = 'Add a short description for your command';
 
     private EntityManagerInterface $entityManager;
     private EventRepository $eventRepository;
     private YouTubeVideoMetadataService $youTubeVideoMetadataService;
 
-    public function __construct(EntityManagerInterface $entityManager, EventRepository $eventRepository, TokenStorageInterface $tokenStorage, UserRepository $userRepository, Security $security, YouTubeVideoMetadataService $youTubeVideoMetadataService, string $name = null)
+    public function __construct(EntityManagerInterface $entityManager, EventRepository $eventRepository, TokenStorageInterface $tokenStorage, UserRepository $userRepository, \Symfony\Bundle\SecurityBundle\Security $security, YouTubeVideoMetadataService $youTubeVideoMetadataService, string $name = null)
     {
         parent::__construct($name);
         $this->entityManager = $entityManager;
         $this->eventRepository = $eventRepository;
         $user = $userRepository->findOneBy(['username' => 'samuel']);
-        $tokenStorage->setToken(new UsernamePasswordToken($user, null, 'main', $user->getRoles()));
+        $tokenStorage->setToken(new UsernamePasswordToken($user, 'main', $user->getRoles()));
         $this->youTubeVideoMetadataService = $youTubeVideoMetadataService;
     }
 
@@ -83,29 +86,24 @@ class PullyoutubetitlesCommand extends Command
 
             if (empty($listResponse)) {
                 $io->warning(sprintf('Can\'t find a video with video id: %s', $stringParts[1]));
-            } else {
-                if ($listResponse->count() > 0) {
-                    /* @var Google_Service_YouTube_Video $video */;
-                    $video = $listResponse->getItems()[0];
-
-                    $capItems = $youtube->captions->listCaptions('snippet', $video->getId());
-                    $io->warning('asdf');
-                    foreach ($capItems as $caption) {
-                        $name = $caption->getSnippet()->getName();
-                        $io->info($name);
-                    }
-
-                    if (count($capItems) == 0) {
-                        $io->info("no captions found for " . $video->getId());
-                    }
-
-                    $io->info($event->getLegacyId() . "|" . $video->getSnippet()->getTitle());
-                    $youtubeTitle = str_replace('| Allan Huxtable', "", $video->getSnippet()->getTitle());
-                    $event->setTitle($youtubeTitle);
-                    $this->entityManager->persist($event);
-                } else {
-                    $io->warning("No results found");
+            } elseif ($listResponse->count() > 0) {
+                /* @var Google_Service_YouTube_Video $video */
+                $video = $listResponse->getItems()[0];
+                $capItems = $youtube->captions->listCaptions('snippet', $video->getId());
+                $io->warning('asdf');
+                foreach ($capItems as $caption) {
+                    $name = $caption->getSnippet()->getName();
+                    $io->info($name);
                 }
+                if (count($capItems) == 0) {
+                    $io->info("no captions found for " . $video->getId());
+                }
+                $io->info($event->getLegacyId() . "|" . $video->getSnippet()->getTitle());
+                $youtubeTitle = str_replace('| Allan Huxtable', "", $video->getSnippet()->getTitle());
+                $event->setTitle($youtubeTitle);
+                $this->entityManager->persist($event);
+            } else {
+                $io->warning("No results found");
             }
         }
         $this->entityManager->flush();

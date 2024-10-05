@@ -7,15 +7,18 @@ use App\Entity\Series;
 use App\Repository\EventRepository;
 use App\Repository\SeriesRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
+#[AsCommand(
+    name: 'app:datestampseries',
+    description: 'Sets the start and end dates for series.',
+)]
 class DatestampSeriesCommand extends Command
 {
-    protected static $defaultName = 'app:datestampseries';
-    protected static $defaultDescription = 'Sets the start and end dates for series';
 
     private EntityManagerInterface $entityManager;
     private SeriesRepository $seriesRepository;
@@ -43,11 +46,11 @@ class DatestampSeriesCommand extends Command
             $startingEventList = $this->eventRepository->findBySeries($series, "ASC", 1);
             $endingEventList = $this->eventRepository->findBySeries($series, "DESC", 1);
 
-            if (is_array($startingEventList) && count($startingEventList) > 0) {
+            if (is_array($startingEventList) && $startingEventList !== []) {
                 $series->setStartDate($startingEventList[0]->getDate());
             }
 
-            if ($series->getComplete() && is_array($endingEventList) && count($endingEventList) > 0) {
+            if ($series->getComplete() && is_array($endingEventList) && $endingEventList !== []) {
                 $series->setEndDate($endingEventList[0]->getDate());
             }
 

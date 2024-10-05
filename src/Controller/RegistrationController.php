@@ -15,9 +15,7 @@ use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 class RegistrationController extends AbstractController
 {
-    /**
-     * @Route("/register", name="register", methods={"GET", "POST"})
-     */
+    #[Route(path: '/register', name: 'register', methods: ['GET', 'POST'])]
     public function register(
         Request $request,
         UserPasswordEncoderInterface $encoder,
@@ -43,7 +41,7 @@ class RegistrationController extends AbstractController
         return $this->render(
             'security/register.html.twig',
             [
-                'form' => $form->createView(),
+                'form' => $form,
             ]
         );
     }

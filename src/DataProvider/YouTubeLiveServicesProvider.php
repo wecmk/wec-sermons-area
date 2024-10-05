@@ -29,7 +29,7 @@ class YouTubeLiveServicesProvider implements CollectionDataProviderInterface, Re
             $response->setLastWeekPm($lastSunday['PM']);
         }
 
-        $searchText = (date('D') == 'Sun') ? "Today" : "Next Sunday";
+        $searchText = (date('D') === 'Sun') ? "Today" : "Next Sunday";
         $nextSunday = $this->getServices($searchText);
         if (null != $nextSunday) {
             if (array_key_exists("AM", $nextSunday)) {

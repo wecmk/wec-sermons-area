@@ -21,8 +21,8 @@ use App\Doctrine\ShortIdGenerator;
 /**
  * @ApiResource(attributes={"order"={"date": "DESC", "apm": "DESC"}})
  * @ApiFilter(DateFilter::class, properties={"updatedAt"})
- * @ORM\Entity(repositoryClass=EventRepository::class)
  */
+#[ORM\Entity(repositoryClass: EventRepository::class)]
 class Event implements TimestampableInterface, SoftDeletableInterface, CanBeDownloaded
 {
     /**
@@ -33,92 +33,68 @@ class Event implements TimestampableInterface, SoftDeletableInterface, CanBeDown
     use TimestampableTrait;
 
     /**
-     * @ORM\Id()
-     * @ORM\GeneratedValue()
-     * @ORM\Column(type="integer", nullable=false)
      * @ApiProperty(identifier=false, readable=false)
      */
-    private $id;
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column(type: 'integer', nullable: false)]
+    private int $id;
 
     /**
-     * @ORM\Column(type="integer", unique=true, nullable=false)
      * @ApiProperty(identifier=true)
      */
+    #[ORM\Column(type: 'integer', unique: true, nullable: false)]
     private ?int $shortId = null;
 
-    /**
-     * @ORM\Column(type="date")
-     */
+    #[ORM\Column(type: 'date')]
     private ?\DateTimeInterface $date;
 
-    /**
-     * @ORM\Column(type="string", length=3)
-     */
+    #[ORM\Column(type: 'string', length: 3)]
     private ?string $apm = null;
 
-    /**
-     * @ORM\Column(type="string", length=255)
-     */
+    #[ORM\Column(type: 'string', length: 255)]
     private ?string $reading = '';
 
-    /**
-     * @ORM\Column(type="string", length=255)
-     */
+    #[ORM\Column(type: 'string', length: 255)]
     private ?string $secondReading = '';
 
-    /**
-     * @ORM\Column(type="string", length=255)
-     */
+    #[ORM\Column(type: 'string', length: 255)]
     private ?string $title = '';
 
-    /**
-     * @ORM\Column(type="boolean")
-     */
+    #[ORM\Column(type: 'boolean')]
     private ?bool $corrupt = false;
 
-    /**
-     * @ORM\Column(type="boolean")
-     */
+    #[ORM\Column(type: 'boolean')]
     private ?bool $isPublic = false;
 
-    /**
-     * @ORM\Column(type="text")
-     */
+    #[ORM\Column(type: 'text')]
     private ?string $tags = "";
 
-    /**
-     * @ORM\Column(type="text")
-     */
+    #[ORM\Column(type: 'text')]
     private ?string $publicComments = "";
 
-    /**
-     * @ORM\Column(type="text")
-     */
+    #[ORM\Column(type: 'text')]
     private ?string $privateComments = "";
 
     /**
-     * @ORM\OneToMany(targetEntity=AttachmentMetadata::class, mappedBy="event", orphanRemoval=true, cascade={"persist"})
+     * @var \Doctrine\Common\Collections\Collection<int, \App\Entity\AttachmentMetadata>
      */
+    #[ORM\OneToMany(targetEntity: AttachmentMetadata::class, mappedBy: 'event', orphanRemoval: true, cascade: ['persist'])]
     private Collection $attachmentMetadata;
 
-    /**
-     * @ORM\Column(type="string", length=10, nullable=true)
-     */
+    #[ORM\Column(type: 'string', length: 10, nullable: true)]
     private ?string $legacyId = '';
 
-    /**
-     * @ORM\Column(type="string", length=255, nullable=true)
-     */
-    private ?string $youTubeLink;
+    #[ORM\Column(type: 'string', length: 255, nullable: true)]
+    private ?string $youTubeLink = null;
 
-    /**
-     * @ORM\Column(type="string", length=255, nullable=false)
-     */
+    #[ORM\Column(type: 'string', length: 255, nullable: false)]
     private ?string $speaker = "";
 
     /**
-     * @ORM\ManyToMany(targetEntity=Series::class, inversedBy="events")
+     * @var \Doctrine\Common\Collections\Collection<int, \App\Entity\Series>
      */
+    #[ORM\ManyToMany(targetEntity: Series::class, inversedBy: 'events')]
     private Collection $series;
 
     public function __construct()
@@ -128,7 +104,6 @@ class Event implements TimestampableInterface, SoftDeletableInterface, CanBeDown
         $this->setUpdatedAt(new \DateTime());
         $this->attachmentMetadata = new ArrayCollection();
         $this->series = new ArrayCollection();
-        $this->youTubeLink = null;
     }
 
     public function getId(): ?int

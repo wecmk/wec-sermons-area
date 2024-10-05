@@ -35,7 +35,7 @@ class WecFilesystem extends Filesystem
      * @throws FileNotFoundException When originFile doesn't exist
      * @throws IOException           When copy fails
      */
-    public function copy($originFile, $targetFile, $overwriteNewerFiles = false)
+    public function copy($originFile, $targetFile, $overwriteNewerFiles = false): void
     {
         parent::copy($originFile, $targetFile, $overwriteNewerFiles);
     }
@@ -74,7 +74,7 @@ class WecFilesystem extends Filesystem
      *
      * @throws IOException When touch fails
      */
-    public function touch($file, $time = null, $atime = null)
+    public function touch($file, $time = null, $atime = null): void
     {
         parent::touch($this->getFilePath($file), $time, $atime);
     }
@@ -84,7 +84,7 @@ class WecFilesystem extends Filesystem
      *
      * @param string $file
      */
-    public function remove($file)
+    public function remove($file): void
     {
         parent::remove($this->getFilePath($file));
     }
@@ -99,7 +99,7 @@ class WecFilesystem extends Filesystem
      *
      * @throws IOException When the change fails
      */
-    public function chmod($files, $mode, $umask = 0000, $recursive = false)
+    public function chmod($files, $mode, $umask = 0000, $recursive = false): void
     {
         parent::chmod($files, $mode, $umask, $recursive);
     }
@@ -113,7 +113,7 @@ class WecFilesystem extends Filesystem
      *
      * @throws IOException When the change fails
      */
-    public function chown($files, $user, $recursive = false)
+    public function chown($files, $user, $recursive = false): void
     {
         parent::chown($files, $user, $recursive);
     }
@@ -127,7 +127,7 @@ class WecFilesystem extends Filesystem
      *
      * @throws IOException When the change fails
      */
-    public function chgrp($files, $group, $recursive = false)
+    public function chgrp($files, $group, $recursive = false): void
     {
         parent::chgrp($files, $group, $recursive);
     }
@@ -142,7 +142,7 @@ class WecFilesystem extends Filesystem
      * @throws IOException When target file or directory already exists
      * @throws IOException When origin cannot be renamed
      */
-    public function rename($origin, $target, $overwrite = false)
+    public function rename($origin, $target, $overwrite = false): void
     {
         parent::rename($origin, $target, $overwrite);
     }
@@ -156,7 +156,7 @@ class WecFilesystem extends Filesystem
      *
      * @throws IOException When symlink fails
      */
-    public function symlink($originDir, $targetDir, $copyOnWindows = false)
+    public function symlink($originDir, $targetDir, $copyOnWindows = false): void
     {
         parent::symlink($originDir, $targetDir, $copyOnWindows);
     }
@@ -170,7 +170,7 @@ class WecFilesystem extends Filesystem
      * @throws FileNotFoundException When original file is missing or not a file
      * @throws IOException           When link fails, including if link already exists
      */
-    public function hardlink($originFile, $targetFiles)
+    public function hardlink($originFile, $targetFiles): void
     {
         parent::hardlink($originFile, $targetFiles);
     }
@@ -228,7 +228,7 @@ class WecFilesystem extends Filesystem
      *
      * @throws IOException When file type is unknown
      */
-    public function mirror($originDir, $targetDir, \Traversable $iterator = null, $options = [])
+    public function mirror($originDir, $targetDir, \Traversable $iterator = null, $options = []): void
     {
         parent::mirror($originDir, $targetDir, $iterator, $options);
     }
@@ -267,7 +267,7 @@ class WecFilesystem extends Filesystem
      *
      * @throws IOException if the file cannot be written to
      */
-    public function dumpFile($filename, $content)
+    public function dumpFile($filename, $content): void
     {
         parent::dumpFile($filename, $content);
     }
@@ -280,7 +280,7 @@ class WecFilesystem extends Filesystem
      *
      * @throws IOException If the file is not writable
      */
-    public function appendToFile($filename, $content)
+    public function appendToFile($filename, $content): void
     {
         parent::appendToFile($filename, $content);
     }
@@ -318,7 +318,7 @@ class WecFilesystem extends Filesystem
      * @param string $algo the algorithm of the expected hash
      * @return bool true if the file hash is the same as the expected hash
      */
-    public function hashIsValid($fileName, $expectedHash, $algo = "sha512")
+    public function hashIsValid($fileName, $expectedHash, $algo = "sha512"): bool
     {
         $filename = $this->getFilePath($fileName);
         return hash_file($algo, $filename) == $expectedHash;

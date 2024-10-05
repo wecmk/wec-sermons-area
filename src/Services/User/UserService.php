@@ -52,7 +52,7 @@ class UserService
     public function add(User $user)
     {
         // If the password isn't set, let's encode what is set is PlainPassword
-        if (empty($user->getPassword())) {
+        if ($user->getPassword() === '' || $user->getPassword() === '0') {
             $user->setPassword($this->passwordHasher->hashPassword($user, $user->getPlainPassword()));
         }
         $this->em->persist($user);

@@ -5,27 +5,20 @@ namespace App\Entity;
 use App\Repository\VariablesRepository;
 use Doctrine\ORM\Mapping as ORM;
 
-/**
- * @ORM\Entity(repositoryClass=VariablesRepository::class)
- * @ORM\Table(indexes={@ORM\Index(columns={"name"})})
- */
+#[ORM\Table]
+#[ORM\Index(columns: ['name'])]
+#[ORM\Entity(repositoryClass: VariablesRepository::class)]
 class Variables
 {
-    /**
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     * @ORM\Column(type="integer")
-     */
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column(type: 'integer')]
     private int $id;
 
-    /**
-     * @ORM\Column(type="string", length=255)
-     */
+    #[ORM\Column(type: 'string', length: 255)]
     private string $name;
 
-    /**
-     * @ORM\Column(type="text")
-     */
+    #[ORM\Column(type: 'text')]
     private ?string $value;
 
     public function __construct($name = null)

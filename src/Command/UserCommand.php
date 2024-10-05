@@ -3,6 +3,7 @@
 namespace App\Command;
 
 use App\Services\User\UserService;
+use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Exception\InvalidArgumentException;
 use Symfony\Component\Console\Input\InputArgument;
@@ -11,11 +12,12 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
+#[AsCommand(
+    name: 'app:user',
+    description: 'Modify Users.',
+)]
 class UserCommand extends Command
 {
-    protected static $defaultName = 'app:user';
-    protected static $defaultDescription = 'Modify Users';
-
     private UserService $userService;
 
     public function __construct(UserService $userService, string $name = null)

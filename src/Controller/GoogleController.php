@@ -26,10 +26,9 @@ class GoogleController extends AbstractController
 {
     /**
      * Link to this controller to start the "connect" process
-     *
-     * @Route("/connect/google", name="connect_google_start")
      */
-    public function connectAction(ClientRegistry $clientRegistry)
+    #[Route(path: '/connect/google', name: 'connect_google_start')]
+    public function connect(ClientRegistry $clientRegistry)
     {
         return $clientRegistry
             ->getClient('google_main') // key used in config/packages/knpu_oauth2_client.yaml
@@ -41,18 +40,18 @@ class GoogleController extends AbstractController
      * because this is the "redirect_route" you configured
      * in config/packages/knpu_oauth2_client.yaml
      *
-     * @Route("/connect/google/check", name="connect_google_check")
      * @param Request $request
      * @param LoggerInterface $logger
      * @param ClientRegistry $clientRegistry
-     * @param Security $security
+     * @param \Symfony\Bundle\SecurityBundle\Security $security
      * @param EntityManager $entityManager
      * @param UserRepository $userRepository
      * @throws IdentityProviderException
      * @throws ORMException
      * @throws OptimisticLockException
      */
-    public function connectCheckAction(Request $request, LoggerInterface $logger, ClientRegistry $clientRegistry, GoogleCredentials $googleCredentials, EntityManagerInterface $entityManager, UserRepository $userRepository)
+    #[Route(path: '/connect/google/check', name: 'connect_google_check')]
+    public function connectCheck(LoggerInterface $logger, ClientRegistry $clientRegistry, GoogleCredentials $googleCredentials, EntityManagerInterface $entityManager, UserRepository $userRepository): \Symfony\Component\HttpFoundation\RedirectResponse
     {
         // ** if you want to *authenticate* the user, then
         // leave this method blank and create a Guard authenticator
@@ -116,19 +115,19 @@ class GoogleController extends AbstractController
 
     /**
      *
-     * @Route("/youtube/{id}", name="youtube")
      * @param Request $request
      * @param YouTubeVideoMetadataService $youTubeVideoMetadataService
      * @param EventRepository $eventRepository
      * @param int $id
      * @return Response
      */
-    public function youTubeAction(Request $request, YouTubeVideoMetadataService $youTubeVideoMetadataService, EventRepository $eventRepository, int $id): Response
+    #[Route(path: '/youtube/{id}', name: 'youtube')]
+    public function youTube(YouTubeVideoMetadataService $youTubeVideoMetadataService, EventRepository $eventRepository, int $id): Response
     {
         $event = $eventRepository->findOneBy(['shortId' => $id]);
         if ($event == null) {
             throw $this->createNotFoundException("shortId not found");
         }
-        return new Response($youTubeVideoMetadataService->updateVideo($event)->getSnippet()->getTitle(), 200);
+        return new Response($youTubeVideoMetadataService->updateVideo($event)->getSnippet()->getTitle(), \Symfony\Component\HttpFoundation\Response::HTTP_OK);
     }
 }

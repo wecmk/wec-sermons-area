@@ -22,9 +22,8 @@ class PublicSermonsController extends AbstractController
     /**
      * Optional GET parameter force-dl=true (default to force the download or
      * false to stream
-     *
-     * @Route("/publicsermon/{id}/download", name="public_sermon_download_v2", methods={"GET"})
      */
+    #[Route(path: '/publicsermon/{id}/download', name: 'public_sermon_download_v2', methods: ['GET'])]
     public function download(Request $request, FilesystemService $filesystemService, AttachmentMetadata $attachment): BinaryFileResponse
     {
         $forceDownload = $request->query->get("force-dl", "true") == "true";

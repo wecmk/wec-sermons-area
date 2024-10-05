@@ -7,6 +7,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 class ContactUsFormResults
 {
+    public $id;
     private $Name;
 
     private $Email;

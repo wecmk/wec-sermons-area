@@ -11,11 +11,11 @@ use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 class SecurityController extends AbstractController
 {
     /**
-     * @Route("/login", name="login", methods={"GET", "POST"})
      * @param AuthenticationUtils $authenticationUtils
      * @return Response
      */
-    public function login(AuthenticationUtils $authenticationUtils)
+    #[Route(path: '/login', name: 'login', methods: ['GET', 'POST'])]
+    public function login(AuthenticationUtils $authenticationUtils): \Symfony\Component\HttpFoundation\Response
     {
         // get the login error if there is one
         $error = $authenticationUtils->getLastAuthenticationError();
@@ -26,7 +26,7 @@ class SecurityController extends AbstractController
         return $this->render(
             'security\login.html.twig',
             [
-                'form' => $form->createView(),
+                'form' => $form,
                 'last_username' => $lastUsername,
                 'error' => $error,
             ]

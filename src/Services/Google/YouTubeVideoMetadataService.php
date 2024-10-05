@@ -12,12 +12,13 @@ use Symfony\Component\Routing\RouterInterface;
 
 class YouTubeVideoMetadataService
 {
+    public $_redirectURI;
     private LoggerInterface $logger;
     private RouterInterface $router;
 
     private string $OAUTH_GOOGLE_CLIENT_ID;
     private string $OAUTH_GOOGLE_CLIENT_SECRET;
-    private ?Google_Service_YouTube $google_Service_YouTube;
+    private ?Google_Service_YouTube $google_Service_YouTube = null;
     private GoogleCredentials $googleCredentials;
     private Google_Client $client;
 
@@ -36,8 +37,6 @@ class YouTubeVideoMetadataService
         $this->client = new Google_Client($config);
 
         $this->googleCredentials = $googleCredentials;
-
-        $this->google_Service_YouTube = null;
     }
 
     public function googleServiceYouTube()
@@ -104,13 +103,9 @@ class YouTubeVideoMetadataService
                 // Format Title
                 $video = $listResponse->getItems()[0];
                 $videoTitle = "";
-                if ($event->getTitle() == "") {
-                    $videoTitle = $event->getDate()->format("l d F Y");
-                } else {
-                    $videoTitle = $event->getTitle();
-                }
+                $videoTitle = $event->getTitle() == "" ? $event->getDate()->format("l d F Y") : $event->getTitle();
                 $videoApm = "";
-                $searchText = (date('D') == 'Sun') ? "Today" : "Next Sunday";
+                $searchText = (date('D') === 'Sun') ? "Today" : "Next Sunday";
                 $searchDate = date('U', strtotime($searchText));
                 $isTodayOrNextSunday = $searchDate <= $event->getDate()->format("U");
                 $this->logger->debug($searchDate . " <= " . $event->getDate()->format("U") . " | " . $searchDate <= $event->getDate()->format("U"));

@@ -2,31 +2,25 @@
 
 declare(strict_types=1);
 
-use Rector\Core\Configuration\Option;
-use Rector\Php74\Rector\Property\TypedPropertyRector;
-use Rector\PostRector\Rector\NameImportingPostRector;
+use Rector\Config\RectorConfig;
+use Rector\Doctrine\Set\DoctrineSetList;
 use Rector\Set\ValueObject\SetList;
-use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+use Rector\Symfony\Set\SensiolabsSetList;
+use Rector\Symfony\Set\SymfonySetList;
+use Rector\TypeDeclaration\Rector\ClassMethod\AddReturnTypeDeclarationBasedOnParentClassMethodRector;
 
-return static function (ContainerConfigurator $containerConfigurator): void {
-    // get parameters
-    $parameters = $containerConfigurator->parameters();
-
-    // Define what rule sets will be applied
-    $parameters->set(Option::SETS, [
+return RectorConfig::configure()
+    ->withSymfonyContainerXml(__DIR__ . '/var/cache/dev/App_KernelDevDebugContainer.xml')
+    ->withSets([
+        SymfonySetList::SYMFONY_71,
+        SymfonySetList::SYMFONY_CODE_QUALITY,
+        SymfonySetList::SYMFONY_CONSTRUCTOR_INJECTION,
+        DoctrineSetList::DOCTRINE_CODE_QUALITY,
         SetList::CODE_QUALITY,
-        SetList::DOCTRINE_GEDMO_TO_KNPLABS,
-        SetList::PERFORMANCE,
-        SetList::SYMFONY_50,
-        SetList::SYMFONY_50_TYPES,
-        SetList::SYMFONY_CODE_QUALITY,
-        SetList::SYMFONY_CONSTRUCTOR_INJECTION,
+        DoctrineSetList::ANNOTATIONS_TO_ATTRIBUTES,
+        SymfonySetList::ANNOTATIONS_TO_ATTRIBUTES,
+        SensiolabsSetList::ANNOTATIONS_TO_ATTRIBUTES,
+    ])
+    ->withRules([
+        AddReturnTypeDeclarationBasedOnParentClassMethodRector::class,
     ]);
-
-    // get services (needed for register a single rule)
-    $services = $containerConfigurator->services();
-
-    // register a single rule
-    $services->set(TypedPropertyRector::class);
-    $services->set(NameImportingPostRector::class);
-};

@@ -16,9 +16,7 @@ use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 class ResettingController extends AbstractController
 {
-    /**
-     * @Route("/reset_password", name="reset_password", methods={"GET", "POST"})
-     */
+    #[Route(path: '/reset_password', name: 'reset_password', methods: ['GET', 'POST'])]
     public function resetPassword(
         Request $request,
         EntityManagerInterface $entityManager
@@ -37,12 +35,10 @@ class ResettingController extends AbstractController
                 return $this->redirectToRoute('reset_password');
             }
         }
-        return $this->render('reset-password.html.twig', ['form' => $form->createView()]);
+        return $this->render('reset-password.html.twig', ['form' => $form]);
     }
 
-    /**
-     * @Route("/reset_password/confirm/{token}", name="reset_password_confirm", methods={"GET", "POST"})
-     */
+    #[Route(path: '/reset_password/confirm/{token}', name: 'reset_password_confirm', methods: ['GET', 'POST'])]
     public function resetPasswordCheck(
         Request $request,
         string $token,
@@ -70,6 +66,6 @@ class ResettingController extends AbstractController
             $this->addFlash('success', "Your new password has been set");
             return $this->redirectToRoute('homepage');
         }
-        return $this->render('reset-password-confirm.html.twig', ['form' => $form->createView()]);
+        return $this->render('reset-password-confirm.html.twig', ['form' => $form]);
     }
 }

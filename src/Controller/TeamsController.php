@@ -10,14 +10,10 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-/**
- * @Route("/teams")
- */
+#[Route(path: '/teams')]
 class TeamsController extends AbstractController
 {
-    /**
-     * @Route("/", name="teams_index", methods={"GET"})
-     */
+    #[Route(path: '/', name: 'teams_index', methods: ['GET'])]
     public function index(TeamsRepository $teamsRepository): Response
     {
         return $this->render('teams/index.html.twig', [
@@ -25,9 +21,7 @@ class TeamsController extends AbstractController
         ]);
     }
 
-    /**
-     * @Route("/new", name="teams_new", methods={"GET","POST"})
-     */
+    #[Route(path: '/new', name: 'teams_new', methods: ['GET', 'POST'])]
     public function new(Request $request): Response
     {
         $team = new Teams();
@@ -48,13 +42,11 @@ class TeamsController extends AbstractController
 
         return $this->render('teams/new.html.twig', [
             'team' => $team,
-            'form' => $form->createView(),
+            'form' => $form,
         ]);
     }
 
-    /**
-     * @Route("/{id}", name="teams_show", methods={"GET"})
-     */
+    #[Route(path: '/{id}', name: 'teams_show', methods: ['GET'])]
     public function show(Teams $team): Response
     {
         return $this->render('teams/show.html.twig', [
@@ -62,9 +54,7 @@ class TeamsController extends AbstractController
         ]);
     }
 
-    /**
-     * @Route("/{id}/edit", name="teams_edit", methods={"GET","POST"})
-     */
+    #[Route(path: '/{id}/edit', name: 'teams_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Teams $team): Response
     {
         $form = $this->createForm(TeamsType::class, $team);
@@ -78,13 +68,11 @@ class TeamsController extends AbstractController
 
         return $this->render('teams/edit.html.twig', [
             'team' => $team,
-            'form' => $form->createView(),
+            'form' => $form,
         ]);
     }
 
-    /**
-     * @Route("/{id}", name="teams_delete", methods={"DELETE"})
-     */
+    #[Route(path: '/{id}', name: 'teams_delete', methods: ['DELETE'])]
     public function delete(Request $request, Teams $team): Response
     {
         if ($this->isCsrfTokenValid('delete'.$team->getId(), $request->request->get('_token'))) {

@@ -51,12 +51,12 @@ services:
     # please note that last definitions always *replace* previous ones
 
     App\Swagger\SwaggerDecorator:
-        decorates: 'api_platform.swagger.normalizer.documentation'
+        #decorates: 'api_platform.swagger.normalizer.documentation'
         arguments: ['@App\Swagger\SwaggerDecorator.inner']
         autoconfigure: false
 
     App\DataPersister\AttachmentMetadataPersister:
-        decorates: 'api_platform.doctrine.orm.data_persister'
+        #decorates: 'api_platform.data_persister'
 
     App\EventListener\UpdateShortIdEventListener:
         tags:

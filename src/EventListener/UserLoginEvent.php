@@ -11,10 +11,10 @@ use Symfony\Component\Security\Http\Event\LoginSuccessEvent;
 
 class UserLoginEvent implements EventSubscriberInterface
 {
-    private Security $security;
+    private \Symfony\Bundle\SecurityBundle\Security $security;
     private GoogleCredentials $googleCredentials;
 
-    public function __construct(Security $security, GoogleCredentials $googleCredentials)
+    public function __construct(\Symfony\Bundle\SecurityBundle\Security $security, GoogleCredentials $googleCredentials)
     {
         $this->security = $security;
         $this->googleCredentials = $googleCredentials;
