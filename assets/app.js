@@ -2,12 +2,7 @@ import './bootstrap.js';
 /*
  * Welcome to your app's main JavaScript file!
  *
- * We recommend including the built version of this JavaScript file
- * (and its CSS file) in your base layout (base.html.twig).
+ * This file will be included onto the page via the importmap() Twig function,
+ * which should already be in your base.html.twig.
  */
-
-
-import './js/app';
-
-// start the Stimulus application
-import './bootstrap';
+import './styles/app.css';

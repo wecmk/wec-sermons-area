@@ -75,19 +75,11 @@
         <!-- Google Analytics tracking disabled. Determined development environment. If it is not, please set app.debug to false -->
         <!-- Note: This is separate to the develop config setting -->
     {% endif %}
-    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
-    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
-    <!--[if lt IE 9]>
-      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
-      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
-    <![endif]-->
-
     {{ parent() }}
 {% endblock %}
 
 {% block javascripts %}
-            {% block importmap %}{{ importmap('app') }}{% endblock %}
-    {{ encore_entry_script_tags('app') }}
+    {% block importmap %}{{ importmap('app') }}{% endblock %}
 {% endblock %}
 
 {% block body %}
@@ -101,7 +93,7 @@
             <div class="row">
                 <div class="col-3">
                     <a class="header-link" href="{{ path('members_area_home') }}">
-                        <img class="header-logo" src="{{ asset('build/images/wec-logo-full.svg') }}" alt=""/>
+                        <img class="header-logo" src="{{ asset('images/wec-logo-full.svg') }}" alt=""/>
                     </a>
                 </div>
                 <div class="col-9 jumbotron-right">
