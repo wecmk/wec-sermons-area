@@ -4,6 +4,7 @@ namespace App\Services\Filesystem;
 
 use phpDocumentor\Reflection\Types\String_;
 use Symfony\Component\Filesystem\Exception\FileNotFoundException;
+use Symfony\Component\Filesystem\Exception\IOException;
 use Symfony\Component\Filesystem\Filesystem;
 
 class WecFilesystem extends Filesystem
@@ -273,14 +274,16 @@ class WecFilesystem extends Filesystem
     /**
      * Appends content to an existing file.
      *
-     * @param string          $filename The file to which to append content
-     * @param string|resource $content  The content to append
+     * @param string|resource $content The content to append
+     * @param bool            $lock    Whether the file should be locked when writing to it
+     *
+     * @return void
      *
      * @throws IOException If the file is not writable
      */
-    public function appendToFile($filename, $content): void
+    public function appendToFile(string $filename, $content, bool $lock = false): void
     {
-        parent::appendToFile($filename, $content);
+        parent::appendToFile($filename, $content, $lock);
     }
 
     /**

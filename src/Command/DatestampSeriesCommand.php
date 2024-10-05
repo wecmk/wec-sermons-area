@@ -3,7 +3,6 @@
 namespace App\Command;
 
 use App\Entity\Event;
-use App\Entity\Series;
 use App\Repository\EventRepository;
 use App\Repository\SeriesRepository;
 use Doctrine\ORM\EntityManagerInterface;
