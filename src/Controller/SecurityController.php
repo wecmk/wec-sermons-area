@@ -4,9 +4,14 @@ namespace App\Controller;
 
 use App\Form\UserLoginType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
+use Symfony\Component\Security\Http\LoginLink\LoginLinkHandlerInterface;
 
 class SecurityController extends AbstractController
 {
@@ -32,4 +37,14 @@ class SecurityController extends AbstractController
             ]
         );
     }
+
+    #[Route(path: '/api/loginlink', name: 'api-login-link', methods: ['GET'])]
+    public function loginLink(Request $request,
+                              #[Autowire(service: 'security.authenticator.login_link_handler.main')]
+                              LoginLinkHandlerInterface $loginLinkHandler,
+                              UserInterface $user): JsonResponse
+    {
+        return $this->json($loginLinkHandler->createLoginLink($user, $request, 2592000));
+    }
+
 }
