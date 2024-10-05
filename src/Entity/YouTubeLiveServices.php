@@ -2,24 +2,8 @@
 
 namespace App\Entity;
 
-use ApiPlatform\Core\Action\NotFoundAction;
-use ApiPlatform\Core\Annotation\ApiResource;
-use ApiPlatform\Core\Annotation\ApiProperty;
 use Doctrine\ORM\Mapping as ORM;
 
-/**
- * @ApiResource(
- *     itemOperations={
- *         "get"={
- *             "method"="GET",
- *             "controller"=NotFoundAction::class,
- *             "read"=false,
- *             "outputClass"=false,
- *         },
- *     },
- *     collectionOperations={"get"}
- * )
- */
 class YouTubeLiveServices
 {
     private $id;

@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 use App\Repository\SpeakerRepository;
 
 /**
- * @ApiResource()
+ * [#ApiResource    ]
  */
 #[ORM\Entity(repositoryClass: SpeakerRepository::class)]
 class Teams
