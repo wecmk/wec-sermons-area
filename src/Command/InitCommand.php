@@ -37,13 +37,6 @@ class InitCommand extends Command
         ];
     }
 
-    protected function configure()
-    {
-        $this
-            ->setDescription(self::$defaultDescription)
-        ;
-    }
-
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         foreach ($this->fixtures as $fixture) {

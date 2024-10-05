@@ -15,7 +15,7 @@ use Symfony\Component\Form\FormBuilderInterface;
  */
 class NewPasswordType extends AbstractType
 {
-    public function buildForm(FormBuilderInterface $builder, array $options)
+    public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
             ->add('password', RepeatedType::class, ['type' => PasswordType::class])

@@ -20,7 +20,7 @@ class UserLoginEvent implements EventSubscriberInterface
         $this->googleCredentials = $googleCredentials;
     }
 
-    public static function getSubscribedEvents()
+    public static function getSubscribedEvents(): array
     {
         return [
             LoginSuccessEvent::class => 'onLoginSuccess'
