@@ -49,7 +49,16 @@ class YouTubeVideoMetadataService
         if ($this->client->isAccessTokenExpired()) {  // if token expired
             // refresh the token
             $this->logger->warning("OAuth2.0 token expired");
-            $this->client->refreshToken($accessKeys['refresh_token']);
+
+            $obj = $this->client->fetchAccessTokenWithRefreshToken($this->client->getRefreshToken());
+
+            $expires = time() + intval($obj['expires_in']);
+            $this->googleCredentials->setAccessToken($obj['access_token'], true);
+            if ($obj['access_token'] != null) {
+                $this->googleCredentials->setRefreshToken($obj['refresh_token'], true);
+            }
+            $this->googleCredentials->setExpires($expires, true);
+            $this->googleCredentials->persist();
         }
         return $this->google_Service_YouTube = new Google_Service_YouTube($this->client);
     }

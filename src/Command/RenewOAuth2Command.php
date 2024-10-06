@@ -40,8 +40,6 @@ class RenewOAuth2Command extends Command
         ];
         $this->client = new Google_Client($config);
         $this->client->setLogger($this->logger);
-
-        $this->googleCredentials = $this->googleCredentials;
     }
 
     protected function configure(): void
@@ -57,30 +55,37 @@ class RenewOAuth2Command extends Command
 
         $accessKeys = [];
         $this->logger->debug("Loaded key");
-        $accessKeys['expires_in'] = time() - $this->googleCredentials->getExpires();
-        $accessKeys['access_token'] = $this->googleCredentials->getAccessToken();
-        if ($this->googleCredentials->getRefreshToken() != null) {
-            $accessKeys['refresh_token'] = $this->googleCredentials->getRefreshToken();
+
+
+        $expiresIn = $this->googleCredentials->getExpires() - 60;
+        if ($expiresIn < time()) {
+            $output->writeln("renew");
+            //return Command::SUCCESS;
+            $accessKeys['expires_in'] = time() - $this->googleCredentials->getExpires();
+            $accessKeys['access_token'] = $this->googleCredentials->getAccessToken();
+            if ($this->googleCredentials->getRefreshToken() != null) {
+                $accessKeys['refresh_token'] = $this->googleCredentials->getRefreshToken();
+            }
+            // refresh the token
+            $this->client->refreshToken($accessKeys['refresh_token']);
+
+            $obj = $this->client->fetchAccessTokenWithRefreshToken($this->client->getRefreshToken());
+
+            //$output->writeln(print_r($obj, true));
+
+            $accessToken = $obj['access_token'];
+            //$idToken = $obj['id_token'];
+            $refreshToken = $obj['refresh_token'] ?? null;
+            $expires = time() + intval($obj['expires_in']);
+            $this->googleCredentials->setAccessToken($accessToken, true);
+            if ($refreshToken != null) {
+                $this->googleCredentials->setRefreshToken($refreshToken, true);
+            }
+            $this->googleCredentials->setExpires($expires, true);
+            $this->googleCredentials->persist();
+        } else {
+            $output->writeln("Auth Token not renewed, expired in (m): " . ($expiresIn - time()) / 60);
         }
-        // refresh the token
-        $this->logger->warning("OAuth2.0 token expired");
-        $this->client->refreshToken($accessKeys['refresh_token']);
-
-        $obj = $this->client->fetchAccessTokenWithRefreshToken($this->client->getRefreshToken());
-
-        $this->logger->info(print_r($obj, true));
-
-        $accessToken = $obj['access_token'];
-        $idToken = $obj['id_token'];
-        $refreshToken = $obj['refresh_token'] ?? null;
-        $expires = time() + intval($obj['expires_in']);
-
-        $this->googleCredentials->setAccessToken($accessToken, true);
-        if ($refreshToken != null) {
-            $this->googleCredentials->setRefreshToken($refreshToken, true);
-        }
-        $this->googleCredentials->setExpires($expires, true);
-        $this->googleCredentials->persist();
 
         return Command::SUCCESS;
     }
