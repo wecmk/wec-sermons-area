@@ -58,25 +58,42 @@ class YouTubeVideoMetadataService
     {
         $youtube = $this->googleServiceYouTube();
 
-        if (str_contains((string) $event->getYouTubeLink(), "youtube.com")) {
-            $stringParts = explode("=", (string) $event->getYouTubeLink());
-            if (count($stringParts) != 2) {
-                return null;
+        if (str_contains((string) $event->getYouTubeLink(), "/live/")) {
+            $this->logger->debug("Live link detected: " . $event->getYouTubeLink());
+            $string = $event->getYouTubeLink();
+            $string = str_replace("https", "http", $string);
+            $string = str_replace("http", "", $string);
+            $string = str_replace("://youtube.com/live/", "", $string);
+            if (str_contains($string, "?")) {
+                $stringParts = explode("?", $string);
+                $string = $stringParts[0];
+            }
+            $this->logger->debug("Live link detected: " . $string);
+        } else {
+            if (str_contains((string)$event->getYouTubeLink(), "youtube.com")) {
+                $stringParts = explode("=", (string)$event->getYouTubeLink());
+                $string = $stringParts[1];
+                if (count($stringParts) != 2) {
+                    return null;
+                }
+            }
+
+            if (str_contains((string)$event->getYouTubeLink(), "youtu.be")) {
+                $string = str_replace("//", "", $event->getYouTubeLink());
+                $stringParts = explode("/", $string);
+                if (count($stringParts) != 2) {
+                    return null;
+                }
+                $string = $stringParts[1];
             }
         }
 
-        if (str_contains((string) $event->getYouTubeLink(), "youtu.be")) {
-            $string = str_replace("//", "", $event->getYouTubeLink());
-            $stringParts = explode("/", $string);
-            if (count($stringParts) != 2) {
-                return null;
-            }
-        }
-
+        $this->logger->debug($event->getYouTubeLink());
+        $this->logger->debug(print_r($stringParts, true));
         // Call the API's videos.list method to retrieve the video resource.
         $listResponse = $youtube->videos->listVideos(
             "snippet,status",
-            ['id' => $stringParts[1]]
+            ['id' => $string]
         );
         $this->logger->debug("Searched for videos. Count of videos: " . $listResponse->count());
 
