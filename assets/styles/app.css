@@ -5,6 +5,10 @@ html * {
     font-family: Lato;
 }
 
+body {
+    background-color: #fff;
+}
+
 h1, h2, h3, h4, h5, h6 {
     color: #942020;
 }
@@ -19,8 +23,12 @@ a:hover {
     text-decoration: underline !important;
 }
 
+img {
+    display: unset;
+}
+
 .container {
-    width: 1170px;
+    max-width: 1170px;
 }
 
 .header {
@@ -30,12 +38,10 @@ a:hover {
     margin-bottom: 20px;
 }
 
-.header-inner-container {
-    @extend .container;
-}
 
 .header-logo {
-    width: 200px;
+    width: 100%;
+    max-width: 200px;
     margin-top: 15px;
     margin-bottom: 15px;
 }
@@ -45,7 +51,6 @@ a:hover {
 }
 
 .sermons-navigation-container {
-    @extend .container;
 
     margin-top: 10px;
     margin-bottom: 10px;

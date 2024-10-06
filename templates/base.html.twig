@@ -28,6 +28,25 @@
 {% endblock%}
 
 {% block stylesheets %}
+    <style>
+        body {
+            background-color: darkgrey;
+        }
+        img {
+            display: none;
+        }
+        .header {
+            padding-top: 20px;
+            padding-bottom: 20px;
+            margin-bottom: 20px;
+        }
+        .header-logo {
+            width: 100%;
+            max-width: 200px;
+            margin-top: 15px;
+            margin-bottom: 15px;
+        }
+    </style>
     <link href='https://fonts.googleapis.com/css?family=Lato&amp;subset=latin,latin-ext' rel='stylesheet' type='text/css'>
     {{ parent() }}
 {% endblock %}
@@ -88,14 +107,14 @@
     <!-- End Google Tag Manager (noscript) -->
 
     <div class="header">
-        <div class="container header-inner-container">
+        <div class="container">
             <div class="row">
-                <div class="col-3">
+                <div class="col-md-3">
                     <a class="header-link" href="{{ path('members_area_home') }}">
                         <img class="header-logo" src="{{ asset('images/wec-logo-full.svg') }}" alt=""/>
                     </a>
                 </div>
-                <div class="col-9 jumbotron-right">
+                <div class="col-md-9 jumbotron-right">
                     {% block header_right %}
                     {% endblock %}
                 </div>
