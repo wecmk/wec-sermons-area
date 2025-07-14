@@ -8,7 +8,7 @@ use Doctrine\Persistence\ObjectManager;
 
 class AttachmentMetadataTypeFixtures extends Fixture implements FixtureGroupInterface
 {
-    public function load(ObjectManager $manager)
+    public function load(ObjectManager $manager): void
     {
         $manager->persist(new \App\Entity\AttachmentMetadataType("sermon-recording", "Sermon", "The main recording of the sermon. May include the reading."));
         $manager->persist(new \App\Entity\AttachmentMetadataType("childrens-talk-recording", "Childrens Talk", "The Childrens Talk."));

@@ -8,7 +8,7 @@ use Doctrine\Persistence\ObjectManager;
 
 class SeriesFixture extends Fixture implements FixtureGroupInterface
 {
-    public function load(ObjectManager $manager)
+    public function load(ObjectManager $manager): void
     {
         $manager->persist(new \App\Entity\Series(null, "Visiting Speakers"));
 

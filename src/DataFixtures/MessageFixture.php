@@ -19,7 +19,7 @@ class MessageFixture extends Fixture implements \Doctrine\Bundle\FixturesBundle\
         $this->attachmentMetadataTypeRepository = $attachmentMetadataTypeRepository;
     }
 
-    public function load(ObjectManager $manager)
+    public function load(ObjectManager $manager): void
     {
         $seriesColossians = new Series();
         $seriesColossians->setName("Colossians");
