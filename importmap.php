@@ -23,16 +23,16 @@ return [
         'version' => '3.2.2',
     ],
     '@hotwired/turbo' => [
-        'version' => '8.0.10',
+        'version' => '8.0.13',
     ],
     '@popperjs/core' => [
         'version' => '2.11.8',
     ],
     'bootstrap/dist/css/bootstrap.min.css' => [
-        'version' => '5.3.3',
+        'version' => '5.3.7',
         'type' => 'css',
     ],
     'bootstrap' => [
-        'version' => '5.3.3',
+        'version' => '5.3.7',
     ],
 ];
